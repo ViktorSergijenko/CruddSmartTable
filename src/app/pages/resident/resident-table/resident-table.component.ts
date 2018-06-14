@@ -73,18 +73,30 @@ export class ResidentTableComponent {
       this.source.load(residentService.residentList);
     });
   }
-
-  onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
-      console.log(event.data);
-      this.http.delete('http://localhost:52414/api/Resident/' + event.data.id).subscribe(res => {
-      console.log(res);
-      event.confirm.resolve(event.source.data);
-    });
-    } else {
-      event.confirm.reject();
-    }
+/**
+ *If user will confirm that he wants to delete additional resident,
+ *then this function will call "deleteResident" fucntion that will make a delete request
+ *
+ * @param {*} event - event-Object, consist of:
+data: Object - original row data
+newData: Object - edited data
+source: DataSource - table data source
+confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+ * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+ */
+onDeleteConfirm(event): void {
+    this.residentService.deleteResident(event);
   }
+  /**
+   *If user will confirm that he wants to add a new resident,function will call
+   *"postResident" function that will make a post request to other localhost
+   * @param {*} event event-Object, consist of:
+data: Object - original row data
+newData: Object - edited data
+source: DataSource - table data source
+confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+   * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+   */
   onCreateConfirm(event): void {
     const data = {
       'id' : event.newData.id = 0,
@@ -95,16 +107,19 @@ export class ResidentTableComponent {
       'email' : event.newData.email,
       'flatid' : event.newData.flatid,
     };
-    if (window.confirm('Are you sure you want to add a resident?')) {
-    this.http.post('http://localhost:52414/api/Resident', data).subscribe(res => {
-      console.log(res);
-      event.confirm.resolve(event.newData);
-    });
-    } else {
-      event.confirm.reject();
-    }
+    this.residentService.postResident(event, data);
   }
-  onSaveConfirm(event): void {
+ /**
+  *If user will confirm that he wants to change information about additional resident
+  * function will call other function called "putResident",that will send put request to our backend
+  * @param {*} event event-Object, consist of:
+data: Object - original row data
+newData: Object - edited data
+source: DataSource - table data source
+confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+  * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+  */
+ onSaveConfirm(event): void {
     const data = {
       'id' : event.newData.id,
       'firstname' : event.newData.firstname,
@@ -114,14 +129,7 @@ export class ResidentTableComponent {
       'email' : event.newData.email,
       'flatid' : event.newData.flatid,
     };
-    if (window.confirm('Are you sure you want to update info about a resident?')) {
-      this.http.put('http://localhost:52414/api/Resident/' + event.newData.id, data).subscribe(res => {
-        console.log(res);
-        event.confirm.resolve(event.newData);
-      });
-      } else {
-        event.confirm.reject();
-      }
+    this.residentService.putResident(event, data);
   }
 }
 
