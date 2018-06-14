@@ -1,0 +1,18 @@
+<nb-card>
+  <nb-card-header>
+    House Table
+  </nb-card-header>
+ 
+    
+  <nb-card-body>
+    <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">
+    </ng2-smart-table>
+  </nb-card-body>
+</nb-card>
+<table class="table table-sm table-hover">
+         
+  <tr *ngFor="let house of houseService.houseList">
+    <td>Street:{{house.street}} - City:{{house.city}} - Country:{{house.country}}</td>
+    <td>P.index:{{house.postindex}}</td>
+    
+</table>
