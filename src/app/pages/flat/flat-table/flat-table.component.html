@@ -5,16 +5,9 @@
  
     
   <nb-card-body>
-    <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">
+    <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" (editConfirm)="onSaveConfirm($event)"
+    (createConfirm)="onCreateConfirm($event)">
     </ng2-smart-table>
   </nb-card-body>
 </nb-card>
 
-<table class="table table-sm table-hover">
-         
-  <tr *ngFor="let flat of flatService.flatList">
-    <td>Floor:{{flat.floor}} - Number:{{flat.number}} - Total Area:{{flat.totalarea}}</td>
-    <td>Liv.Space{{flat.livingspace}} - House Number:{{flat.houseid}}</td>
-    
-    
-</table>
