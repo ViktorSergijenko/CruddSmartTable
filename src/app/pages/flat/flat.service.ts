@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import { Flat } from './flat.module';
+import { House } from '../../pages/house/house.module';
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
 
 
@@ -9,6 +10,9 @@ import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular
 export class FlatService {
     selectedFlat: Flat;
     flatList: Flat[];
+    flatHouseIdList: any[];
+    houseList: House[] = [];
+    selectedHouse: House;
     constructor(private http: Http) { }
     /**
     *this function addes a new  object to our databse that is located on our backend.
@@ -68,4 +72,9 @@ export class FlatService {
       event.confirm.reject();
     }
   }
-}
+  getHouseIds() {
+    return this.http.get('http://localhost:52414/api/House');
+    }
+  }
+
+

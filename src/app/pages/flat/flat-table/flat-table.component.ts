@@ -50,7 +50,13 @@ settings = {
     },
     houseid: {
       title: 'HouseId',
-      type: 'number',
+      type: 'html',
+      editor: {
+        type: 'list',
+        config: {
+          list: this.flatService.flatHouseIdList,
+        },
+      },
     },
   },
 };
@@ -66,6 +72,15 @@ source: LocalDataSource = new LocalDataSource();
     console.log(resp.json());
     this.flatService.flatList = resp.json();
     this.source.load(flatService.flatList);
+    });
+    this.flatService.getHouseIds().subscribe(resp => {
+      console.log(resp.json());
+      this.flatService.flatList = resp.json();
+      for (let index = 0; index < this.flatService.houseList.length; index++) {
+        this.flatService.flatHouseIdList.push(this.flatService.houseList[index].id);
+        }
+        console.log(this.flatService.flatHouseIdList);
+        this.source.load(this.flatService.flatHouseIdList);
     });
 
 
