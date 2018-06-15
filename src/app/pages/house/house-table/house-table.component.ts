@@ -21,21 +21,19 @@ export class HouseTableComponent {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
+      confirmCreate: true,
     },
     edit: {
       editButtonContent: '<i class="nb-edit"></i>',
       saveButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
+      confirmSave: true,
     },
     delete: {
       deleteButtonContent: '<i class="nb-trash" (click)="justGettingHouses()"></i>',
       confirmDelete: true,
     },
     columns: {
-      id: {
-        title: 'ID',
-        type: 'number',
-      },
       street: {
         title: 'Street Name',
         type: 'string',
@@ -69,22 +67,60 @@ export class HouseTableComponent {
     // this.source.load(houseService.houseList); // problem with this
     // this.source.load(data); // problem with this
   }
-  onDelete(id: number) {
-    this.houseService.deleteHouse(id)
-      .subscribe(x => {
-        this.houseService.getHouseList();
-      })
-  }
-  justGettingHouses() {
-    this.houseService.getHouseList();
-  }
-  onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
-      event.confirm.resolve();
-    } else {
-      event.confirm.reject();
-    }
-  }
+  /**
+ *If user will confirm that he wants to delete additional resident,
+ *then this function will call "deleteResident" fucntion that will make a delete request
+ *
+ * @param {*} event - event-Object, consist of:
+data: Object - original row data
+newData: Object - edited data
+source: DataSource - table data source
+confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+ * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+ */
+onDeleteConfirm(event): void {
+  this.houseService.deleteHouse(event);
+}
+/**
+ *If user will confirm that he wants to add a new resident,function will call
+ *"postResident" function that will make a post request to other localhost
+ * @param {*} event event-Object, consist of:
+data: Object - original row data
+newData: Object - edited data
+source: DataSource - table data source
+confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+ * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+ */
+onCreateConfirm(event): void {
+  const data = {
+    'id' : event.newData.id = 0,
+    'street' : event.newData.street,
+    'city' : event.newData.city,
+    'country' :  event.newData.country,
+    'postindex' : event.newData.postindex,
+  };
+  this.houseService.postHouse(event, data);
+}
+/**
+*If user will confirm that he wants to change information about additional resident
+* function will call other function called "putResident",that will send put request to our backend
+* @param {*} event event-Object, consist of:
+data: Object - original row data
+newData: Object - edited data
+source: DataSource - table data source
+confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+* @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+*/
+onSaveConfirm(event): void {
+  const data = {
+    'id' : event.newData.id,
+    'street' : event.newData.street,
+    'city' : event.newData.city,
+    'country' :  event.newData.country,
+    'postindex' : event.newData.postindex,
+  };
+  this.houseService.putHouse(event, data);
+}
 
 
 }
