@@ -55,8 +55,14 @@ export class ResidentTableComponent {
         type: 'string',
       },
       flatid: {
-        title: 'FlatId',
-        type: 'number',
+        title: 'HouseId',
+        type: 'html',
+        editor: {
+          type: 'list',
+          config: {
+            list: this.residentService.residentFlatIdList,
+          },
+        },
       },
     },
   };
@@ -71,6 +77,22 @@ export class ResidentTableComponent {
     this.residentService.getResidentList().subscribe((resp) => {
       this.residentService.residentList = resp.json();
       this.source.load(residentService.residentList);
+    });
+    const options = [];
+    this.residentService.getFlatIds().subscribe(resp => {
+      this.residentService.flatList = resp.json();
+
+
+      for (let index = 0; index < this.residentService.flatList.length; index++) {
+        this.residentService.residentFlatIdList.push(this.residentService.flatList[index].id);
+
+        options.push({ value: this.residentService.flatList[index].id, title: this.residentService.flatList[index].id });
+
+        this.settings.columns.flatid.editor.config.list = options;
+        this.settings = Object.assign({}, this.settings);
+      }
+
+      console.log(options);
     });
   }
 /**

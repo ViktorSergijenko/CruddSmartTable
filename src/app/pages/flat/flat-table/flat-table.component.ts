@@ -69,14 +69,11 @@ export class FlatTableComponent {
     // vse dannie po zaprosu "GET" i kak tolko vse dannie prijdut,liw togda programma nachnot zasovivatj...
     // vse eti dannie(massiv tipa Flat),v peremennuju flatList
     this.flatService.getFlatList().subscribe(resp => {
-      // console.log(resp.json());
       this.flatService.flatList = resp.json();
       this.source.load(flatService.flatList);
     });
     const options = [];
     this.flatService.getHouseIds().subscribe(resp => {
-      // console.log(1);
-      // console.log(resp.json());
       this.flatService.houseList = resp.json();
 
 
