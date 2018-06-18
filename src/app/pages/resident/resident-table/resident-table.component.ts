@@ -55,7 +55,7 @@ export class ResidentTableComponent {
         type: 'string',
       },
       flatid: {
-        title: 'HouseId',
+        title: 'FlatId',
         type: 'html',
         editor: {
           type: 'list',
