@@ -10,7 +10,7 @@ import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular
 export class FlatService {
     selectedFlat: Flat;
     flatList: Flat[];
-    flatHouseIdList: any[];
+    flatHouseIdList: any[] = [];
     houseList: House[] = [];
     selectedHouse: House;
     constructor(private http: Http) { }
