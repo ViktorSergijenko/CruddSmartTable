@@ -7,17 +7,21 @@ import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular
 
 
 @Injectable()
-export class FlatService {
-    selectedFlat: Flat;
-    flatList: Flat[];
-    flatHouseIdList: any[] = [];
-    houseList: House[] = [];
-    selectedHouse: House;
+export class FlatService { // service that will contain all crud fucntions and values for them for flat model
+    selectedFlat: Flat; // value that will contain an additional flat object(just one)
+    flatList: Flat[]; // array that will contain all Flat objects
+    flatHouseIdList: any[] = []; // array that will hold all house idies that exist in database
+    houseList: House[] = []; // array that will contain House Objects
+    selectedHouse: House; // value that will contain an additional house object(just one)
     constructor(private http: Http) { }
     /**
     *this function addes a new  object to our databse that is located on our backend.
     *Function sends a post request to other local server(backend),sends a new object that has to be added
-    * @param {*} event Object
+    * @param {*} event event-Object, consist of:
+data: Object - original row data
+newData: Object - edited data
+source: DataSource - table data source
+confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
     * @param {*} data Object - original row data
     * @memberof FlatService Service that contains all RESTfull functions that we need
     */
@@ -34,7 +38,11 @@ export class FlatService {
  /**
   *this function saves all changes with our object(Resident),function sends a put request to
   *our database that is located on backend,it sends a new information about resident to chnage information about him
-  * @param {*} event its object
+  * @param {*} event event-Object, consist of:
+data: Object - original row data
+newData: Object - edited data
+source: DataSource - table data source
+confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
   * @param {*} data Object - original row data
   * @memberof FlatService Service that contains all RESTfull functions that we need
   */
@@ -58,7 +66,11 @@ export class FlatService {
  /**
   *function sends a delete request on our (backend) to delete a object that user wants to delete
   *
-  * @param {*} event Object
+  * @param {*} event event-Object, consist of:
+data: Object - original row data
+newData: Object - edited data
+source: DataSource - table data source
+confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
   * @memberof FlatService Service that contains all RESTfull functions that we need
   */
  deleteFlat(event) {
@@ -72,6 +84,12 @@ export class FlatService {
       event.confirm.reject();
     }
   }
+  /**
+   *it's just a function for sending a request to our backend,so he could return
+   *us a house objects from database.
+   * @returns House List(all objects HOUSE)
+   * @memberof FlatService Service that contains all RESTfull functions that we need
+   */
   getHouseIds() {
     return this.http.get('http://localhost:52414/api/House');
     }

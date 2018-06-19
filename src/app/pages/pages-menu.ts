@@ -153,7 +153,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'House',
-    icon: 'nb-shuffle',
+    icon: 'nb-tables',
     children: [
       {
         title: 'House',
@@ -163,7 +163,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Flat',
-    icon: 'nb-shuffle',
+    icon: 'nb-tables',
     children: [
       {
         title: 'Flat',
@@ -173,7 +173,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Resident',
-    icon: 'nb-shuffle',
+    icon: 'nb-tables',
     children: [
       {
         title: 'Resident',

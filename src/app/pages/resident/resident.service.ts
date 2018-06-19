@@ -7,16 +7,20 @@ import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular
 
 
 @Injectable()
-export class ResidentService {
-    selectedResident: Resident;
-    residentList: Resident[];
-    residentFlatIdList: any[] = [];
-    flatList: Flat[];
+export class ResidentService { // service that will contain all crud fucntions and values for them for resident model
+    selectedResident: Resident; // value that will contain an additional resident object(just one)
+    residentList: Resident[]; // array that will contain all returned house objects
+    residentFlatIdList: any[] = []; // array that will hold all flat idies that exist in database
+    flatList: Flat[]; // array that will contain all returned flat objects
     constructor(private http: Http) { }
    /**
     *this function addes a new  object to our databse that is located on our backend.
     *Function sends a post request to other local server(backend),sends a new object that has to be added
-    * @param {*} event Object
+    * @param {*} event event-Object, consist of:
+data: Object - original row data
+newData: Object - edited data
+source: DataSource - table data source
+confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
     * @param {*} data Object - original row data
     * @memberof ResidentService Service that contains all RESTfull functions that we need
     */
@@ -33,7 +37,11 @@ export class ResidentService {
      /**
       *this function saves all changes with our object(Resident),function sends a put request to
       *our database that is located on backend,it sends a new information about resident to chnage information about him
-      * @param {*} event its object
+      * @param {*} event event-Object, consist of:
+data: Object - original row data
+newData: Object - edited data
+source: DataSource - table data source
+confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
       * @param {*} data Object - original row data
       * @memberof ResidentService Service that contains all RESTfull functions that we need
       */
@@ -57,7 +65,11 @@ export class ResidentService {
      /**
       *function sends a delete request on our (backend) to delete a object that user wants to delete
       *
-      * @param {*} event Object
+      * @param {*} event event-Object, consist of:
+data: Object - original row data
+newData: Object - edited data
+source: DataSource - table data source
+confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
       * @memberof ResidentService Service that contains all RESTfull functions that we need
       */
      deleteResident(event) {

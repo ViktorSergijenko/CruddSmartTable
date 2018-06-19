@@ -30,7 +30,7 @@ export class HouseTableComponent {
       confirmSave: true,
     },
     delete: {
-      deleteButtonContent: '<i class="nb-trash" (click)="justGettingHouses()"></i>',
+      deleteButtonContent: '<i class="nb-trash"></i>',
       confirmDelete: true,
     },
     columns: {
@@ -53,7 +53,10 @@ export class HouseTableComponent {
     },
   };
   data: any = [];
-  source: LocalDataSource = new LocalDataSource();
+  source: LocalDataSource = new LocalDataSource(); // ng2 smart table functionality
+  // our constructor calles getHouseList() function to send a request to our backend so he could rewturn us all house objects...
+  // then all this returned values will be placed in houseList from HouseService(Array of House Objects),and after that...
+  // function load() from LocalDataSource class will load all this data to our smart table
   constructor(private houseService: HouseService, private http: Http) {
     this.houseService.getHouseList().subscribe(resp => {
       console.log(resp.json());
@@ -92,7 +95,7 @@ confirm: Deferred - Deferred object with resolve(newData: Object) and reject() m
  * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
  */
 onCreateConfirm(event): void {
-  const data = {
+  const data = { // our data that we will work with
     'id' : event.newData.id = 0,
     'street' : event.newData.street,
     'city' : event.newData.city,
@@ -112,7 +115,7 @@ confirm: Deferred - Deferred object with resolve(newData: Object) and reject() m
 * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
 */
 onSaveConfirm(event): void {
-  const data = {
+  const data = { // our data that we will work with
     'id' : event.newData.id,
     'street' : event.newData.street,
     'city' : event.newData.city,
