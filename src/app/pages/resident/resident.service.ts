@@ -83,6 +83,12 @@ confirm: Deferred - Deferred object with resolve(newData: Object) and reject() m
           event.confirm.reject();
         }
       }
+      /**
+       *function that will send a request to backend so he could returns us all...
+       *flat objects
+       * @returns Flat list(all flat objects)
+       * @memberof ResidentService Service that contains all RESTfull functions that we need
+       */
       getFlatIds() {
         return this.http.get('http://localhost:52414/api/Flat');
         }
