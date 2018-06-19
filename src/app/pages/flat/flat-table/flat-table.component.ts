@@ -65,9 +65,6 @@ export class FlatTableComponent {
   // then all this returned values will be placed in flatList from FlatService(Array of Flat Objects),and after that...
   // function load() from LocalDataSource class will load all this data to our smart table
   constructor(private flatService: FlatService) {
-    this.flatService.getFlatList().subscribe(resp => {
-      this.flatService.flatList = resp.json();
-    });
     const options = [];
     this.flatService.getHouseIds().subscribe(resp => {
       this.flatService.houseList = resp.json();
@@ -79,8 +76,10 @@ export class FlatTableComponent {
       this.settings = Object.assign({}, this.settings);
       console.log(options);
     });
-    this.source.load(flatService.flatList);
-
+    this.flatService.getFlatList().subscribe(resp => {
+      this.flatService.flatList = resp.json();
+      this.source.load(flatService.flatList);
+    });
   }
   /**
   *If user will confirm that he wants to delete additional resident,
