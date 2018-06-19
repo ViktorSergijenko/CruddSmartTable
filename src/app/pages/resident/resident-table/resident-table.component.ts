@@ -16,7 +16,7 @@ import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular
 })
 export class ResidentTableComponent {
   // vesj html(kak vigljadjat i nazivajutsja nawi polja i td,vsja eta infa sazovivaetsja v peremennuju "settings")
-  settings = {
+  settings = { // setting of our smart table (buttons,columns,names......)
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -120,7 +120,7 @@ confirm: Deferred - Deferred object with resolve(newData: Object) and reject() m
    * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
    */
   onCreateConfirm(event): void {
-    const data = {
+    const data = { // values of our data that we will work with
       'id' : event.newData.id = 0,
       'firstname' : event.newData.firstname,
       'lastname' : event.newData.lastname,
@@ -142,7 +142,7 @@ confirm: Deferred - Deferred object with resolve(newData: Object) and reject() m
   * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
   */
  onSaveConfirm(event): void {
-    const data = {
+    const data = { // values of our data that we will work with
       'id' : event.newData.id,
       'firstname' : event.newData.firstname,
       'lastname' : event.newData.lastname,

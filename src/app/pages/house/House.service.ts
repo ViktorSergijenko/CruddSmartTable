@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-import { House } from './house.module';
-import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
+import { House } from './house.module'; // our house model is located here
+import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http'; // for http(crud) requests
 
 
 @Injectable()

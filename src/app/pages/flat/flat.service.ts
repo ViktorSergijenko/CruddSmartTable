@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-import { Flat } from './flat.module';
-import { House } from '../../pages/house/house.module';
-import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
+import { Flat } from './flat.module'; // our flat model is located here
+import { House } from '../../pages/house/house.module'; // our house model is located here
+import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http'; // for http(crud) requests
 
 
 @Injectable()
@@ -36,8 +36,8 @@ confirm: Deferred - Deferred object with resolve(newData: Object) and reject() m
       }
   }
  /**
-  *this function saves all changes with our object(Resident),function sends a put request to
-  *our database that is located on backend,it sends a new information about resident to chnage information about him
+  *this function saves all changes with our object(Flat),function sends a put request to
+  *our database that is located on backend,it sends a new information about flat to chnage information about him
   * @param {*} event event-Object, consist of:
 data: Object - original row data
 newData: Object - edited data
@@ -58,7 +58,7 @@ confirm: Deferred - Deferred object with resolve(newData: Object) and reject() m
   }
   /**
    * Function sends a get request to our backend,and returns all data.(in our case it is Flat array)
-   * @memberof ResidentService Service that contains all RESTfull functions that we need
+   * @memberof FlatService Service that contains all RESTfull functions that we need
    */
   getFlatList() {
     return this.http.get('http://localhost:52414/api/Flat');

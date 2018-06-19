@@ -14,7 +14,7 @@ import { SmartTableService } from '../../../@core/data/smart-table.service';
 })
 export class FlatTableComponent {
   // vesj html(kak vigljadjat i nazivajutsja nawi polja i td,vsja eta infa sazovivaetsja v peremennuju "settings")
-  settings = {
+  settings = { // setting of our smart table (buttons,columns,names......)
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -92,30 +92,30 @@ export class FlatTableComponent {
   }
   /**
   *If user will confirm that he wants to delete additional resident,
-  *then this function will call "deleteResident" fucntion that will make a delete request
+  *then this function will call "deleteFlat" fucntion that will make a delete request
   *
   * @param {*} event - event-Object, consist of:
  data: Object - original row data
  newData: Object - edited data
  source: DataSource - table data source
  confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
-  * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+  * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
   */
   onDeleteConfirm(event): void {
     this.flatService.deleteFlat(event);
   }
   /**
-   *If user will confirm that he wants to add a new resident,function will call
-   *"postResident" function that will make a post request to other localhost
+   *If user will confirm that he wants to add a new flat,function will call
+   *"postFlat" function that will make a post request to other localhost
    * @param {*} event event-Object, consist of:
   data: Object - original row data
   newData: Object - edited data
   source: DataSource - table data source
   confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
-   * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+   * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
    */
   onCreateConfirm(event): void {
-    const data = {
+    const data = { // values of our data that we will work with
       'id': event.newData.id = 0,
       'number': event.newData.number,
       'totalarea': event.newData.totalarea,
@@ -127,7 +127,7 @@ export class FlatTableComponent {
   }
   /**
   *If user will confirm that he wants to change information about additional resident
-  * function will call other function called "putResident",that will send put request to our backend
+  * function will call other function called "putFlat",that will send put request to our backend
   * @param {*} event event-Object, consist of:
   data: Object - original row data
   newData: Object - edited data
@@ -136,7 +136,7 @@ export class FlatTableComponent {
   * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
   */
   onSaveConfirm(event): void {
-    const data = {
+    const data = { // values of our data that we will work with
       'id': event.newData.id,
       'number': event.newData.number,
       'totalarea': event.newData.totalarea,

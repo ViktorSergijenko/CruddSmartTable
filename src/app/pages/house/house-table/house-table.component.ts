@@ -16,7 +16,7 @@ import { House } from '../house.module';
 `],
 })
 export class HouseTableComponent {
-  settings = {
+  settings = { // setting of our smart table (buttons,columns,names......)
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -52,7 +52,6 @@ export class HouseTableComponent {
       },
     },
   };
-  data: any = [];
   source: LocalDataSource = new LocalDataSource(); // ng2 smart table functionality
   // our constructor calles getHouseList() function to send a request to our backend so he could rewturn us all house objects...
   // then all this returned values will be placed in houseList from HouseService(Array of House Objects),and after that...
@@ -63,12 +62,6 @@ export class HouseTableComponent {
       this.houseService.houseList = resp.json();
       this.source.load(resp.json());
     });
-
-    // var data = houseService.houseList; // data = undefined ;(
-    // var data = houseService.GetHouse(); // same
-    // this.source.load(data); // problem with this
-    // this.source.load(houseService.houseList); // problem with this
-    // this.source.load(data); // problem with this
   }
   /**
  *If user will confirm that he wants to delete additional resident,
@@ -95,7 +88,7 @@ confirm: Deferred - Deferred object with resolve(newData: Object) and reject() m
  * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
  */
 onCreateConfirm(event): void {
-  const data = { // our data that we will work with
+  const data = { // values of our data that we will work with
     'id' : event.newData.id = 0,
     'street' : event.newData.street,
     'city' : event.newData.city,
@@ -115,7 +108,7 @@ confirm: Deferred - Deferred object with resolve(newData: Object) and reject() m
 * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
 */
 onSaveConfirm(event): void {
-  const data = { // our data that we will work with
+  const data = { // values of our data that we will work with
     'id' : event.newData.id,
     'street' : event.newData.street,
     'city' : event.newData.city,

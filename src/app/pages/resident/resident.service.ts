@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-import { Resident } from './resident.module';
-import { Flat } from '../../pages/flat/flat.module';
-import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
+import { Resident } from './resident.module'; // our resident model is located here
+import { Flat } from '../../pages/flat/flat.module'; // our flat model is located here
+import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http'; // for http(crud) requests
 
 
 @Injectable()
