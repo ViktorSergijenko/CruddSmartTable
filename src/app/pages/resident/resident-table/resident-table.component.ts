@@ -66,17 +66,13 @@ export class ResidentTableComponent {
       },
     },
   };
-  // source nasleduet nowij object klassa LocalDataSource,tem samim nasleduja vesj funkcional(budu ispolzovatj funkciju "load")...
-  // dlja togo wtobi zagruzaitj svoi dannie v tablicu/
-  source: LocalDataSource = new LocalDataSource();
-  // v konstruktore ja sozdaju peremennuju kotoraja nasleduet klass HouseService(vesj Restfull Funkcional imenno tut)...
+  source: LocalDataSource = new LocalDataSource(); // fucntionality of our ng2 smart table
+  // our constructor calles getFlatList() function to send a request to our backend so he could return us all house objects...
+  // then all this returned values will be placed in flatList from FlatService(Array of Flat Objects),and after that...
+  // function load() from LocalDataSource class will load all this data to our smart table
   constructor(private residentService: ResidentService, private http: Http) {
-    // vipolnjaet funkciju getFlatList iz klassa FlatService,subskrajbit dlja togo wtobi snachala prowli...
-    // vse dannie po zaprosu "GET" i kak tolko vse dannie prijdut,liw togda programma nachnot zasovivatj...
-    // vse eti dannie(massiv tipa Flat),v peremennuju flatList
     this.residentService.getResidentList().subscribe((resp) => {
       this.residentService.residentList = resp.json();
-      this.source.load(residentService.residentList);
     });
     const options = [];
     this.residentService.getFlatIds().subscribe(resp => {
@@ -94,62 +90,63 @@ export class ResidentTableComponent {
 
       console.log(options);
     });
+    this.source.load(residentService.residentList);
   }
-/**
- *If user will confirm that he wants to delete additional resident,
- *then this function will call "deleteResident" fucntion that will make a delete request
- *
- * @param {*} event - event-Object, consist of:
-data: Object - original row data
-newData: Object - edited data
-source: DataSource - table data source
-confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
- * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
- */
-onDeleteConfirm(event): void {
+  /**
+   *If user will confirm that he wants to delete additional resident,
+   *then this function will call "deleteResident" fucntion that will make a delete request
+   *
+   * @param {*} event - event-Object, consist of:
+   *data: Object - original row data
+   *newData: Object - edited data
+   *source: DataSource - table data source
+   *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+   * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+   */
+  onDeleteConfirm(event): void {
     this.residentService.deleteResident(event);
   }
   /**
    *If user will confirm that he wants to add a new resident,function will call
    *"postResident" function that will make a post request to other localhost
    * @param {*} event event-Object, consist of:
-data: Object - original row data
-newData: Object - edited data
-source: DataSource - table data source
-confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+   *data: Object - original row data
+   *newData: Object - edited data
+   *source: DataSource - table data source
+   *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
    * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
    */
   onCreateConfirm(event): void {
     const data = { // values of our data that we will work with
-      'id' : event.newData.id = 0,
-      'firstname' : event.newData.firstname,
-      'lastname' : event.newData.lastname,
-      'postcode' :  event.newData.postcode,
-      'phone' : event.newData.phone,
-      'email' : event.newData.email,
-      'flatid' : event.newData.flatid,
+      'id': event.newData.id = 0,
+      'firstname': event.newData.firstname,
+      'lastname': event.newData.lastname,
+      'postcode': event.newData.postcode,
+      'phone': event.newData.phone,
+      'email': event.newData.email,
+      'flatid': event.newData.flatid,
     };
     this.residentService.postResident(event, data);
   }
- /**
-  *If user will confirm that he wants to change information about additional resident
-  * function will call other function called "putResident",that will send put request to our backend
-  * @param {*} event event-Object, consist of:
-data: Object - original row data
-newData: Object - edited data
-source: DataSource - table data source
-confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
-  * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
-  */
- onSaveConfirm(event): void {
+  /**
+   *If user will confirm that he wants to change information about additional resident
+   * function will call other function called "putResident",that will send put request to our backend
+   * @param {*} event event-Object, consist of:
+   *data: Object - original row data
+   *newData: Object - edited data
+   *source: DataSource - table data source
+   *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+   * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+   */
+  onSaveConfirm(event): void {
     const data = { // values of our data that we will work with
-      'id' : event.newData.id,
-      'firstname' : event.newData.firstname,
-      'lastname' : event.newData.lastname,
-      'postcode' :  event.newData.postcode,
-      'phone' : event.newData.phone,
-      'email' : event.newData.email,
-      'flatid' : event.newData.flatid,
+      'id': event.newData.id,
+      'firstname': event.newData.firstname,
+      'lastname': event.newData.lastname,
+      'postcode': event.newData.postcode,
+      'phone': event.newData.phone,
+      'email': event.newData.email,
+      'flatid': event.newData.flatid,
     };
     this.residentService.putResident(event, data);
   }

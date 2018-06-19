@@ -54,40 +54,32 @@ export class FlatTableComponent {
         editor: {
           type: 'list',
           config: {
-            list: this.flatService.flatHouseIdList,
+            list: [],
           },
         },
       },
     },
   };
-  // source nasleduet nowij object klassa LocalDataSource,tem samim nasleduja vesj funkcional(budu ispolzovatj funkciju "load")...
-  // dlja togo wtobi zagruzaitj svoi dannie v tablicu/
-  source: LocalDataSource = new LocalDataSource();
-  // v konstruktore ja sozdaju peremennuju kotoraja nasleduet klass HouseService(vesj Restfull Funkcional imenno tut)...
+  source: LocalDataSource = new LocalDataSource(); // fucntionality of our ng2 smart table
+  // our constructor calles getFlatList() function to send a request to our backend so he could return us all house objects...
+  // then all this returned values will be placed in flatList from FlatService(Array of Flat Objects),and after that...
+  // function load() from LocalDataSource class will load all this data to our smart table
   constructor(private flatService: FlatService) {
-    // vipolnjaet funkciju getFlatList iz klassa FlatService,subskrajbit dlja togo wtobi snachala prowli...
-    // vse dannie po zaprosu "GET" i kak tolko vse dannie prijdut,liw togda programma nachnot zasovivatj...
-    // vse eti dannie(massiv tipa Flat),v peremennuju flatList
     this.flatService.getFlatList().subscribe(resp => {
       this.flatService.flatList = resp.json();
-      this.source.load(flatService.flatList);
     });
     const options = [];
     this.flatService.getHouseIds().subscribe(resp => {
       this.flatService.houseList = resp.json();
-
-
-      for (let index = 0; index < this.flatService.houseList.length; index++) {
-        this.flatService.flatHouseIdList.push(this.flatService.houseList[index].id);
-
-        options.push({ value: this.flatService.houseList[index].id, title: this.flatService.houseList[index].id });
-
-        this.settings.columns.houseid.editor.config.list = options;
-        this.settings = Object.assign({}, this.settings);
-      }
-
+      this.flatService.houseList.map(house => {
+        const myTest = { value: house.id, title: house.street };
+        options.push(myTest);
+      });
+      this.settings.columns.houseid.editor.config.list = options;
+      this.settings = Object.assign({}, this.settings);
       console.log(options);
     });
+    this.source.load(flatService.flatList);
 
   }
   /**
@@ -95,10 +87,10 @@ export class FlatTableComponent {
   *then this function will call "deleteFlat" fucntion that will make a delete request
   *
   * @param {*} event - event-Object, consist of:
- data: Object - original row data
- newData: Object - edited data
- source: DataSource - table data source
- confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+  *data: Object - original row data
+  *newData: Object - edited data
+  *source: DataSource - table data source
+  *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
   * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
   */
   onDeleteConfirm(event): void {
@@ -108,10 +100,10 @@ export class FlatTableComponent {
    *If user will confirm that he wants to add a new flat,function will call
    *"postFlat" function that will make a post request to other localhost
    * @param {*} event event-Object, consist of:
-  data: Object - original row data
-  newData: Object - edited data
-  source: DataSource - table data source
-  confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+   *data: Object - original row data
+   *newData: Object - edited data
+   *source: DataSource - table data source
+   *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
    * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
    */
   onCreateConfirm(event): void {
@@ -129,10 +121,10 @@ export class FlatTableComponent {
   *If user will confirm that he wants to change information about additional resident
   * function will call other function called "putFlat",that will send put request to our backend
   * @param {*} event event-Object, consist of:
-  data: Object - original row data
-  newData: Object - edited data
-  source: DataSource - table data source
-  confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+  *data: Object - original row data
+  *newData: Object - edited data
+  *source: DataSource - table data source
+  *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
   * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
   */
   onSaveConfirm(event): void {
