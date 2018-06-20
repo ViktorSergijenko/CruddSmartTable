@@ -74,17 +74,12 @@ export class ResidentTableComponent {
     const options = [];
     this.residentService.getFlatIds().subscribe(resp => {
       this.residentService.flatList = resp.json();
-
-
-      for (let index = 0; index < this.residentService.flatList.length; index++) {
-        this.residentService.residentFlatIdList.push(this.residentService.flatList[index].id);
-
-        options.push({ value: this.residentService.flatList[index].id, title: this.residentService.flatList[index].id });
-
-        this.settings.columns.flatid.editor.config.list = options;
-        this.settings = Object.assign({}, this.settings);
-      }
-
+      this.residentService.flatList.map(flat => {
+        const myTest = { value: flat.id, title: flat.number };
+        options.push(myTest);
+      });
+      this.settings.columns.flatid.editor.config.list = options;
+      this.settings = Object.assign({}, this.settings);
       console.log(options);
     });
     this.residentService.getResidentList().subscribe((resp) => {
