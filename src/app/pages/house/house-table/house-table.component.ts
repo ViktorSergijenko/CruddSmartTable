@@ -52,7 +52,7 @@ export class HouseTableComponent {
       },
       flats: {
         title: 'FlatAmount',
-        type: 'number',
+        type: 'Flat',
       },
     },
   };
@@ -67,7 +67,7 @@ export class HouseTableComponent {
       this.source.load(resp.json());
       this.source.count();
       this.houseService.TotalAmountOfHosesInTable = this.source.count();
-      this.houseService.GetAmountOfFlats(1);
+      // this.houseService.GetAmountOfFlats(1);
     });
   }
   /**
@@ -102,7 +102,6 @@ export class HouseTableComponent {
       'city': event.newData.city,
       'country': event.newData.country,
       'postindex': event.newData.postindex,
-
     };
     this.houseService.postHouse(event, data);
     this.houseService.TotalAmountOfHosesInTable = this.houseService.TotalAmountOfHosesInTable + 1;
