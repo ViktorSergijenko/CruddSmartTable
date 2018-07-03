@@ -4,6 +4,7 @@ import 'rxjs/add/operator/toPromise';
 import { Flat } from './flat.module'; // our flat model is located here
 import { House } from '../../pages/house/house.module'; // our house model is located here
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http'; // for http(crud) requests
+import { Resident } from '../resident/resident.module';
 
 
 @Injectable()
@@ -14,6 +15,7 @@ export class FlatService { // service that will contain all crud fucntions and v
   houseList: House[] = []; // array that will contain House Objects
   selectedHouse: House; // value that will contain an additional house object(just one)
   TotalFlatsInTable: number;
+  SourtedResidents: Resident[];
   constructor(private http: Http) { }
   /**
   *this function addes a new  object to our databse that is located on our backend.
@@ -94,6 +96,14 @@ export class FlatService { // service that will contain all crud fucntions and v
    */
   getHouseIds() {
     return this.http.get('http://localhost:52414/api/House');
+  }
+
+  GetFlatResidents(id: number) {
+    this.http.get('http://localhost:52414/api/flat/' + id + '/residents').subscribe(res => {
+      this.SourtedResidents = res.json();
+      console.log(res);
+      console.log('Flats: ', this.SourtedResidents);
+    });
   }
 }
 

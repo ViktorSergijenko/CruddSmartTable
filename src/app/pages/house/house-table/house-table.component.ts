@@ -125,7 +125,12 @@ export class HouseTableComponent {
     };
     this.houseService.putHouse(event, data);
   }
-  onUserRowSelect(event) { console.log('user row select: ', event.data.id); }
-
+  onUserRowSelect(event) {
+    console.log('user row select: ', event.data.id);
+    this.houseService.GetHouseFlats(event.data.id);
+  }
 
 }
+// valuePrepareFunction: (cell, row) => {
+//  return '<a title="See Detail Product " href = "Your api key or something/${row.Id}" > <i class="ion-edit" > </i></a >';
+// }

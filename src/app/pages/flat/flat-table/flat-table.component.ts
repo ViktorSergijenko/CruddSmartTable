@@ -144,5 +144,10 @@ export class FlatTableComponent {
     };
     this.flatService.putFlat(event, data);
   }
+  onUserRowSelect(event) {
+    console.log('user row select: ', event.data.id);
+    this.flatService.GetFlatResidents(event.data.id);
+
+  }
 }
 

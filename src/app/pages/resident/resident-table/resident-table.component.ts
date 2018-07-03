@@ -66,21 +66,21 @@ export class ResidentTableComponent {
           },
         },
       },
-      Actions: // or something
-        {
-          title: 'Detail',
-          type: 'html',
-          filter: false,
-          editable: false,
-          addable: false,
-          valuePrepareFunction: (cell, row) => {
-            return '<a title="See Detail Product " href = "Your api key or something/${row.Id}" > <i class="ion-edit" > </i></a >';
-          },
-          Id: { //  this Id to use in ${row.Id}
-            title: 'ID',
-            type: 'number',
-          },
-        },
+      // Actions: // or something
+      //  {
+      //    title: 'Detail',
+      //    type: 'html',
+      //    filter: false,
+      //    editable: false,
+      //   addable: false,
+      //   valuePrepareFunction: (cell, row) => {
+      //     return '<a title="See Detail Product " href = "Your api key or something/${row.Id}" > <i class="ion-edit" > </i></a >';
+      //   },
+      //    Id: { //  this Id to use in ${row.Id}
+      //      title: 'ID',
+      //      type: 'number',
+      //   },
+      // },
     },
   };
   source: LocalDataSource = new LocalDataSource(); // fucntionality of our ng2 smart table

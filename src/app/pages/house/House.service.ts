@@ -10,7 +10,7 @@ import { Flat } from '../flat/flat.module';
 export class HouseService { // service that will contain all crud fucntions and values for them for house model
   selectedHouse: House; // variable for one additional selected house item
   houseList: House[]; // array to keep all House object
-  flatamountList: Flat[];
+  SourtedFlatList: Flat[];
   TotalAmountOfHosesInTable: number;
   constructor(private http: Http) { }
   /**
@@ -83,12 +83,11 @@ export class HouseService { // service that will contain all crud fucntions and 
       event.confirm.reject();
     }
   }
-  GetAmountOfFlats(id: number) {
-    this.http.get('http://localhost:52414/api/House/' + id + 'flats').map((data: Response) => {
-      return data.json() as Flat[];
-    }).toPromise().then(currentFlats => {
-      this.flatamountList = currentFlats;
-      console.log(currentFlats);
+  GetHouseFlats(id: number) {
+    this.http.get('http://localhost:52414/api/House/' + id + '/flats').subscribe(res => {
+      this.SourtedFlatList = res.json();
+      console.log(res);
+      console.log('Flats: ', this.SourtedFlatList);
     });
   }
 }
