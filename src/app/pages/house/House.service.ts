@@ -83,12 +83,12 @@ export class HouseService { // service that will contain all crud fucntions and 
       event.confirm.reject();
     }
   }
-  GetAmountOfFlats(event) {
-    this.http.get('http://localhost:52414/api/House/' + event.data.id + 'flats').map((data: Response) => {
+  GetAmountOfFlats(id: number) {
+    this.http.get('http://localhost:52414/api/House/' + id + 'flats').map((data: Response) => {
       return data.json() as Flat[];
     }).toPromise().then(currentFlats => {
       this.flatamountList = currentFlats;
-      console.log('ORIGATO' + this.flatamountList.length);
+      console.log(currentFlats);
     });
   }
 }

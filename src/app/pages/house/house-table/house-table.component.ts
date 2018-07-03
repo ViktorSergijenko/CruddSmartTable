@@ -50,7 +50,7 @@ export class HouseTableComponent {
         title: 'P.Index',
         type: 'string',
       },
-      flats: {
+      flatamount: {
         title: 'FlatAmount',
         type: 'Flat',
       },
@@ -67,7 +67,6 @@ export class HouseTableComponent {
       this.source.load(resp.json());
       this.source.count();
       this.houseService.TotalAmountOfHosesInTable = this.source.count();
-      // this.houseService.GetAmountOfFlats(1);
     });
   }
   /**
@@ -126,6 +125,7 @@ export class HouseTableComponent {
     };
     this.houseService.putHouse(event, data);
   }
+  onUserRowSelect(event) { console.log('user row select: ', event.data.id); }
 
 
 }

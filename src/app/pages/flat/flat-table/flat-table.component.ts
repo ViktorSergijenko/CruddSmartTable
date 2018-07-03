@@ -48,6 +48,10 @@ export class FlatTableComponent {
         title: 'LivingSpace',
         type: 'number',
       },
+      residentamount: {
+        title: 'ResidentAmount',
+        type: 'number',
+      },
       houseid: {
         title: 'HouseId',
         type: 'html',
