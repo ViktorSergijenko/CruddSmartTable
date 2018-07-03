@@ -3,12 +3,15 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import { House } from './house.module'; // our house model is located here
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http'; // for http(crud) requests
+import { Flat } from '../flat/flat.module';
 
 
 @Injectable()
 export class HouseService { // service that will contain all crud fucntions and values for them for house model
   selectedHouse: House; // variable for one additional selected house item
   houseList: House[]; // array to keep all House object
+  flatamountList: Flat[];
+  TotalAmountOfHosesInTable: number;
   constructor(private http: Http) { }
   /**
  *this function addes a new  object to our databse that is located on our backend.
@@ -72,12 +75,20 @@ export class HouseService { // service that will contain all crud fucntions and 
   deleteHouse(event) {
     if (window.confirm('Are you sure you want to delete?')) {
       console.log(event.data);
-      this.http.delete('http://localhost:52414/api/House/' + event.data.id.subscribe(res => {
+      this.http.delete('http://localhost:52414/api/House/' + event.data.id).subscribe(res => {
         console.log(res);
         event.confirm.resolve(event.source.data);
-      }));
+      });
     } else {
       event.confirm.reject();
     }
+  }
+  GetAmountOfFlats(event) {
+    this.http.get('http://localhost:52414/api/House/' + event.data.id + 'flats').map((data: Response) => {
+      return data.json() as Flat[];
+    }).toPromise().then(currentFlats => {
+      this.flatamountList = currentFlats;
+      console.log('ORIGATO' + this.flatamountList.length);
+    });
   }
 }

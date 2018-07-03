@@ -13,6 +13,7 @@ export class FlatService { // service that will contain all crud fucntions and v
   flatHouseIdList: any[] = []; // array that will hold all house idies that exist in database
   houseList: House[] = []; // array that will contain House Objects
   selectedHouse: House; // value that will contain an additional house object(just one)
+  TotalFlatsInTable: number;
   constructor(private http: Http) { }
   /**
   *this function addes a new  object to our databse that is located on our backend.

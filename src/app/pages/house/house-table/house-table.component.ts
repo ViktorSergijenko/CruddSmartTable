@@ -50,6 +50,10 @@ export class HouseTableComponent {
         title: 'P.Index',
         type: 'string',
       },
+      flats: {
+        title: 'FlatAmount',
+        type: 'number',
+      },
     },
   };
   source: LocalDataSource = new LocalDataSource(); // ng2 smart table functionality
@@ -61,6 +65,9 @@ export class HouseTableComponent {
       console.log(resp.json());
       this.houseService.houseList = resp.json();
       this.source.load(resp.json());
+      this.source.count();
+      this.houseService.TotalAmountOfHosesInTable = this.source.count();
+      this.houseService.GetAmountOfFlats(1);
     });
   }
   /**
@@ -76,6 +83,7 @@ export class HouseTableComponent {
  */
   onDeleteConfirm(event): void {
     this.houseService.deleteHouse(event);
+    this.houseService.TotalAmountOfHosesInTable = this.houseService.TotalAmountOfHosesInTable - 1;
   }
   /**
    *If user will confirm that he wants to add a new resident,function will call
@@ -94,8 +102,10 @@ export class HouseTableComponent {
       'city': event.newData.city,
       'country': event.newData.country,
       'postindex': event.newData.postindex,
+
     };
     this.houseService.postHouse(event, data);
+    this.houseService.TotalAmountOfHosesInTable = this.houseService.TotalAmountOfHosesInTable + 1;
   }
   /**
   *If user will confirm that he wants to change information about additional resident

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ResidentService } from '../resident.service';
 import { DataSource } from '../../../../../node_modules/ng2-smart-table/lib/data-source/data-source';
@@ -15,8 +15,10 @@ import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular
 `],
 })
 export class ResidentTableComponent {
+  totalRows: number = 0;
   // vesj html(kak vigljadjat i nazivajutsja nawi polja i td,vsja eta infa sazovivaetsja v peremennuju "settings")
   settings = { // setting of our smart table (buttons,columns,names......)
+
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -60,10 +62,25 @@ export class ResidentTableComponent {
         editor: {
           type: 'list',
           config: {
-            list: this.residentService.residentFlatIdList,
+            list: [],
           },
         },
       },
+      Actions: // or something
+        {
+          title: 'Detail',
+          type: 'html',
+          filter: false,
+          editable: false,
+          addable: false,
+          valuePrepareFunction: (cell, row) => {
+            return '<a title="See Detail Product " href = "Your api key or something/${row.Id}" > <i class="ion-edit" > </i></a >';
+          },
+          Id: { //  this Id to use in ${row.Id}
+            title: 'ID',
+            type: 'number',
+          },
+        },
     },
   };
   source: LocalDataSource = new LocalDataSource(); // fucntionality of our ng2 smart table
@@ -85,6 +102,8 @@ export class ResidentTableComponent {
     this.residentService.getResidentList().subscribe((resp) => {
       this.residentService.residentList = resp.json();
       this.source.load(residentService.residentList);
+      this.residentService.TotalResidents = this.source.count();
+      console.log(this.residentService.TotalResidents);
     });
   }
   /**
@@ -100,6 +119,7 @@ export class ResidentTableComponent {
    */
   onDeleteConfirm(event): void {
     this.residentService.deleteResident(event);
+    this.residentService.TotalResidents = this.residentService.TotalResidents - 1;
   }
   /**
    *If user will confirm that he wants to add a new resident,function will call
@@ -122,6 +142,8 @@ export class ResidentTableComponent {
       'flatid': event.newData.flatid,
     };
     this.residentService.postResident(event, data);
+    this.residentService.TotalResidents = this.residentService.TotalResidents + 1;
+    this.source.refresh();
   }
   /**
    *If user will confirm that he wants to change information about additional resident

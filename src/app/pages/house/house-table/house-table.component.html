@@ -1,12 +1,12 @@
 <nb-card>
   <nb-card-header>
-    House Table
+    <h1>House Table</h1> Total amount of houses in Table: {{this.houseService.TotalAmountOfHosesInTable}} houses
   </nb-card-header>
- 
-    
+
+
   <nb-card-body>
     <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" (editConfirm)="onSaveConfirm($event)"
-    (createConfirm)="onCreateConfirm($event)">
+      (createConfirm)="onCreateConfirm($event)">
     </ng2-smart-table>
   </nb-card-body>
 </nb-card>

@@ -1,13 +1,12 @@
 <nb-card>
   <nb-card-header>
-    Flat Table
+    <h1>Flat Table</h1> Total amount of flats in all houses: {{this.flatService.TotalFlatsInTable}} flats
   </nb-card-header>
- 
-    
+
+
   <nb-card-body>
     <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" (editConfirm)="onSaveConfirm($event)"
-    (createConfirm)="onCreateConfirm($event)">
+      (createConfirm)="onCreateConfirm($event)">
     </ng2-smart-table>
   </nb-card-body>
 </nb-card>
-

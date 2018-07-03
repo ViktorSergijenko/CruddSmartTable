@@ -1,12 +1,13 @@
 <nb-card>
   <nb-card-header>
-    Resident Table
+    <h1>Resident Table</h1> Total amount of residents in all houses: {{this.residentService.TotalResidents}} people
   </nb-card-header>
- 
-    
+
+
   <nb-card-body>
     <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" (editConfirm)="onSaveConfirm($event)"
-    (createConfirm)="onCreateConfirm($event)">
+      (createConfirm)="onCreateConfirm($event)">
     </ng2-smart-table>
   </nb-card-body>
 </nb-card>
+<i class="nb-close"></i>

@@ -79,6 +79,7 @@ export class FlatTableComponent {
     this.flatService.getFlatList().subscribe(resp => {
       this.flatService.flatList = resp.json();
       this.source.load(flatService.flatList);
+      this.flatService.TotalFlatsInTable = this.source.count();
     });
   }
   /**
@@ -94,6 +95,7 @@ export class FlatTableComponent {
   */
   onDeleteConfirm(event): void {
     this.flatService.deleteFlat(event);
+    this.flatService.TotalFlatsInTable = this.flatService.TotalFlatsInTable - 1;
   }
   /**
    *If user will confirm that he wants to add a new flat,function will call
@@ -115,6 +117,7 @@ export class FlatTableComponent {
       'houseid': event.newData.houseid,
     };
     this.flatService.postFlat(event, data);
+    this.flatService.TotalFlatsInTable = this.flatService.TotalFlatsInTable + 1;
   }
   /**
   *If user will confirm that he wants to change information about additional resident
