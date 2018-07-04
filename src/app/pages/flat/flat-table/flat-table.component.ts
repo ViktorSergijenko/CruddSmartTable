@@ -83,14 +83,13 @@ export class FlatTableComponent {
     this.route.params.subscribe((params: any) => {
 
       console.log('I am there');
-      console.log(params);
+      console.log(params.id);
 
     });
 
-    houseService.mysubject.subscribe((value) => {
-      console.log('value from Flat Controller' + value);
-    });
-    console.log('value from Flat Controller');
+    // houseService.mysubject.subscribe((value) => {
+    //  console.log('value from Flat Controller' + value);
+    // });
     const options = [];
     this.flatService.getHouseIds().subscribe(resp => {
       this.flatService.houseList = resp.json();

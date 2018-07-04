@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgModule } from '@angular/core';
-import 'rxjs/Rx';
+
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import { House } from './house.module'; // our house model is located here
@@ -90,11 +90,9 @@ export class HouseService { // service that will contain all crud fucntions and 
     }
   }
   GetHouseFlats(id: number) {
-    this.http.get('http://localhost:52414/api/House/' + id + '/flats')
-      .map((data: Response) => {
-        return data.json() as Flat[];
-      }).toPromise().then(flats => {
-        this.SourtedFlatList = flats;
-      });
+    this.http.get('http://localhost:52414/api/House/' + id + '/flats').subscribe(res => {
+      this.SourtedFlatList = res.json();
+      console.log('Flats in service: ', this.SourtedFlatList);
+    });
   }
 }

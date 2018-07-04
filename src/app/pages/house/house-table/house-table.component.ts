@@ -62,7 +62,7 @@ export class HouseTableComponent {
   // then all this returned values will be placed in houseList from HouseService(Array of House Objects),and after that...
   // function load() from LocalDataSource class will load all this data to our smart table
   constructor(private houseService: HouseService, private http: Http, private router: Router, private route: ActivatedRoute) {
-    houseService.mysubject.next('My favourite value');
+    // houseService.mysubject.next('My favourite value');
     this.houseService.getHouseList().subscribe(resp => {
       console.log(resp.json());
       this.houseService.houseList = resp.json();
