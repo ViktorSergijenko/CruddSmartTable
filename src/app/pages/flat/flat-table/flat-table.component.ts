@@ -18,6 +18,7 @@ import { ActivatedRoute } from '@angular/router';
 `],
 })
 export class FlatTableComponent {
+  houseId: any;
   // vesj html(kak vigljadjat i nazivajutsja nawi polja i td,vsja eta infa sazovivaetsja v peremennuju "settings")
   settings = { // setting of our smart table (buttons,columns,names......)
     add: {
@@ -81,10 +82,11 @@ export class FlatTableComponent {
     // private houseTable: HouseTableComponent,
   ) {
     this.route.params.subscribe((params: any) => {
-
       console.log('I am there');
       console.log(params.id);
-
+      // this.loadLogic(params.id);
+      this.houseService.GetHouseFlats(params.id);
+      this.source.load(this.houseService.SourtedFlatList);
     });
 
     // houseService.mysubject.subscribe((value) => {
@@ -101,16 +103,6 @@ export class FlatTableComponent {
       this.settings = Object.assign({}, this.settings);
       console.log(options);
     });
-    if (this.houseService.SourtedFlatList.length === 0 || this.houseService.SourtedFlatList.length === null) {
-      this.flatService.getFlatList().subscribe(resp => {
-        this.flatService.flatList = resp.json();
-        this.source.load(flatService.flatList);
-        this.flatService.TotalFlatsInTable = this.source.count();
-      });
-    } else {
-      this.houseService.GetHouseFlats(1);
-      this.source.load(this.houseService.SourtedFlatList);
-    }
   }
   /**
   *If user will confirm that he wants to delete additional resident,
@@ -177,6 +169,22 @@ export class FlatTableComponent {
     console.log('user row select: ', event.data.id);
     this.flatService.GetFlatResidents(event.data.id);
 
+  }
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  loadLogic(id: number) {
+    this.houseService.SourtedFlatList = [];
+    this.houseService.GetHouseFlats(id);
+    if (this.houseService.SourtedFlatList.length === 0 || this.houseService.SourtedFlatList.length === null) {
+      this.flatService.getFlatList().subscribe(resp => {
+        this.flatService.flatList = resp.json();
+        this.source.load(this.flatService.flatList);
+        this.flatService.TotalFlatsInTable = this.source.count();
+      });
+    } else {
+      this.source.load(this.houseService.SourtedFlatList);
+    }
   }
 }
 

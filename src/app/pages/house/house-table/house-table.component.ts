@@ -130,7 +130,7 @@ export class HouseTableComponent {
   onUserRowSelect(event) {
     console.log('user row select: ', event.data.id);
     this.router.navigate(['/pages/flat/flat-table/' + event.data.id], { relativeTo: this.route });
-    this.houseService.GetHouseFlats(event.data.id);
+    // this.houseService.GetHouseFlats(event.data.id);
   }
 
 }
