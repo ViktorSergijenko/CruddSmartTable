@@ -6,10 +6,10 @@ import { FlatTableComponent } from './flat-table/flat-table.component';
 const routes: Routes = [{
   path: '',
   component: FlatComponent,
-  children: [{
-    path: 'flat-table',
-    component: FlatTableComponent,
-  }],
+  children: [
+    { path: 'flat-table/:id', component: FlatTableComponent },
+    { path: '', component: FlatTableComponent },
+  ],
 }];
 
 @NgModule({

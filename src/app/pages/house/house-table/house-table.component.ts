@@ -5,6 +5,7 @@ import { DataSource } from '../../../../../node_modules/ng2-smart-table/lib/data
 import { SmartTableService } from '../../../@core/data/smart-table.service';
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
 import { House } from '../house.module';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-house-table',
@@ -60,7 +61,8 @@ export class HouseTableComponent {
   // our constructor calles getHouseList() function to send a request to our backend so he could rewturn us all house objects...
   // then all this returned values will be placed in houseList from HouseService(Array of House Objects),and after that...
   // function load() from LocalDataSource class will load all this data to our smart table
-  constructor(private houseService: HouseService, private http: Http) {
+  constructor(private houseService: HouseService, private http: Http, private router: Router, private route: ActivatedRoute) {
+    houseService.mysubject.next('My favourite value');
     this.houseService.getHouseList().subscribe(resp => {
       console.log(resp.json());
       this.houseService.houseList = resp.json();
@@ -127,6 +129,7 @@ export class HouseTableComponent {
   }
   onUserRowSelect(event) {
     console.log('user row select: ', event.data.id);
+    this.router.navigate(['/pages/flat/flat-table/' + event.data.id], { relativeTo: this.route });
     this.houseService.GetHouseFlats(event.data.id);
   }
 

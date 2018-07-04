@@ -99,11 +99,8 @@ export class FlatService { // service that will contain all crud fucntions and v
   }
 
   GetFlatResidents(id: number) {
-    this.http.get('http://localhost:52414/api/flat/' + id + '/residents').subscribe(res => {
-      this.SourtedResidents = res.json();
-      console.log(res);
-      console.log('Flats: ', this.SourtedResidents);
-    });
+    this.http.get('http://localhost:52414/api/flat/' + id + '/residents')
+      ;
   }
 }
 

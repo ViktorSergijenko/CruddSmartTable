@@ -7,6 +7,7 @@ import { HouseService } from '../../house/House.service';
 import { Location } from '@angular/common';
 import { HouseComponent } from '../../house/house.component';
 import { HouseTableComponent } from '../../house/house-table/house-table.component';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-flat-table',
   templateUrl: './flat-table.component.html',
@@ -76,8 +77,20 @@ export class FlatTableComponent {
     private flatService: FlatService,
     private houseService: HouseService,
     private location: Location,
+    private route: ActivatedRoute,
     // private houseTable: HouseTableComponent,
   ) {
+    this.route.params.subscribe((params: any) => {
+
+      console.log('I am there');
+      console.log(params);
+
+    });
+
+    houseService.mysubject.subscribe((value) => {
+      console.log('value from Flat Controller' + value);
+    });
+    console.log('value from Flat Controller');
     const options = [];
     this.flatService.getHouseIds().subscribe(resp => {
       this.flatService.houseList = resp.json();

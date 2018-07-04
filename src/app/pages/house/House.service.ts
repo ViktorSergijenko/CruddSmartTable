@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { NgModule } from '@angular/core';
+import 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import { House } from './house.module'; // our house model is located here
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http'; // for http(crud) requests
 import { Flat } from '../flat/flat.module';
+import { Subject } from 'rxjs/Subject';
 
 
 @Injectable()
@@ -12,6 +15,7 @@ export class HouseService { // service that will contain all crud fucntions and 
   houseList: House[]; // array to keep all House object
   SourtedFlatList: Flat[] = [];
   TotalAmountOfHosesInTable: number;
+  public mysubject: Subject<any> = new Subject();
   constructor(private http: Http) {
     console.log('hi');
   }
