@@ -172,5 +172,11 @@ export class ResidentTableComponent {
   goBack(): void {
     this.location.back();
   }
+  getFullList(): void {
+    this.source.empty();
+    this.source.load(this.residentService.residentList);
+    this.residentService.TotalResidents = this.source.count();
+    this.source.refresh();
+  }
 }
 

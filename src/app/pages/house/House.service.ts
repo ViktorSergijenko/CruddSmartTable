@@ -90,9 +90,11 @@ export class HouseService { // service that will contain all crud fucntions and 
     }
   }
   GetHouseFlats(id: number) {
-    this.http.get('http://localhost:52414/api/House/' + id + '/flats').subscribe(res => {
-      this.SourtedFlatList = res.json();
-      console.log('Flats in service: ', this.SourtedFlatList);
-    });
+    return this.http.get('http://localhost:52414/api/House/' + id + '/flats');
+    // .subscribe(res => {
+    //   this.SourtedFlatList = res.json();
+    //   console.log('Flats in service: ', this.SourtedFlatList);
+    //   return this.SourtedFlatList;
+    // });
   }
 }

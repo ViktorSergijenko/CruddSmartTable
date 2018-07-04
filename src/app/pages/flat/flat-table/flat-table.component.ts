@@ -84,9 +84,24 @@ export class FlatTableComponent {
     this.route.params.subscribe((params: any) => {
       console.log('I am there');
       console.log(params.id);
-      // this.loadLogic(params.id);
-      this.houseService.GetHouseFlats(params.id);
-      this.source.load(this.houseService.SourtedFlatList);
+      this.houseService.GetHouseFlats(params.id).subscribe(myFlats => {
+        this.houseService.SourtedFlatList = myFlats.json();
+      });
+      if (!params.id) {
+        this.flatService.getFlatList().subscribe(resp => {
+          this.flatService.flatList = resp.json();
+          this.source.load(this.flatService.flatList);
+          this.flatService.TotalFlatsInTable = this.source.count();
+        });
+      } else {
+        this.houseService.GetHouseFlats(params.id).subscribe(flats => {
+          this.houseService.SourtedFlatList = flats.json();
+          this.source.load(this.houseService.SourtedFlatList);
+          this.source.refresh();
+          this.houseService.SourtedFlatList = [];
+        });
+      }
+      this.source.refresh();
     });
 
     // houseService.mysubject.subscribe((value) => {
@@ -102,6 +117,7 @@ export class FlatTableComponent {
       this.settings.columns.houseid.editor.config.list = options;
       this.settings = Object.assign({}, this.settings);
       console.log(options);
+      this.source.refresh();
     });
   }
   /**
@@ -170,13 +186,16 @@ export class FlatTableComponent {
     this.flatService.GetFlatResidents(event.data.id);
 
   }
-  delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  getFullList(): void {
+    this.source.empty();
+    this.source.load(this.flatService.flatList);
+    this.flatService.TotalFlatsInTable = this.source.count();
+    this.source.refresh();
   }
   loadLogic(id: number) {
-    this.houseService.SourtedFlatList = [];
-    this.houseService.GetHouseFlats(id);
-    if (this.houseService.SourtedFlatList.length === 0 || this.houseService.SourtedFlatList.length === null) {
+    if (this.houseService.SourtedFlatList.length === 0 ||
+      this.houseService.SourtedFlatList.length === null ||
+      this.houseService.SourtedFlatList === []) {
       this.flatService.getFlatList().subscribe(resp => {
         this.flatService.flatList = resp.json();
         this.source.load(this.flatService.flatList);
@@ -184,6 +203,7 @@ export class FlatTableComponent {
       });
     } else {
       this.source.load(this.houseService.SourtedFlatList);
+      this.source.refresh();
     }
   }
 }

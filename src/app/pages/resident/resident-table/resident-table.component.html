@@ -1,9 +1,7 @@
 <nb-card>
   <nb-card-header>
     <h1>Resident Table</h1> Total amount of residents in all houses: {{this.residentService.TotalResidents}} people
-    <a routerLink="flat">
-      <button class="btn btn-hero-info btn-demo">Get Full List</button>
-    </a>
+    <button class="btn btn-hero-info btn-demo" (click)="getFullList()">Get Full List</button>
   </nb-card-header>
 
   <nb-card-body>
