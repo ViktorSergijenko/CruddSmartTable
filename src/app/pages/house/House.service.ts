@@ -10,9 +10,11 @@ import { Flat } from '../flat/flat.module';
 export class HouseService { // service that will contain all crud fucntions and values for them for house model
   selectedHouse: House; // variable for one additional selected house item
   houseList: House[]; // array to keep all House object
-  SourtedFlatList: Flat[];
+  SourtedFlatList: Flat[] = [];
   TotalAmountOfHosesInTable: number;
-  constructor(private http: Http) { }
+  constructor(private http: Http) {
+    console.log('hi');
+  }
   /**
  *this function addes a new  object to our databse that is located on our backend.
  *Function sends a post request to other local server(backend),sends a new object that has to be added
@@ -84,10 +86,11 @@ export class HouseService { // service that will contain all crud fucntions and 
     }
   }
   GetHouseFlats(id: number) {
-    this.http.get('http://localhost:52414/api/House/' + id + '/flats').subscribe(res => {
-      this.SourtedFlatList = res.json();
-      console.log(res);
-      console.log('Flats: ', this.SourtedFlatList);
-    });
+    this.http.get('http://localhost:52414/api/House/' + id + '/flats')
+      .map((data: Response) => {
+        return data.json() as Flat[];
+      }).toPromise().then(flats => {
+        this.SourtedFlatList = flats;
+      });
   }
 }

@@ -1,6 +1,8 @@
 <nb-card>
   <nb-card-header>
     <h1>Flat Table</h1> Total amount of flats in all houses: {{this.flatService.TotalFlatsInTable}} flats
+    <button class="btn btn-hero-info btn-demo">Get Full List</button>
+
   </nb-card-header>
 
 
@@ -9,5 +11,5 @@
       (createConfirm)="onCreateConfirm($event)" (userRowSelect)="onUserRowSelect($event)">
     </ng2-smart-table>
   </nb-card-body>
-  <button class="btn btn-hero-primary btn-demo">Go Back</button>
+  <button class="btn btn-hero-primary btn-demo" (click)="goBack()">GoBack</button>
 </nb-card>

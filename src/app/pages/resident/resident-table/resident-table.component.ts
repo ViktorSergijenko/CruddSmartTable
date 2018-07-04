@@ -5,6 +5,7 @@ import { DataSource } from '../../../../../node_modules/ng2-smart-table/lib/data
 import { SmartTableService } from '../../../@core/data/smart-table.service';
 import { Resident } from '../resident.module';
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-resident-table',
   templateUrl: './resident-table.component.html',
@@ -87,7 +88,7 @@ export class ResidentTableComponent {
   // our constructor calles getFlatList() function to send a request to our backend so he could return us all house objects...
   // then all this returned values will be placed in flatList from FlatService(Array of Flat Objects),and after that...
   // function load() from LocalDataSource class will load all this data to our smart table
-  constructor(private residentService: ResidentService, private http: Http) {
+  constructor(private residentService: ResidentService, private http: Http, private location: Location) {
     const options = [];
     this.residentService.getFlatIds().subscribe(resp => {
       this.residentService.flatList = resp.json();
@@ -166,6 +167,10 @@ export class ResidentTableComponent {
       'flatid': event.newData.flatid,
     };
     this.residentService.putResident(event, data);
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }
 

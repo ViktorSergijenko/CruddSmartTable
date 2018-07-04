@@ -3,6 +3,10 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { FlatService } from '../flat.service';
 import { DataSource } from '../../../../../node_modules/ng2-smart-table/lib/data-source/data-source';
 import { SmartTableService } from '../../../@core/data/smart-table.service';
+import { HouseService } from '../../house/House.service';
+import { Location } from '@angular/common';
+import { HouseComponent } from '../../house/house.component';
+import { HouseTableComponent } from '../../house/house-table/house-table.component';
 @Component({
   selector: 'app-flat-table',
   templateUrl: './flat-table.component.html',
@@ -68,7 +72,12 @@ export class FlatTableComponent {
   // our constructor calles getFlatList() function to send a request to our backend so he could return us all house objects...
   // then all this returned values will be placed in flatList from FlatService(Array of Flat Objects),and after that...
   // function load() from LocalDataSource class will load all this data to our smart table
-  constructor(private flatService: FlatService) {
+  constructor(
+    private flatService: FlatService,
+    private houseService: HouseService,
+    private location: Location,
+    // private houseTable: HouseTableComponent,
+  ) {
     const options = [];
     this.flatService.getHouseIds().subscribe(resp => {
       this.flatService.houseList = resp.json();
@@ -80,11 +89,16 @@ export class FlatTableComponent {
       this.settings = Object.assign({}, this.settings);
       console.log(options);
     });
-    this.flatService.getFlatList().subscribe(resp => {
-      this.flatService.flatList = resp.json();
-      this.source.load(flatService.flatList);
-      this.flatService.TotalFlatsInTable = this.source.count();
-    });
+    if (this.houseService.SourtedFlatList.length === 0 || this.houseService.SourtedFlatList.length === null) {
+      this.flatService.getFlatList().subscribe(resp => {
+        this.flatService.flatList = resp.json();
+        this.source.load(flatService.flatList);
+        this.flatService.TotalFlatsInTable = this.source.count();
+      });
+    } else {
+      this.houseService.GetHouseFlats(1);
+      this.source.load(this.houseService.SourtedFlatList);
+    }
   }
   /**
   *If user will confirm that he wants to delete additional resident,
@@ -143,6 +157,9 @@ export class FlatTableComponent {
       'houseid': event.newData.houseid,
     };
     this.flatService.putFlat(event, data);
+  }
+  goBack(): void {
+    this.location.back();
   }
   onUserRowSelect(event) {
     console.log('user row select: ', event.data.id);

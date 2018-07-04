@@ -1,13 +1,15 @@
 <nb-card>
   <nb-card-header>
     <h1>Resident Table</h1> Total amount of residents in all houses: {{this.residentService.TotalResidents}} people
+    <a routerLink="flat">
+      <button class="btn btn-hero-info btn-demo">Get Full List</button>
+    </a>
   </nb-card-header>
-
 
   <nb-card-body>
     <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" (editConfirm)="onSaveConfirm($event)"
       (createConfirm)="onCreateConfirm($event)">
     </ng2-smart-table>
   </nb-card-body>
-  <button class="btn btn-hero-primary btn-demo">Go Back</button>
+  <button class="btn btn-hero-primary btn-demo" (click)="goBack()">Go Back</button>
 </nb-card>
