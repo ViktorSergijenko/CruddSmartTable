@@ -167,7 +167,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Flat',
-        link: '/pages/flat/flat-table',
+        link: '/pages/flat/flat-table/all',
       },
     ],
   },

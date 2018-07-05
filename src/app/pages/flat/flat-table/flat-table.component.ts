@@ -21,6 +21,7 @@ export class FlatTableComponent {
   houseId: any;
   // vesj html(kak vigljadjat i nazivajutsja nawi polja i td,vsja eta infa sazovivaetsja v peremennuju "settings")
   settings = { // setting of our smart table (buttons,columns,names......)
+    noDataMessage: 'Sorry, but there is no Flats in this house,if you want to watch all Flats,Press GET FULL LIST button ',
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -82,12 +83,16 @@ export class FlatTableComponent {
     // private houseTable: HouseTableComponent,
   ) {
     this.route.params.subscribe((params: any) => {
+      this.houseService.SourtedFlatList = [];
       console.log('I am there');
       console.log(params.id);
       this.houseService.GetHouseFlats(params.id).subscribe(myFlats => {
         this.houseService.SourtedFlatList = myFlats.json();
+        this.flatService.getFlatList().subscribe(flat => {
+          this.flatService.flatList = flat.json();
+        });
       });
-      if (!params.id) {
+      if (!params.id || params.id === 'all') {
         this.flatService.getFlatList().subscribe(resp => {
           this.flatService.flatList = resp.json();
           this.source.load(this.flatService.flatList);
