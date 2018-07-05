@@ -99,14 +99,10 @@ export class ResidentTableComponent {
     private router: Router,
   ) {
     this.route.params.subscribe((params: any) => {
-      this.flatService.SourtedResidents = [];
       console.log('I am there');
       console.log(params.id);
       this.flatService.GetFlatResidents(params.id).subscribe(myResidents => {
         this.flatService.SourtedResidents = myResidents.json();
-        this.residentService.getResidentList().subscribe(resident => {
-          this.residentService.residentList = resident.json();
-        });
       });
       if (!params.id || params.id === 'all') {
         this.residentService.getResidentList().subscribe(resident => {
@@ -118,6 +114,7 @@ export class ResidentTableComponent {
         this.flatService.GetFlatResidents(params.id).subscribe(resident => {
           this.flatService.SourtedResidents = resident.json();
           this.source.load(this.flatService.SourtedResidents);
+          this.residentService.TotalResidents = this.source.count();
           this.source.refresh();
           this.flatService.SourtedResidents = [];
         });
@@ -135,12 +132,7 @@ export class ResidentTableComponent {
       this.settings = Object.assign({}, this.settings);
       console.log(options);
     });
-    this.residentService.getResidentList().subscribe((resp) => {
-      this.residentService.residentList = resp.json();
-      this.source.load(residentService.residentList);
-      this.residentService.TotalResidents = this.source.count();
-      console.log(this.residentService.TotalResidents);
-    });
+    this.residentService.TotalResidents = this.source.count();
   }
   /**
    *If user will confirm that he wants to delete additional resident,
@@ -209,9 +201,12 @@ export class ResidentTableComponent {
   }
   getFullList(): void {
     this.source.empty();
-    this.source.load(this.residentService.residentList);
-    this.residentService.TotalResidents = this.source.count();
-    this.source.refresh();
+    this.residentService.getResidentList().subscribe(resident => {
+      this.residentService.residentList = resident.json();
+      this.source.load(this.residentService.residentList);
+      this.residentService.TotalResidents = this.source.count();
+      this.source.refresh();
+    });
   }
 }
 

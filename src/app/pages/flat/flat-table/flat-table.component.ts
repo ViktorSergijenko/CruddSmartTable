@@ -92,6 +92,10 @@ export class FlatTableComponent {
         this.houseService.SourtedFlatList = myFlats.json();
         this.flatService.getFlatList().subscribe(flat => {
           this.flatService.flatList = flat.json();
+          this.houseService.GetOneHouse(params.id).subscribe(myHouse => {
+            this.houseService.selectedHouse = myHouse.json();
+            this.flatService.TotalFlatsInTable = this.flatService.flatList.length;
+          });
         });
       });
       if (!params.id || params.id === 'all') {
@@ -104,6 +108,7 @@ export class FlatTableComponent {
         this.houseService.GetHouseFlats(params.id).subscribe(flats => {
           this.houseService.SourtedFlatList = flats.json();
           this.source.load(this.houseService.SourtedFlatList);
+          this.flatService.TotalFlatsInAdditionalHouse = this.source.count();
           this.source.refresh();
           this.houseService.SourtedFlatList = [];
         });
@@ -196,6 +201,7 @@ export class FlatTableComponent {
     this.source.empty();
     this.source.load(this.flatService.flatList);
     this.flatService.TotalFlatsInTable = this.source.count();
+    this.flatService.TotalFlatsInAdditionalHouse = 0;
     this.source.refresh();
   }
   loadLogic(id: number) {

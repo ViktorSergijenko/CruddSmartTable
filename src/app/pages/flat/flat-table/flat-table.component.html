@@ -1,7 +1,18 @@
 <nb-card>
   <nb-card-header>
-    <h1>Flat Table</h1> Total amount of flats in all houses: {{this.flatService.TotalFlatsInTable}} flats
-    <button class="btn btn-hero-info btn-demo" (click)="getFullList()">Get Full List</button>
+    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+      <div>
+        <h1>Flat Table</h1> Total amount of flats in all houses: {{this.flatService.TotalFlatsInTable}} flats
+        <br>
+        <button class="btn btn-hero-info btn-demo" (click)="getFullList()">Get Full List</button>
+      </div>
+      <div>
+        <h1>House Info:</h1> {{this.houseService.selectedHouse.street}}
+      </div>
+      <div>
+        <h1>Flats in this House:</h1> {{this.flatService.TotalFlatsInAdditionalHouse}} Flats are located in this house
+      </div>
+    </div>
 
   </nb-card-header>
 

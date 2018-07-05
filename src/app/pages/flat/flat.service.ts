@@ -15,6 +15,7 @@ export class FlatService { // service that will contain all crud fucntions and v
   houseList: House[] = []; // array that will contain House Objects
   selectedHouse: House; // value that will contain an additional house object(just one)
   TotalFlatsInTable: number;
+  TotalFlatsInAdditionalHouse: number;
   SourtedResidents: Resident[] = [];
   constructor(private http: Http) { }
   /**
