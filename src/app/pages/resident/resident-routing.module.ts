@@ -6,10 +6,10 @@ import { ResidentTableComponent } from './resident-table/resident-table.componen
 const routes: Routes = [{
   path: '',
   component: ResidentComponent,
-  children: [{
-    path: 'resident-table',
-    component: ResidentTableComponent,
-  }],
+  children: [
+    { path: 'resident-table/:id', component: ResidentTableComponent },
+    { path: '', component: ResidentTableComponent },
+  ],
 }];
 
 @NgModule({

@@ -132,7 +132,6 @@ export class HouseTableComponent {
     this.router.navigate(['/pages/flat/flat-table/' + event.data.id], { relativeTo: this.route });
     // this.houseService.GetHouseFlats(event.data.id);
   }
-
 }
 // valuePrepareFunction: (cell, row) => {
 //  return '<a title="See Detail Product " href = "Your api key or something/${row.Id}" > <i class="ion-edit" > </i></a >';

@@ -8,6 +8,7 @@ import { Location } from '@angular/common';
 import { HouseComponent } from '../../house/house.component';
 import { HouseTableComponent } from '../../house/house-table/house-table.component';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-flat-table',
   templateUrl: './flat-table.component.html',
@@ -80,6 +81,7 @@ export class FlatTableComponent {
     private houseService: HouseService,
     private location: Location,
     private route: ActivatedRoute,
+    private router: Router,
     // private houseTable: HouseTableComponent,
   ) {
     this.route.params.subscribe((params: any) => {
@@ -184,12 +186,11 @@ export class FlatTableComponent {
     this.flatService.putFlat(event, data);
   }
   goBack(): void {
-    this.location.back();
+    this.router.navigate(['/pages/house/house-table'], { relativeTo: this.route });
   }
   onUserRowSelect(event) {
     console.log('user row select: ', event.data.id);
-    this.flatService.GetFlatResidents(event.data.id);
-
+    this.router.navigate(['/pages/resident/resident-table/' + event.data.id], { relativeTo: this.route });
   }
   getFullList(): void {
     this.source.empty();

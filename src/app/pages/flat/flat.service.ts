@@ -15,7 +15,7 @@ export class FlatService { // service that will contain all crud fucntions and v
   houseList: House[] = []; // array that will contain House Objects
   selectedHouse: House; // value that will contain an additional house object(just one)
   TotalFlatsInTable: number;
-  SourtedResidents: Resident[];
+  SourtedResidents: Resident[] = [];
   constructor(private http: Http) { }
   /**
   *this function addes a new  object to our databse that is located on our backend.
@@ -99,8 +99,7 @@ export class FlatService { // service that will contain all crud fucntions and v
   }
 
   GetFlatResidents(id: number) {
-    this.http.get('http://localhost:52414/api/flat/' + id + '/residents')
-      ;
+    return this.http.get('http://localhost:52414/api/flat/' + id + '/residents');
   }
 }
 

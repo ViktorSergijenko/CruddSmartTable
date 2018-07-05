@@ -177,7 +177,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Resident',
-        link: '/pages/resident/resident-table',
+        link: '/pages/resident/resident-table/all',
       },
     ],
   },

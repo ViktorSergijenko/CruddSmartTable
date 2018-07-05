@@ -6,6 +6,8 @@ import { SmartTableService } from '../../../@core/data/smart-table.service';
 import { Resident } from '../resident.module';
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
 import { Location } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FlatService } from '../../flat/flat.service';
 @Component({
   selector: 'app-resident-table',
   templateUrl: './resident-table.component.html',
@@ -88,7 +90,40 @@ export class ResidentTableComponent {
   // our constructor calles getFlatList() function to send a request to our backend so he could return us all house objects...
   // then all this returned values will be placed in flatList from FlatService(Array of Flat Objects),and after that...
   // function load() from LocalDataSource class will load all this data to our smart table
-  constructor(private residentService: ResidentService, private http: Http, private location: Location) {
+  constructor(
+    private residentService: ResidentService,
+    private flatService: FlatService,
+    private http: Http,
+    private location: Location,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
+    this.route.params.subscribe((params: any) => {
+      this.flatService.SourtedResidents = [];
+      console.log('I am there');
+      console.log(params.id);
+      this.flatService.GetFlatResidents(params.id).subscribe(myResidents => {
+        this.flatService.SourtedResidents = myResidents.json();
+        this.residentService.getResidentList().subscribe(resident => {
+          this.residentService.residentList = resident.json();
+        });
+      });
+      if (!params.id || params.id === 'all') {
+        this.residentService.getResidentList().subscribe(resident => {
+          this.residentService.residentList = resident.json();
+          this.source.load(this.residentService.residentList);
+          this.residentService.TotalResidents = this.source.count();
+        });
+      } else {
+        this.flatService.GetFlatResidents(params.id).subscribe(resident => {
+          this.flatService.SourtedResidents = resident.json();
+          this.source.load(this.flatService.SourtedResidents);
+          this.source.refresh();
+          this.flatService.SourtedResidents = [];
+        });
+      }
+      this.source.refresh();
+    });
     const options = [];
     this.residentService.getFlatIds().subscribe(resp => {
       this.residentService.flatList = resp.json();
@@ -170,7 +205,7 @@ export class ResidentTableComponent {
   }
 
   goBack(): void {
-    this.location.back();
+    this.router.navigate(['/pages/flat/flat-table/all'], { relativeTo: this.route });
   }
   getFullList(): void {
     this.source.empty();
