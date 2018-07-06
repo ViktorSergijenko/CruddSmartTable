@@ -1,26 +1,27 @@
 <nb-card>
   <nb-card-header>
-    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; display: table;
+    margin: 0 auto;">
       <div class="row">
-        <div class="col-sm-3" *ngIf="this.houseId">
+        <div class="col-sm-4" *ngIf="this.houseId">
           <h1>Flat Table</h1> Total amount of flats in all houses: {{this.flatService.TotalFlatsInTable}} flats
           <br>
           <button class="btn btn-hero-info btn-demo" (click)="getFullList()" *ngIf="this.houseId">Go To Flat List</button>
         </div>
-        <div class="col-sm-12" *ngIf="!this.houseId">
+        <div class="col-sm-12" *ngIf="!this.houseId" style="text-align: center;">
           <h1>Flat Table</h1> Total amount of flats in all houses: {{this.flatService.TotalFlatsInTable}} flats
           <br>
           <button class="btn btn-hero-info btn-demo" (click)="getFullList()" *ngIf="this.houseId">Get Full List</button>
         </div>
 
-        <div class="col-sm-3" *ngIf="this.houseService.selectedHouse">
+        <div class="col-sm-4" *ngIf="this.houseService.selectedHouse">
 
           <h1>House Info:</h1> Street: {{this.houseService.selectedHouse.street}}
           <br>City: {{this.houseService.selectedHouse.city}}
           <br>Country: {{this.houseService.selectedHouse.country}}
           <br>Postindex: {{this.houseService.selectedHouse.postindex}}
         </div>
-        <div class="col-sm-3" *ngIf="this.houseId">
+        <div class="col-sm-4" *ngIf="this.houseId">
           <h1>Flats in this House:</h1> {{this.flatService.TotalFlatsInAdditionalHouse}} Flats are located in this house
         </div>
 

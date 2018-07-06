@@ -52,6 +52,8 @@ export class HouseTableComponent {
         type: 'string',
       },
       flatamount: {
+        editable: false,
+        addable: false,
         title: 'FlatAmount',
         type: 'Flat',
       },

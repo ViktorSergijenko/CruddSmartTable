@@ -8,6 +8,7 @@ const routes: Routes = [{
   component: ResidentComponent,
   children: [
     { path: 'resident-table/:id', component: ResidentTableComponent },
+    { path: 'resident-table', component: ResidentTableComponent },
     { path: '', component: ResidentTableComponent },
   ],
 }];

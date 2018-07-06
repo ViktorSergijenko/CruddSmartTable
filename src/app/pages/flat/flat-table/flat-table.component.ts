@@ -57,10 +57,13 @@ export class FlatTableComponent {
         type: 'number',
       },
       residentamount: {
+        editable: false,
+        addable: false,
         title: 'ResidentAmount',
         type: 'number',
       },
       houseid: {
+        editable: false,
         title: 'HouseId',
         type: 'html',
         editor: {
@@ -116,6 +119,7 @@ export class FlatTableComponent {
           this.houseService.SourtedFlatList = [];
         });
       }
+
       this.source.refresh();
     });
 

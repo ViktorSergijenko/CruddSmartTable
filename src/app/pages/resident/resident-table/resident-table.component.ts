@@ -18,10 +18,10 @@ import { FlatService } from '../../flat/flat.service';
 `],
 })
 export class ResidentTableComponent {
-  totalRows: number = 0;
+  flatId: any;
   // vesj html(kak vigljadjat i nazivajutsja nawi polja i td,vsja eta infa sazovivaetsja v peremennuju "settings")
   settings = { // setting of our smart table (buttons,columns,names......)
-
+    noDataMessage: 'Sorry, but there is no Residents in this house,if you want to watch all Residents,Press GO TO RESIDENT LIST button ',
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -101,6 +101,7 @@ export class ResidentTableComponent {
     this.route.params.subscribe((params: any) => {
       this.flatService.SourtedResidents = [];
       console.log('I am there');
+      this.flatId = params.id;
       console.log(params.id);
       this.flatService.GetFlatResidents(params.id).subscribe(myResidents => {
         this.flatService.SourtedResidents = myResidents.json();
@@ -134,12 +135,13 @@ export class ResidentTableComponent {
     this.residentService.getFlatIds().subscribe(resp => {
       this.residentService.flatList = resp.json();
       this.residentService.flatList.map(flat => {
-        const myTest = { value: flat.id, title: flat.number };
+        const myTest = { value: flat.id, title: flat.id };
         options.push(myTest);
       });
       this.settings.columns.flatid.editor.config.list = options;
       this.settings = Object.assign({}, this.settings);
       console.log(options);
+      this.source.refresh();
     });
     this.residentService.TotalResidentsInAllFlats = this.source.count();
   }
@@ -157,6 +159,7 @@ export class ResidentTableComponent {
   onDeleteConfirm(event): void {
     this.residentService.deleteResident(event);
     this.residentService.TotalResidentsInAllFlats = this.residentService.TotalResidentsInAllFlats - 1;
+    this.residentService.TotalResidentsInAdditionalFlat = this.residentService.TotalResidentsInAdditionalFlat - 1;
   }
   /**
    *If user will confirm that he wants to add a new resident,function will call
@@ -180,6 +183,7 @@ export class ResidentTableComponent {
     };
     this.residentService.postResident(event, data);
     this.residentService.TotalResidentsInAllFlats = this.residentService.TotalResidentsInAllFlats + 1;
+    this.residentService.TotalResidentsInAdditionalFlat = this.residentService.TotalResidentsInAdditionalFlat + 1;
     this.source.refresh();
   }
   /**
@@ -207,17 +211,18 @@ export class ResidentTableComponent {
 
   goBack(): void {
     // this.router.navigate(['/pages/flat/flat-table/all'], { relativeTo: this.route });
-    this.router.navigate(['/pages/flat/flat-table']);
+    this.router.navigate(['/pages/flat/flat-table'], { relativeTo: this.route });
   }
   getFullList(): void {
-    this.source.empty();
-    this.residentService.getResidentList().subscribe(resident => {
-      this.residentService.residentList = resident.json();
-      this.source.load(this.residentService.residentList);
-      this.residentService.TotalResidentsInAllFlats = this.source.count();
-      this.flatService.TotalFlatsInAdditionalHouse = 0;
-      this.source.refresh();
-    });
+    // this.source.empty();
+    // this.residentService.getResidentList().subscribe(resident => {
+    //  this.residentService.residentList = resident.json();
+    //  this.source.load(this.residentService.residentList);
+    //  this.residentService.TotalResidentsInAllFlats = this.source.count();
+    //  this.flatService.TotalFlatsInAdditionalHouse = 0;
+    //  this.source.refresh();
+    this.router.navigate(['/pages/resident/resident-table'],
+    );
   }
 }
 
