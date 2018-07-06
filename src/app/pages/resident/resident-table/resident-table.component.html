@@ -1,25 +1,25 @@
 <nb-card>
   <nb-card-header>
-    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; align-items: center; display: table; margin: 0 auto;">
       <div class="row">
-        <div class="col-sm-3" *ngIf="this.flatId">
+        <div class="col-sm-4" *ngIf="this.flatId">
           <h1>Resident Table</h1> Total amount of residents in all flats: {{this.residentService.TotalResidentsInAllFlats}} residents
           <br>
           <button class="btn btn-hero-info btn-demo" (click)="getFullList()">Go To Resident List</button>
         </div>
-        <div class="col-sm-12" *ngIf="!this.flatId">
+        <div class="col-sm-12" *ngIf="!this.flatId" style="text-align: center;">
           <h1>Resident Table</h1> Total amount of residents in all flats: {{this.residentService.TotalResidentsInAllFlats}} residents
           <br>
           <button class="btn btn-hero-info btn-demo" (click)="getFullList()" *ngIf="this.flatId">Go To Resident List</button>
         </div>
-        <div class="col-sm-3" *ngIf="this.flatService.selectedFlat">
+        <div class="col-sm-4" *ngIf="this.flatService.selectedFlat">
 
           <h1>Flat Info:</h1> Floor: {{ this.flatService.selectedFlat.floor}}
           <br>Number: {{ this.flatService.selectedFlat.number}}
           <br>Total Area: {{ this.flatService.selectedFlat.totalarea}}
           <br>Residents Living: {{ this.flatService.selectedFlat.residentamount}}
         </div>
-        <div class="col-sm-3" *ngIf="this.flatId">
+        <div class="col-sm-4" *ngIf="this.flatId">
           <h1>Residents in this Flat:</h1> {{this.residentService.TotalResidentsInAdditionalFlat}} Residents are located in this
           house
         </div>

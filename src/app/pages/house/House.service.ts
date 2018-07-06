@@ -13,9 +13,8 @@ import { Subject } from 'rxjs/Subject';
 export class HouseService { // service that will contain all crud fucntions and values for them for house model
   selectedHouse: House; // variable for one additional selected house item
   houseList: House[]; // array to keep all House object
-  SourtedFlatList: Flat[] = [];
-  TotalAmountOfHosesInTable: number;
-  public mysubject: Subject<any> = new Subject();
+  SourtedFlatList: Flat[] = []; // array to keep all additional flats of one house
+  TotalAmountOfHosesInTable: number; // value that keep amount houses in table
   constructor(private http: Http) {
     console.log('hi');
   }
@@ -76,7 +75,7 @@ export class HouseService { // service that will contain all crud fucntions and 
    *newData: Object - edited data
    *source: DataSource - table data source
    *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
-   * @memberof HouseService Service that contains all RESTfull functions that we need
+   * @memberof HouseService HouseService Service that contains all RESTfull functions that we need
    */
   deleteHouse(event) {
     if (window.confirm('Are you sure you want to delete?')) {
@@ -89,15 +88,23 @@ export class HouseService { // service that will contain all crud fucntions and 
       event.confirm.reject();
     }
   }
+  /**
+   * function sends a get request to our backend to get all all flats
+   * of an house that we need
+   * @param {number} id id- id of house that has flats that we need
+   * @returns returns array of flat objects of additional house
+   * @memberof HouseService HouseService Service that contains all RESTfull functions that we need
+   */
   GetHouseFlats(id: number) {
     return this.http.get('http://localhost:52414/api/House/' + id + '/flats');
-    // .subscribe(res => {
-    //   this.SourtedFlatList = res.json();
-    //   console.log('Flats in service: ', this.SourtedFlatList);
-    //   return this.SourtedFlatList;
-    // });
   }
-
+  /**
+   * fucntion sends a get request to get one additional house that we need
+   *
+   * @param {number} id id- id of house that we want to get
+   * @returns returns a house as a object
+   * @memberof HouseService HouseService Service that contains all RESTfull functions that we need
+   */
   GetOneHouse(id: number) {
     return this.http.get('http://localhost:52414/api/House/' + id);
   }

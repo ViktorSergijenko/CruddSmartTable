@@ -12,9 +12,9 @@ export class ResidentService { // service that will contain all crud fucntions a
   residentList: Resident[]; // array that will contain all returned house objects
   residentFlatIdList: any[] = []; // array that will hold all flat idies that exist in database
   flatList: Flat[]; // array that will contain all returned flat objects
-  TotalResidentsInAllFlats: number;
-  TotalResidentsInAdditionalFlat: number;
-  sourtedResidents: Resident[] = [];
+  TotalResidentsInAllFlats: number; // value that will contain all amount of residents that we have in database
+  TotalResidentsInAdditionalFlat: number; // value that will contain  amount of residents that are living in additional flat
+  sourtedResidents: Resident[] = []; // array that will contain array of residents that lives in additional flat
   constructor(private http: Http) { }
   /**
    *this function addes a new  object to our databse that is located on our backend.

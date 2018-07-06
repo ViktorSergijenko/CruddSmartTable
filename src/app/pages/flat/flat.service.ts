@@ -14,9 +14,9 @@ export class FlatService { // service that will contain all crud fucntions and v
   flatHouseIdList: any[] = []; // array that will hold all house idies that exist in database
   houseList: House[] = []; // array that will contain House Objects
   selectedHouse: House; // value that will contain an additional house object(just one)
-  TotalFlatsInTable: number;
-  TotalFlatsInAdditionalHouse: number;
-  SourtedResidents: Resident[] = [];
+  TotalFlatsInTable: number; // value that will contain total amount of existing flats in database
+  TotalFlatsInAdditionalHouse: number; // value that will contain total amount of flats that contains in additional house
+  SourtedResidents: Resident[] = []; // array that will contain returned residents objects from additional flat
   constructor(private http: Http) { }
   /**
   *this function addes a new  object to our databse that is located on our backend.
@@ -27,7 +27,7 @@ export class FlatService { // service that will contain all crud fucntions and v
   *source: DataSource - table data source
   *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
   * @param {*} data Object - original row data
-  * @memberof FlatService Service that contains all RESTfull functions that we need
+  * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
   */
   postFlat(event, data) {
     if (window.confirm('Are you sure you want to add a Flat?')) {
@@ -49,7 +49,7 @@ export class FlatService { // service that will contain all crud fucntions and v
   * source: DataSource - table data source
   * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
   * @param {*} data Object - original row data
-  * @memberof FlatService Service that contains all RESTfull functions that we need
+  * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
   */
   putFlat(event: any, data: any) {
     if (window.confirm('Are you sure you want to update info about a Flat?')) {
@@ -63,7 +63,7 @@ export class FlatService { // service that will contain all crud fucntions and v
   }
   /**
    * Function sends a get request to our backend,and returns all data.(in our case it is Flat array)
-   * @memberof FlatService Service that contains all RESTfull functions that we need
+   * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
    */
   getFlatList() {
     return this.http.get('http://localhost:52414/api/Flat');
@@ -76,7 +76,7 @@ export class FlatService { // service that will contain all crud fucntions and v
    *newData: Object - edited data
    *source: DataSource - table data source
    *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
-   * @memberof FlatService Service that contains all RESTfull functions that we need
+   * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
    */
   deleteFlat(event) {
     if (window.confirm('Are you sure you want to delete?')) {
@@ -90,18 +90,31 @@ export class FlatService { // service that will contain all crud fucntions and v
     }
   }
   /**
-   *it's just a function for sending a request to our backend,so he could return
-   *us a house objects from database.
+   * it's just a function for sending a request to our backend,so he could return
+   * us a house objects from database.
    * @returns House List(all objects HOUSE)
-   * @memberof FlatService Service that contains all RESTfull functions that we need
+   * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
    */
   getHouseIds() {
     return this.http.get('http://localhost:52414/api/House');
   }
-
+  /**
+   * function sends a get request to our backend to get all residents that live in
+   * additional flat
+   * @param {number} id id- id of a flat that we want to get residents from
+   * @returns returns an array of residents objects that live in additional flat
+   * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
+   */
   GetFlatResidents(id: number) {
     return this.http.get('http://localhost:52414/api/flat/' + id + '/residents');
   }
+  /**
+   * Function will send get request to our backend to get one additional flat that we want
+   *
+   * @param {number} id id- id of a flat that we want to get
+   * @returns returns one flat object
+   * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
+   */
   GetOneFlat(id: number) {
     return this.http.get('http://localhost:52414/api/House/' + id);
   }

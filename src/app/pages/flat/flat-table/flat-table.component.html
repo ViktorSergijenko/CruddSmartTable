@@ -1,7 +1,6 @@
 <nb-card>
   <nb-card-header>
-    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; display: table;
-    margin: 0 auto;">
+    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; display: table; margin: 0 auto;">
       <div class="row">
         <div class="col-sm-4" *ngIf="this.houseId">
           <h1>Flat Table</h1> Total amount of flats in all houses: {{this.flatService.TotalFlatsInTable}} flats
@@ -24,7 +23,6 @@
         <div class="col-sm-4" *ngIf="this.houseId">
           <h1>Flats in this House:</h1> {{this.flatService.TotalFlatsInAdditionalHouse}} Flats are located in this house
         </div>
-
       </div>
     </div>
 

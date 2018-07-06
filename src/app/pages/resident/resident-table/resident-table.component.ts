@@ -60,6 +60,7 @@ export class ResidentTableComponent {
         type: 'string',
       },
       flatid: {
+        editable: false,
         title: 'FlatId',
         type: 'html',
         editor: {
@@ -69,21 +70,6 @@ export class ResidentTableComponent {
           },
         },
       },
-      // Actions: // or something
-      //  {
-      //    title: 'Detail',
-      //    type: 'html',
-      //    filter: false,
-      //    editable: false,
-      //   addable: false,
-      //   valuePrepareFunction: (cell, row) => {
-      //     return '<a title="See Detail Product " href = "Your api key or something/${row.Id}" > <i class="ion-edit" > </i></a >';
-      //   },
-      //    Id: { //  this Id to use in ${row.Id}
-      //      title: 'ID',
-      //      type: 'number',
-      //   },
-      // },
     },
   };
   source: LocalDataSource = new LocalDataSource(); // fucntionality of our ng2 smart table
@@ -146,14 +132,14 @@ export class ResidentTableComponent {
     this.residentService.TotalResidentsInAllFlats = this.source.count();
   }
   /**
-   *If user will confirm that he wants to delete additional resident,
-   *then this function will call "deleteResident" fucntion that will make a delete request
+   * If user will confirm that he wants to delete additional resident,
+   * then this function will call "deleteResident" fucntion that will make a delete request
    *
    * @param {*} event - event-Object, consist of:
-   *data: Object - original row data
-   *newData: Object - edited data
-   *source: DataSource - table data source
-   *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+   * data: Object - original row data
+   * newData: Object - edited data
+   * source: DataSource - table data source
+   * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
    * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
    */
   onDeleteConfirm(event): void {
@@ -162,13 +148,13 @@ export class ResidentTableComponent {
     this.residentService.TotalResidentsInAdditionalFlat = this.residentService.TotalResidentsInAdditionalFlat - 1;
   }
   /**
-   *If user will confirm that he wants to add a new resident,function will call
+   * If user will confirm that he wants to add a new resident,function will call
    *"postResident" function that will make a post request to other localhost
    * @param {*} event event-Object, consist of:
-   *data: Object - original row data
-   *newData: Object - edited data
-   *source: DataSource - table data source
-   *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+   * data: Object - original row data
+   * newData: Object - edited data
+   * source: DataSource - table data source
+   * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
    * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
    */
   onCreateConfirm(event): void {
@@ -187,13 +173,13 @@ export class ResidentTableComponent {
     this.source.refresh();
   }
   /**
-   *If user will confirm that he wants to change information about additional resident
+   * If user will confirm that he wants to change information about additional resident
    * function will call other function called "putResident",that will send put request to our backend
    * @param {*} event event-Object, consist of:
-   *data: Object - original row data
-   *newData: Object - edited data
-   *source: DataSource - table data source
-   *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+   * data: Object - original row data
+   * newData: Object - edited data
+   * source: DataSource - table data source
+   * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
    * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
    */
   onSaveConfirm(event): void {
@@ -208,19 +194,20 @@ export class ResidentTableComponent {
     };
     this.residentService.putResident(event, data);
   }
-
+  /**
+   * Function will be use on button,when we will click on button,
+   * function will send uss on other page
+   * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+   */
   goBack(): void {
-    // this.router.navigate(['/pages/flat/flat-table/all'], { relativeTo: this.route });
     this.router.navigate(['/pages/flat/flat-table'], { relativeTo: this.route });
   }
+  /**
+   * This function is use on a button,when we will press button,it will
+   * send uss on a Flat table page,where will be loaded all flats that we have in database
+   * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+   */
   getFullList(): void {
-    // this.source.empty();
-    // this.residentService.getResidentList().subscribe(resident => {
-    //  this.residentService.residentList = resident.json();
-    //  this.source.load(this.residentService.residentList);
-    //  this.residentService.TotalResidentsInAllFlats = this.source.count();
-    //  this.flatService.TotalFlatsInAdditionalHouse = 0;
-    //  this.source.refresh();
     this.router.navigate(['/pages/resident/resident-table'],
     );
   }

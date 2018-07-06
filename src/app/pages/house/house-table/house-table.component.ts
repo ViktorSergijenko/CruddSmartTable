@@ -52,8 +52,8 @@ export class HouseTableComponent {
         type: 'string',
       },
       flatamount: {
-        editable: false,
-        addable: false,
+        editable: false, // dont have posability to edit this column
+        addable: false, // dont have posability to ad values in this column
         title: 'FlatAmount',
         type: 'Flat',
       },
@@ -74,29 +74,29 @@ export class HouseTableComponent {
     });
   }
   /**
- *If user will confirm that he wants to delete additional resident,
- *then this function will call "deleteResident" fucntion that will make a delete request
- *
- * @param {*} event - event-Object, consist of:
- *data: Object - original row data
- *newData: Object - edited data
- *source: DataSource - table data source
- *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
- * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
- */
+   * If user will confirm that he wants to delete additional resident,
+   * then this function will call "deleteResident" fucntion that will make a delete request
+   *
+   * @param {*} event - event-Object, consist of:
+   * data: Object - original row data
+   * newData: Object - edited data
+   * source: DataSource - table data source
+   * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+   * @memberof HouseTableComponent HouseTableComponent - Have all setting of our resident smart table
+   */
   onDeleteConfirm(event): void {
     this.houseService.deleteHouse(event);
     this.houseService.TotalAmountOfHosesInTable = this.houseService.TotalAmountOfHosesInTable - 1;
   }
   /**
-   *If user will confirm that he wants to add a new resident,function will call
-   *"postResident" function that will make a post request to other localhost
+   * If user will confirm that he wants to add a new resident,function will call
+   * "postResident" function that will make a post request to other localhost
    * @param {*} event event-Object, consist of:
-   *data: Object - original row data
-   *newData: Object - edited data
-   *source: DataSource - table data source
-   *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
-   * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+   * data: Object - original row data
+   * newData: Object - edited data
+   * source: DataSource - table data source
+   * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+   * @memberof HouseTableComponent HouseTableComponent - Have all setting of our resident smart table
    */
   onCreateConfirm(event): void {
     const data = { // values of our data that we will work with
@@ -110,14 +110,14 @@ export class HouseTableComponent {
     this.houseService.TotalAmountOfHosesInTable = this.houseService.TotalAmountOfHosesInTable + 1;
   }
   /**
-  *If user will confirm that he wants to change information about additional resident
+  * If user will confirm that he wants to change information about additional resident
   * function will call other function called "putResident",that will send put request to our backend
   * @param {*} event event-Object, consist of:
-  *data: Object - original row data
-  *newData: Object - edited data
-  *source: DataSource - table data source
-  *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
-  * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+  * data: Object - original row data
+  * newData: Object - edited data
+  * source: DataSource - table data source
+  * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+  * @memberof HouseTableComponent HouseTableComponent - Have all setting of our resident smart table
   */
   onSaveConfirm(event): void {
     const data = { // values of our data that we will work with
@@ -129,12 +129,15 @@ export class HouseTableComponent {
     };
     this.houseService.putHouse(event, data);
   }
+  /**
+   * give us posability to click on a row
+   * as a result it will give us all values of this row as an event
+   * @param {*} event event- in our case it is a click event on a row
+   * @memberof HouseTableComponent HouseTableComponent - Have all setting of our resident smart table
+   */
   onUserRowSelect(event) {
     console.log('user row select: ', event.data.id);
     this.router.navigate(['/pages/flat/flat-table/' + event.data.id], { relativeTo: this.route });
-    // this.houseService.GetHouseFlats(event.data.id);
   }
 }
-// valuePrepareFunction: (cell, row) => {
-//  return '<a title="See Detail Product " href = "Your api key or something/${row.Id}" > <i class="ion-edit" > </i></a >';
-// }
+

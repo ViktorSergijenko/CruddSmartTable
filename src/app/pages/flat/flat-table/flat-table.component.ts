@@ -85,7 +85,6 @@ export class FlatTableComponent {
     private location: Location,
     private route: ActivatedRoute,
     private router: Router,
-    // private houseTable: HouseTableComponent,
   ) {
     this.route.params.subscribe((params: any) => {
       this.houseService.SourtedFlatList = [];
@@ -123,14 +122,11 @@ export class FlatTableComponent {
       this.source.refresh();
     });
 
-    // houseService.mysubject.subscribe((value) => {
-    //  console.log('value from Flat Controller' + value);
-    // });
     const options = [];
     this.flatService.getHouseIds().subscribe(resp => {
       this.flatService.houseList = resp.json();
       this.flatService.houseList.map(house => {
-        const myTest = { value: house.id, title: house.street };
+        const myTest = { value: house.id, title: 'Street: ' + house.street + '  City: ' + house.city + '  Country: ' + house.country };
         options.push(myTest);
       });
       this.settings.columns.houseid.editor.config.list = options;
@@ -140,14 +136,14 @@ export class FlatTableComponent {
     });
   }
   /**
-  *If user will confirm that he wants to delete additional resident,
-  *then this function will call "deleteFlat" fucntion that will make a delete request
+  * If user will confirm that he wants to delete additional resident,
+  * then this function will call "deleteFlat" fucntion that will make a delete request
   *
   * @param {*} event - event-Object, consist of:
-  *data: Object - original row data
-  *newData: Object - edited data
-  *source: DataSource - table data source
-  *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+  * data: Object - original row data
+  * newData: Object - edited data
+  * source: DataSource - table data source
+  * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
   * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
   */
   onDeleteConfirm(event): void {
@@ -156,13 +152,13 @@ export class FlatTableComponent {
     this.flatService.TotalFlatsInAdditionalHouse = this.flatService.TotalFlatsInAdditionalHouse - 1;
   }
   /**
-   *If user will confirm that he wants to add a new flat,function will call
-   *"postFlat" function that will make a post request to other localhost
+   * If user will confirm that he wants to add a new flat,function will call
+   * "postFlat" function that will make a post request to other localhost
    * @param {*} event event-Object, consist of:
-   *data: Object - original row data
-   *newData: Object - edited data
-   *source: DataSource - table data source
-   *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+   * data: Object - original row data
+   * newData: Object - edited data
+   * source: DataSource - table data source
+   * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
    * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
    */
   onCreateConfirm(event): void {
@@ -179,14 +175,14 @@ export class FlatTableComponent {
     this.flatService.TotalFlatsInAdditionalHouse = this.flatService.TotalFlatsInAdditionalHouse + 1;
   }
   /**
-  *If user will confirm that he wants to change information about additional resident
+  * If user will confirm that he wants to change information about additional resident
   * function will call other function called "putFlat",that will send put request to our backend
   * @param {*} event event-Object, consist of:
-  *data: Object - original row data
-  *newData: Object - edited data
-  *source: DataSource - table data source
-  *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
-  * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+  * data: Object - original row data
+  * newData: Object - edited data
+  * source: DataSource - table data source
+  * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
+  * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
   */
   onSaveConfirm(event): void {
     const data = { // values of our data that we will work with
@@ -199,36 +195,32 @@ export class FlatTableComponent {
     };
     this.flatService.putFlat(event, data);
   }
+  /**
+   * Function will be use on button,when we will click on button,
+   * function will send uss on other page
+   * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
+   */
   goBack(): void {
     this.router.navigate(['/pages/house/house-table'], { relativeTo: this.route });
   }
+  /**
+   * give us posability to click on a row
+   * as a result it will give us all values of this row as an event
+   * @param {*} event event- in our case it is a click event on a row
+   * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
+   */
   onUserRowSelect(event) {
     console.log('user row select: ', event.data.id);
     this.router.navigate(['/pages/resident/resident-table/' + event.data.id], { relativeTo: this.route });
   }
+  /**
+   * This function is use on a button,when we will press button,it will
+   * send uss on a House table page,where will be loaded all Houses that we have in database
+   * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
+   */
   getFullList(): void {
-    // this.source.empty();
-    // this.source.load(this.flatService.flatList);
-    // this.flatService.TotalFlatsInTable = this.source.count();
-    // this.flatService.TotalFlatsInAdditionalHouse = 0;
-    // this.source.refresh();
     this.router.navigate(['/pages/flat/flat-table'],
-      // { relativeTo: this.route }
     );
-  }
-  loadLogic(id: number) {
-    if (this.houseService.SourtedFlatList.length === 0 ||
-      this.houseService.SourtedFlatList.length === null ||
-      this.houseService.SourtedFlatList === []) {
-      this.flatService.getFlatList().subscribe(resp => {
-        this.flatService.flatList = resp.json();
-        this.source.load(this.flatService.flatList);
-        this.flatService.TotalFlatsInTable = this.source.count();
-      });
-    } else {
-      this.source.load(this.houseService.SourtedFlatList);
-      this.source.refresh();
-    }
   }
 }
 
