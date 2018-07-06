@@ -8,6 +8,7 @@ const routes: Routes = [{
   component: FlatComponent,
   children: [
     { path: 'flat-table/:id', component: FlatTableComponent },
+    { path: 'flat-table', component: FlatTableComponent },
     { path: '', component: FlatTableComponent },
   ],
 }];

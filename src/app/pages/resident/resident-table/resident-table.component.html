@@ -1,7 +1,23 @@
 <nb-card>
   <nb-card-header>
-    <h1>Resident Table</h1> Total amount of residents in all houses: {{this.residentService.TotalResidents}} people
-    <button class="btn btn-hero-info btn-demo" (click)="getFullList()">Get Full List</button>
+    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+      <div>
+        <h1>Resident Table</h1> Total amount of residents in all flats: {{this.residentService.TotalResidentsInAllFlats}} residents
+        <br>
+        <button class="btn btn-hero-info btn-demo" (click)="getFullList()">Get Full List</button>
+      </div>
+      <div *ngIf="this.flatService.selectedFlat">
+
+        <h1>Flat Info:</h1> Floor: {{ this.flatService.selectedFlat.Floor}}
+        <br>Number: {{ this.flatService.selectedFlat.number}}
+        <br>Total Area: {{ this.flatService.selectedFlat.totalarea}}
+        <br>Residents Living: {{ this.flatService.selectedFlat.residentamount}}
+      </div>
+      <div>
+        <h1>Residents in this Flat:</h1> {{this.residentService.TotalResidentsInAdditionalFlat}} Residents are located in this
+        house
+      </div>
+    </div>
   </nb-card-header>
 
   <nb-card-body>

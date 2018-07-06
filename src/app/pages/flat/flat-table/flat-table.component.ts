@@ -87,7 +87,8 @@ export class FlatTableComponent {
     this.route.params.subscribe((params: any) => {
       this.houseService.SourtedFlatList = [];
       console.log('I am there');
-      console.log(params.id);
+      this.houseId = params.id;
+      console.log(this.houseId);
       this.houseService.GetHouseFlats(params.id).subscribe(myFlats => {
         this.houseService.SourtedFlatList = myFlats.json();
         this.flatService.getFlatList().subscribe(flat => {
@@ -99,10 +100,12 @@ export class FlatTableComponent {
         });
       });
       if (!params.id || params.id === 'all') {
+        console.log(this.houseId);
         this.flatService.getFlatList().subscribe(resp => {
           this.flatService.flatList = resp.json();
           this.source.load(this.flatService.flatList);
           this.flatService.TotalFlatsInTable = this.source.count();
+          this.houseService.selectedHouse = null;
         });
       } else {
         this.houseService.GetHouseFlats(params.id).subscribe(flats => {
@@ -146,6 +149,7 @@ export class FlatTableComponent {
   onDeleteConfirm(event): void {
     this.flatService.deleteFlat(event);
     this.flatService.TotalFlatsInTable = this.flatService.TotalFlatsInTable - 1;
+    this.flatService.TotalFlatsInAdditionalHouse = this.flatService.TotalFlatsInAdditionalHouse - 1;
   }
   /**
    *If user will confirm that he wants to add a new flat,function will call
@@ -168,6 +172,7 @@ export class FlatTableComponent {
     };
     this.flatService.postFlat(event, data);
     this.flatService.TotalFlatsInTable = this.flatService.TotalFlatsInTable + 1;
+    this.flatService.TotalFlatsInAdditionalHouse = this.flatService.TotalFlatsInAdditionalHouse + 1;
   }
   /**
   *If user will confirm that he wants to change information about additional resident
@@ -198,11 +203,14 @@ export class FlatTableComponent {
     this.router.navigate(['/pages/resident/resident-table/' + event.data.id], { relativeTo: this.route });
   }
   getFullList(): void {
-    this.source.empty();
-    this.source.load(this.flatService.flatList);
-    this.flatService.TotalFlatsInTable = this.source.count();
-    this.flatService.TotalFlatsInAdditionalHouse = 0;
-    this.source.refresh();
+    // this.source.empty();
+    // this.source.load(this.flatService.flatList);
+    // this.flatService.TotalFlatsInTable = this.source.count();
+    // this.flatService.TotalFlatsInAdditionalHouse = 0;
+    // this.source.refresh();
+    this.router.navigate(['/pages/flat/flat-table'],
+      // { relativeTo: this.route }
+    );
   }
   loadLogic(id: number) {
     if (this.houseService.SourtedFlatList.length === 0 ||

@@ -99,22 +99,31 @@ export class ResidentTableComponent {
     private router: Router,
   ) {
     this.route.params.subscribe((params: any) => {
+      this.flatService.SourtedResidents = [];
       console.log('I am there');
       console.log(params.id);
       this.flatService.GetFlatResidents(params.id).subscribe(myResidents => {
         this.flatService.SourtedResidents = myResidents.json();
+        this.residentService.getResidentList().subscribe(myResidentsALL => {
+          this.residentService.residentList = myResidentsALL.json();
+          this.flatService.GetOneFlat(params.id).subscribe(OneFlat => {
+            this.flatService.selectedFlat = OneFlat.json();
+            this.residentService.TotalResidentsInAllFlats = this.residentService.residentList.length;
+          });
+        });
       });
       if (!params.id || params.id === 'all') {
         this.residentService.getResidentList().subscribe(resident => {
           this.residentService.residentList = resident.json();
           this.source.load(this.residentService.residentList);
-          this.residentService.TotalResidents = this.source.count();
+          this.residentService.TotalResidentsInAllFlats = this.source.count();
+          this.flatService.selectedFlat = null;
         });
       } else {
         this.flatService.GetFlatResidents(params.id).subscribe(resident => {
           this.flatService.SourtedResidents = resident.json();
           this.source.load(this.flatService.SourtedResidents);
-          this.residentService.TotalResidents = this.source.count();
+          this.residentService.TotalResidentsInAdditionalFlat = this.source.count();
           this.source.refresh();
           this.flatService.SourtedResidents = [];
         });
@@ -132,7 +141,7 @@ export class ResidentTableComponent {
       this.settings = Object.assign({}, this.settings);
       console.log(options);
     });
-    this.residentService.TotalResidents = this.source.count();
+    this.residentService.TotalResidentsInAllFlats = this.source.count();
   }
   /**
    *If user will confirm that he wants to delete additional resident,
@@ -147,7 +156,7 @@ export class ResidentTableComponent {
    */
   onDeleteConfirm(event): void {
     this.residentService.deleteResident(event);
-    this.residentService.TotalResidents = this.residentService.TotalResidents - 1;
+    this.residentService.TotalResidentsInAllFlats = this.residentService.TotalResidentsInAllFlats - 1;
   }
   /**
    *If user will confirm that he wants to add a new resident,function will call
@@ -170,7 +179,7 @@ export class ResidentTableComponent {
       'flatid': event.newData.flatid,
     };
     this.residentService.postResident(event, data);
-    this.residentService.TotalResidents = this.residentService.TotalResidents + 1;
+    this.residentService.TotalResidentsInAllFlats = this.residentService.TotalResidentsInAllFlats + 1;
     this.source.refresh();
   }
   /**
@@ -197,14 +206,16 @@ export class ResidentTableComponent {
   }
 
   goBack(): void {
-    this.router.navigate(['/pages/flat/flat-table/all'], { relativeTo: this.route });
+    // this.router.navigate(['/pages/flat/flat-table/all'], { relativeTo: this.route });
+    this.router.navigate(['/pages/flat/flat-table']);
   }
   getFullList(): void {
     this.source.empty();
     this.residentService.getResidentList().subscribe(resident => {
       this.residentService.residentList = resident.json();
       this.source.load(this.residentService.residentList);
-      this.residentService.TotalResidents = this.source.count();
+      this.residentService.TotalResidentsInAllFlats = this.source.count();
+      this.flatService.TotalFlatsInAdditionalHouse = 0;
       this.source.refresh();
     });
   }
