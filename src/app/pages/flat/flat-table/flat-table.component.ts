@@ -206,6 +206,7 @@ export class FlatTableComponent {
   /**
    * give us posability to click on a row
    * as a result it will give us all values of this row as an event
+   * and after that it will route uss to '/pages/resident/resident-table/ id'
    * @param {*} event event- in our case it is a click event on a row
    * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
    */
