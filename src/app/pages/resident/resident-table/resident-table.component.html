@@ -9,6 +9,7 @@
         </div>
         <div class="col-sm-12" *ngIf="!this.flatId" style="text-align: center;">
           <h1>Resident Table</h1> Total amount of residents in all flats: {{this.residentService.TotalResidentsInAllFlats}} residents
+          <i class="fas fa-door-open"></i>
           <br>
           <button class="btn btn-hero-info btn-demo" (click)="getFullList()" *ngIf="this.flatId">Go To Resident List</button>
         </div>

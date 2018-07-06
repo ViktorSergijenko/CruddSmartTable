@@ -39,6 +39,7 @@ export class FlatTableComponent {
       deleteButtonContent: '<i class="nb-trash"></i>',
       confirmDelete: true,
     },
+
     columns: {
       floor: {
         title: 'Floor',
@@ -73,6 +74,7 @@ export class FlatTableComponent {
           },
         },
       },
+
     },
   };
   source: LocalDataSource = new LocalDataSource(); // fucntionality of our ng2 smart table
@@ -86,6 +88,9 @@ export class FlatTableComponent {
     private route: ActivatedRoute,
     private router: Router,
   ) {
+    // first of all we get value from route,we use it to define house id as a params.id
+    // then we use GetHouseFlats , getFlatList and GetOneHouse to get all needed information to load in table
+    // and counting all objects
     this.route.params.subscribe((params: any) => {
       this.houseService.SourtedFlatList = [];
       console.log('I am there');
@@ -101,6 +106,8 @@ export class FlatTableComponent {
           });
         });
       });
+      // if route returns params.id as 'all' or it is undefined then
+      // programm will load all flats in to the table that we have in our database on our backend
       if (!params.id || params.id === 'all') {
         console.log(this.houseId);
         this.flatService.getFlatList().subscribe(resp => {
@@ -109,6 +116,8 @@ export class FlatTableComponent {
           this.flatService.TotalFlatsInTable = this.source.count();
           this.houseService.selectedHouse = null;
         });
+        // else (if we have returned param.id as a number) it will load to
+        // the table all flats that include house with id that have === param.id
       } else {
         this.houseService.GetHouseFlats(params.id).subscribe(flats => {
           this.houseService.SourtedFlatList = flats.json();

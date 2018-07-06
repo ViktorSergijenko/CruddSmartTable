@@ -84,6 +84,9 @@ export class ResidentTableComponent {
     private route: ActivatedRoute,
     private router: Router,
   ) {
+    // first of all we get value from route,we use it to define house id as a params.id
+    // then we use GetFlatResidents , getResidentList and GetOneFlat to get all needed information to load in table
+    // and counting all objects
     this.route.params.subscribe((params: any) => {
       this.flatService.SourtedResidents = [];
       console.log('I am there');
@@ -95,10 +98,13 @@ export class ResidentTableComponent {
           this.residentService.residentList = myResidentsALL.json();
           this.flatService.GetOneFlat(params.id).subscribe(OneFlat => {
             this.flatService.selectedFlat = OneFlat.json();
+            console.log('BLEDJ' + OneFlat.json());
             this.residentService.TotalResidentsInAllFlats = this.residentService.residentList.length;
           });
         });
       });
+      // if route returns params.id as 'all' or it is undefined then
+      // programm will load all flats in to the table that we have in our database on our backend
       if (!params.id || params.id === 'all') {
         this.residentService.getResidentList().subscribe(resident => {
           this.residentService.residentList = resident.json();
@@ -106,6 +112,8 @@ export class ResidentTableComponent {
           this.residentService.TotalResidentsInAllFlats = this.source.count();
           this.flatService.selectedFlat = null;
         });
+        // else (if we have returned param.id as a number) it will load to
+        // the table all flats that include house with id that have === param.id
       } else {
         this.flatService.GetFlatResidents(params.id).subscribe(resident => {
           this.flatService.SourtedResidents = resident.json();

@@ -116,7 +116,7 @@ export class FlatService { // service that will contain all crud fucntions and v
    * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
    */
   GetOneFlat(id: number) {
-    return this.http.get('http://localhost:52414/api/House/' + id);
+    return this.http.get('http://localhost:52414/api/flat/' + id);
   }
 }
 
