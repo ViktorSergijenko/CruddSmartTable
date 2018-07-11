@@ -6,6 +6,7 @@ import { SmartTableService } from '../../../@core/data/smart-table.service';
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
 import { House } from '../house.module';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-house-table',
@@ -22,7 +23,7 @@ export class HouseTableComponent {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
-      confirmCreate: true,
+      create: true,
     },
     edit: {
       editButtonContent: '<i class="nb-edit"></i>',
@@ -34,10 +35,19 @@ export class HouseTableComponent {
       deleteButtonContent: '<i class="nb-trash"></i>',
       confirmDelete: true,
     },
+    mode: 'external',
     columns: {
       street: {
         title: 'Street Name',
         type: 'string',
+      },
+      number: {
+        title: 'House Number',
+        type: 'number',
+      },
+      floors: {
+        title: 'Floors',
+        type: 'number',
       },
       city: {
         title: 'City',
@@ -63,7 +73,8 @@ export class HouseTableComponent {
   // our constructor calles getHouseList() function to send a request to our backend so he could rewturn us all house objects...
   // then all this returned values will be placed in houseList from HouseService(Array of House Objects),and after that...
   // function load() from LocalDataSource class will load all this data to our smart table
-  constructor(private houseService: HouseService, private http: Http, private router: Router, private route: ActivatedRoute) {
+  constructor(public houseService: HouseService, private http: Http, private router: Router, private route: ActivatedRoute) {
+    // this.houseService.houseForForm = new House();
     // houseService.mysubject.next('My favourite value');
     this.houseService.getHouseList().subscribe(resp => {
       console.log(resp.json());
@@ -71,6 +82,17 @@ export class HouseTableComponent {
       this.source.load(resp.json());
       this.source.count();
       this.houseService.TotalAmountOfHosesInTable = this.source.count();
+      this.houseService.selectedHouse = {
+        id: null,
+        street: '',
+        number: null,
+        floors: null,
+        flatamount: null,
+        city: '',
+        country: '',
+        postindex: '',
+        flats: null,
+      };
     });
   }
   /**
@@ -98,16 +120,19 @@ export class HouseTableComponent {
    * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
    * @memberof HouseTableComponent HouseTableComponent - Have all setting of our resident smart table
    */
-  onCreateConfirm(event): void {
-    const data = { // values of our data that we will work with
-      'id': event.newData.id = 0,
-      'street': event.newData.street,
-      'city': event.newData.city,
-      'country': event.newData.country,
-      'postindex': event.newData.postindex,
-    };
-    this.houseService.postHouse(event, data);
-    this.houseService.TotalAmountOfHosesInTable = this.houseService.TotalAmountOfHosesInTable + 1;
+  onCreateConfirm(): void {
+    // const data = { // values of our data that we will work with
+    //   'id': event.newData.id = 0,
+    //   'street': event.newData.street,
+    //   'number': event.newData.number,
+    //   'city': event.newData.city,
+    //   'country': event.newData.country,
+    //   'postindex': event.newData.postindex,
+    //   'floors': event.newData.floors,
+    // };
+    // this.houseService.postHouse(event, data);
+    // this.houseService.TotalAmountOfHosesInTable = this.houseService.TotalAmountOfHosesInTable + 1;
+    console.log('HEYHEY');
   }
   /**
   * If user will confirm that he wants to change information about additional resident
@@ -123,6 +148,7 @@ export class HouseTableComponent {
     const data = { // values of our data that we will work with
       'id': event.newData.id,
       'street': event.newData.street,
+      'number': event.newData.number,
       'city': event.newData.city,
       'country': event.newData.country,
       'postindex': event.newData.postindex,

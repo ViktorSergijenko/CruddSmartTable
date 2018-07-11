@@ -9,6 +9,7 @@ import { HouseComponent } from '../../house/house.component';
 import { HouseTableComponent } from '../../house/house-table/house-table.component';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { Flat } from '../flat.module';
 @Component({
   selector: 'app-flat-table',
   templateUrl: './flat-table.component.html',
@@ -82,8 +83,8 @@ export class FlatTableComponent {
   // then all this returned values will be placed in flatList from FlatService(Array of Flat Objects),and after that...
   // function load() from LocalDataSource class will load all this data to our smart table
   constructor(
-    private flatService: FlatService,
-    private houseService: HouseService,
+    public flatService: FlatService,
+    public houseService: HouseService,
     private location: Location,
     private route: ActivatedRoute,
     private router: Router,
@@ -91,6 +92,7 @@ export class FlatTableComponent {
     // first of all we get value from route,we use it to define house id as a params.id
     // then we use GetHouseFlats , getFlatList and GetOneHouse to get all needed information to load in table
     // and counting all objects
+    this.flatService.selectedFlat = new Flat;
     this.route.params.subscribe((params: any) => {
       this.houseService.SourtedFlatList = [];
       console.log('I am there');
@@ -135,7 +137,7 @@ export class FlatTableComponent {
     this.flatService.getHouseIds().subscribe(resp => {
       this.flatService.houseList = resp.json();
       this.flatService.houseList.map(house => {
-        const myTest = { value: house.id, title: 'Street: ' + house.street + '  City: ' + house.city + '  Country: ' + house.country };
+        const myTest = { value: house.id, title: 'Street: ' + house.street + ' Number: ' + house.number + '  City: ' + house.city };
         options.push(myTest);
       });
       this.settings.columns.houseid.editor.config.list = options;
@@ -210,7 +212,7 @@ export class FlatTableComponent {
    * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
    */
   goBack(): void {
-    this.router.navigate(['/pages/house/house-table'], { relativeTo: this.route });
+    this.location.back();
   }
   /**
    * give us posability to click on a row

@@ -36,9 +36,9 @@ C:\Users\PC\Desktop\SmoodeLookingRestClient\TESTAPI\TESTAPI\bin\Debug\netcoreapp
 C:\Users\PC\Desktop\SmoodeLookingRestClient\TESTAPI\TESTAPI\bin\Debug\netcoreapp2.0\TESTAPI.runtimeconfig.dev.json
 C:\Users\PC\Desktop\SmoodeLookingRestClient\TESTAPI\TESTAPI\bin\Debug\netcoreapp2.0\TESTAPI.dll
 C:\Users\PC\Desktop\SmoodeLookingRestClient\TESTAPI\TESTAPI\bin\Debug\netcoreapp2.0\TESTAPI.pdb
-C:\Users\PC\Desktop\SmoodeLookingRestClient\TESTAPI\TESTAPI\obj\Debug\netcoreapp2.0\TESTAPI.csprojResolveAssemblyReference.cache
 C:\Users\PC\Desktop\SmoodeLookingRestClient\TESTAPI\TESTAPI\obj\Debug\netcoreapp2.0\TESTAPI.csproj.CoreCompileInputs.cache
 C:\Users\PC\Desktop\SmoodeLookingRestClient\TESTAPI\TESTAPI\obj\Debug\netcoreapp2.0\TESTAPI.AssemblyInfoInputs.cache
 C:\Users\PC\Desktop\SmoodeLookingRestClient\TESTAPI\TESTAPI\obj\Debug\netcoreapp2.0\TESTAPI.AssemblyInfo.cs
 C:\Users\PC\Desktop\SmoodeLookingRestClient\TESTAPI\TESTAPI\obj\Debug\netcoreapp2.0\TESTAPI.dll
 C:\Users\PC\Desktop\SmoodeLookingRestClient\TESTAPI\TESTAPI\obj\Debug\netcoreapp2.0\TESTAPI.pdb
+C:\Users\PC\Desktop\SmoodeLookingRestClient\TESTAPI\TESTAPI\obj\Debug\netcoreapp2.0\TESTAPI.csprojResolveAssemblyReference.cache

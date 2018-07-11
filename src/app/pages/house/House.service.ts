@@ -6,12 +6,13 @@ import 'rxjs/add/operator/toPromise';
 import { House } from './house.module'; // our house model is located here
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http'; // for http(crud) requests
 import { Flat } from '../flat/flat.module';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs/subject';
 
 
 @Injectable()
 export class HouseService { // service that will contain all crud fucntions and values for them for house model
   selectedHouse: House; // variable for one additional selected house item
+  houseForForm: House;
   houseList: House[]; // array to keep all House object
   SourtedFlatList: Flat[] = []; // array to keep all additional flats of one house
   TotalAmountOfHosesInTable: number; // value that keep amount houses in table

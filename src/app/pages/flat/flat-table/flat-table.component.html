@@ -2,26 +2,30 @@
   <nb-card-header>
     <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; display: table; margin: 0 auto;">
       <div class="row">
-        <div class="col-sm-4" *ngIf="this.houseId">
-          <h1>Flat Table</h1> Total amount of flats in all houses: {{this.flatService.TotalFlatsInTable}} flats
+        <div class="col-sm-4" *ngIf="houseId">
+          <h1>Flat Table</h1> Total amount of flats in all houses: {{flatService.TotalFlatsInTable}} flats
           <br>
-          <button class="btn btn-hero-info btn-demo" (click)="getFullList()" *ngIf="this.houseId">Go To Flat List</button>
+          <button class="btn btn-hero-info btn-demo" (click)="getFullList()" *ngIf="houseId">Go To Flat List</button>
         </div>
-        <div class="col-sm-12" *ngIf="!this.houseId" style="text-align: center;">
-          <h1>Flat Table</h1> Total amount of flats in all houses: {{this.flatService.TotalFlatsInTable}} flats
+        <div class="col-sm-12" *ngIf="!houseId" style="text-align: center;">
+          <h1>Flat Table</h1> Total amount of flats in all houses: {{flatService.TotalFlatsInTable}} flats
           <br>
-          <button class="btn btn-hero-info btn-demo" (click)="getFullList()" *ngIf="this.houseId">Get Full List</button>
+          <button class="btn btn-hero-info btn-demo" (click)="getFullList()" *ngIf="houseId">Get Full List</button>
         </div>
 
-        <div class="col-sm-4" *ngIf="this.houseService.selectedHouse">
+        <div class="col-sm-4" *ngIf="houseService.selectedHouse">
 
-          <h1>House Info:</h1> Street: {{this.houseService.selectedHouse.street}}
-          <br>City: {{this.houseService.selectedHouse.city}}
-          <br>Country: {{this.houseService.selectedHouse.country}}
-          <br>Postindex: {{this.houseService.selectedHouse.postindex}}
+          <h1>House Info:</h1> Street: {{houseService.selectedHouse.street}}
+          <br>Number: {{houseService.selectedHouse.number}}
+          <br>Floors: {{houseService.selectedHouse.floors}}
+          <br>City: {{houseService.selectedHouse.city}}
+          <br>Country: {{houseService.selectedHouse.country}}
+          <br>Postindex: {{houseService.selectedHouse.postindex}}
+
+
         </div>
-        <div class="col-sm-4" *ngIf="this.houseId">
-          <h1>Flats in this House:</h1> {{this.flatService.TotalFlatsInAdditionalHouse}} Flats are located in this house
+        <div class="col-sm-4" *ngIf="houseId">
+          <h1>Flats in this House:</h1> {{flatService.TotalFlatsInAdditionalHouse}} Flats are located in this house
         </div>
       </div>
     </div>
@@ -37,3 +41,53 @@
   </nb-card-body>
   <button class="btn btn-hero-primary btn-demo" (click)="goBack()">GoBack</button>
 </nb-card>
+
+<form class="emp-form" #flatForm="ngForm">
+  <nb-card>
+    <nb-card-header>Block form</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <input type="hidden" *ngIf="flatService.selectedFlat && flatService.selectedFlat.id" name="id" #id="ngModel" [(ngModel)]="flatService.selectedFlat.id">
+        <input type="hidden" *ngIf="flatService.selectedFlat && flatService.selectedFlat.residentamount" name="residentamount" #id="ngModel"
+          [(ngModel)]="flatService.selectedFlat.residentamount">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputstreet">Floor</label>
+            <!-- <input type="text" class="form-control" id="inputFirstName" placeholder="First Name"> -->
+            <input class="form-control" id="inputfloor" name="floor" #floor="ngModel" [(ngModel)]="flatService.selectedFlat.floor" placeholder="floor"
+              required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputnumber">Flat Number</label>
+            <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="flatService.selectedFlat.number"
+              placeholder="number" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputtotalarea">TotalArea</label>
+            <input type="text" class="form-control" id="inputtotalarea" name="totalarea" #totalarea="ngModel" [(ngModel)]="flatService.selectedFlat.totalarea"
+              placeholder="totalarea" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputlivingspace">LivingSpace</label>
+            <input type="text" class="form-control" id="inputlivingspace" name="livingspace" #livingspace="ngModel" [(ngModel)]="flatService.selectedFlat.livingspace"
+              placeholder="livingspace" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputcountry">houseid</label>
+            <input type="text" class="form-control" id="inputhouseid" name="houseid" #houseid="ngModel" [(ngModel)]="flatService.selectedFlat.houseid"
+              placeholder="houseid" required>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </nb-card-body>
+  </nb-card>
+</form>

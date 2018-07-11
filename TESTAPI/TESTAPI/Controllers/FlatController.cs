@@ -31,9 +31,6 @@ namespace TESTAPI.Controllers
           .ToList();
       flats.ForEach(flat => flat.residentamount = flat.residents.Count);
       return flats;
-
-
-
     }
 
         [HttpGet("{id}", Name = "GetFlat")]

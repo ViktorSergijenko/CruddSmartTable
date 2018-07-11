@@ -32,6 +32,8 @@ export class House {
    */
   id: number;
   street: string;
+  number: number;
+  floors: number;
   city: string;
   country: string;
   postindex: string;

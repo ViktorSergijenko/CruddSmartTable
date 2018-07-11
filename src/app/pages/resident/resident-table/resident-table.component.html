@@ -2,27 +2,26 @@
   <nb-card-header>
     <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; align-items: center; display: table; margin: 0 auto;">
       <div class="row">
-        <div class="col-sm-4" *ngIf="this.flatId">
-          <h1>Resident Table</h1> Total amount of residents in all flats: {{this.residentService.TotalResidentsInAllFlats}} residents
+        <div class="col-sm-4" *ngIf="flatId">
+          <h1>Resident Table</h1> Total amount of residents in all flats: {{residentService.TotalResidentsInAllFlats}} residents
           <br>
           <button class="btn btn-hero-info btn-demo" (click)="getFullList()">Go To Resident List</button>
         </div>
-        <div class="col-sm-12" *ngIf="!this.flatId" style="text-align: center;">
-          <h1>Resident Table</h1> Total amount of residents in all flats: {{this.residentService.TotalResidentsInAllFlats}} residents
+        <div class="col-sm-12" *ngIf="!flatId" style="text-align: center;">
+          <h1>Resident Table</h1> Total amount of residents in all flats: {{residentService.TotalResidentsInAllFlats}} residents
           <i class="fas fa-door-open"></i>
           <br>
-          <button class="btn btn-hero-info btn-demo" (click)="getFullList()" *ngIf="this.flatId">Go To Resident List</button>
+          <button class="btn btn-hero-info btn-demo" (click)="getFullList()" *ngIf="flatId">Go To Resident List</button>
         </div>
-        <div class="col-sm-4" *ngIf="this.flatService.selectedFlat">
+        <div class="col-sm-4" *ngIf="flatService.selectedFlat">
 
-          <h1>Flat Info:</h1> Floor: {{ this.flatService.selectedFlat.floor}}
-          <br>Number: {{ this.flatService.selectedFlat.number}}
-          <br>Total Area: {{ this.flatService.selectedFlat.totalarea}}
-          <br>Residents Living: {{ this.flatService.selectedFlat.residentamount}}
+          <h1>Flat Info:</h1> Floor: {{ flatService.selectedFlat.floor}}
+          <br>Number: {{ flatService.selectedFlat.number}}
+          <br>Total Area: {{ flatService.selectedFlat.totalarea}}
+          <br>
         </div>
-        <div class="col-sm-4" *ngIf="this.flatId">
-          <h1>Residents in this Flat:</h1> {{this.residentService.TotalResidentsInAdditionalFlat}} Residents are located in this
-          house
+        <div class="col-sm-4" *ngIf="flatId">
+          <h1>Residents in this Flat:</h1> {{residentService.TotalResidentsInAdditionalFlat}} Residents are located in this house
         </div>
       </div>
     </div>
@@ -35,3 +34,51 @@
   </nb-card-body>
   <button class="btn btn-hero-primary btn-demo" (click)="goBack()">Go Back</button>
 </nb-card>
+
+<!-- <form class="emp-form" #residentForm="ngForm">
+  <nb-card>
+    <nb-card-header>Block form</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <input type="hidden" *ngIf="residentService.selectedResident && residentService.selectedResident.id" name="id" #id="ngModel"
+          [(ngModel)]="residentService.selectedResident.id">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputfirstname">firstname</label>
+            <input class="form-control" id="inputfirstname" name="firstname" #firstname="ngModel" [(ngModel)]="residentService.selectedResident.firstname"
+              placeholder="firstname" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputlastname">lastname</label>
+            <input type="text" class="form-control" id="inputlastname" name="lastname" #lastname="ngModel" [(ngModel)]="residentService.selectedResident.lastname"
+              placeholder="lastname" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputphone">phone</label>
+            <input type="text" class="form-control" id="inputphone" name="phone" #phone="ngModel" [(ngModel)]="residentService.selectedResident.phone"
+              placeholder="totalarea" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputemail">email</label>
+            <input type="text" class="form-control" id="inputemail" name="email" #email="ngModel" [(ngModel)]="residentService.selectedResident.email"
+              placeholder="email" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputcountry">flatid</label>
+            <input type="text" class="form-control" id="inputflatid" name="flatid" #flatid="ngModel" [(ngModel)]="residentService.selectedResident.flatid"
+              placeholder="flatid" required>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </nb-card-body>
+  </nb-card>
+</form> -->

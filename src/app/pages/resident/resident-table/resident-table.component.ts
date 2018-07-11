@@ -77,13 +77,14 @@ export class ResidentTableComponent {
   // then all this returned values will be placed in flatList from FlatService(Array of Flat Objects),and after that...
   // function load() from LocalDataSource class will load all this data to our smart table
   constructor(
-    private residentService: ResidentService,
-    private flatService: FlatService,
+    public residentService: ResidentService,
+    public flatService: FlatService,
     private http: Http,
     private location: Location,
     private route: ActivatedRoute,
     private router: Router,
   ) {
+    // this.residentService.selectedResident = new Resident;
     // first of all we get value from route,we use it to define house id as a params.id
     // then we use GetFlatResidents , getResidentList and GetOneFlat to get all needed information to load in table
     // and counting all objects
@@ -208,7 +209,7 @@ export class ResidentTableComponent {
    * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
    */
   goBack(): void {
-    this.router.navigate(['/pages/flat/flat-table'], { relativeTo: this.route });
+    this.location.back();
   }
   /**
    * This function is use on a button,when we will press button,it will

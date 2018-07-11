@@ -5,7 +5,7 @@ import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { HouseComponent } from './house/house.component';
-import {FlatComponent} from './flat/flat.component';
+import { FlatComponent } from './flat/flat.component';
 
 const routes: Routes = [{
   path: '',
@@ -48,7 +48,7 @@ const routes: Routes = [{
     loadChildren: './resident/resident.module#ResidentModule',
   }, {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'house/house-table',
     pathMatch: 'full',
   }, {
     path: '**',
