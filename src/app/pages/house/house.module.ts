@@ -2,9 +2,8 @@ import { NgModule } from '@angular/core';
 import { ThemeModule } from '../../@theme/theme.module';
 import { HouseRoutingModule, routedComponents } from './house-routing.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { SmartTableService } from '../../@core/data/smart-table.service';
-import { HouseService } from './House.service';
-import { Flat } from '../flat/flat.module';
+import { HouseService } from './house.service';
+import { Flat } from '../flat/flat.model';
 
 @NgModule({
   imports: [
@@ -17,7 +16,6 @@ import { Flat } from '../flat/flat.module';
 
   ],
   providers: [
-    SmartTableService,
     HouseService, // owibka ne v etom
   ],
 
@@ -25,18 +23,3 @@ import { Flat } from '../flat/flat.module';
 export class HouseModule { }
 
 
-
-export class House {
-  /**
-   * Creats a new house
-   */
-  id: number;
-  street: string;
-  number: number;
-  floors: number;
-  city: string;
-  country: string;
-  postindex: string;
-  flatamount: number;
-  flats: [Flat];
-}

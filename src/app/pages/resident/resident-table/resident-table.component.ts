@@ -1,13 +1,12 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ResidentService } from '../resident.service';
-import { DataSource } from '../../../../../node_modules/ng2-smart-table/lib/data-source/data-source';
-import { SmartTableService } from '../../../@core/data/smart-table.service';
-import { Resident } from '../resident.module';
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FlatService } from '../../flat/flat.service';
+import { Resident } from '../resident.model';
+import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-resident-table',
   templateUrl: './resident-table.component.html',
@@ -21,6 +20,7 @@ export class ResidentTableComponent {
   flatId: any;
   // vesj html(kak vigljadjat i nazivajutsja nawi polja i td,vsja eta infa sazovivaetsja v peremennuju "settings")
   settings = { // setting of our smart table (buttons,columns,names......)
+    mode: 'external',
     noDataMessage: 'Sorry, but there is no Residents in this house,if you want to watch all Residents,Press GO TO RESIDENT LIST button ',
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
@@ -84,7 +84,9 @@ export class ResidentTableComponent {
     private route: ActivatedRoute,
     private router: Router,
   ) {
-    // this.residentService.selectedResident = new Resident;
+    this.residentService.selectedResident = new Resident();
+    this.residentService.ResidentEditForm = null;
+    this.residentService.ResidentRegForm = null;
     // first of all we get value from route,we use it to define house id as a params.id
     // then we use GetFlatResidents , getResidentList and GetOneFlat to get all needed information to load in table
     // and counting all objects
@@ -167,19 +169,20 @@ export class ResidentTableComponent {
    * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
    */
   onCreateConfirm(event): void {
-    const data = { // values of our data that we will work with
-      'id': event.newData.id = 0,
-      'firstname': event.newData.firstname,
-      'lastname': event.newData.lastname,
-      'postcode': event.newData.postcode,
-      'phone': event.newData.phone,
-      'email': event.newData.email,
-      'flatid': event.newData.flatid,
-    };
-    this.residentService.postResident(event, data);
-    this.residentService.TotalResidentsInAllFlats = this.residentService.TotalResidentsInAllFlats + 1;
-    this.residentService.TotalResidentsInAdditionalFlat = this.residentService.TotalResidentsInAdditionalFlat + 1;
-    this.source.refresh();
+    // const data = { // values of our data that we will work with
+    //   'id': event.newData.id = 0,
+    //   'firstname': event.newData.firstname,
+    //   'lastname': event.newData.lastname,
+    //   'postcode': event.newData.postcode,
+    //   'phone': event.newData.phone,
+    //   'email': event.newData.email,
+    //   'flatid': event.newData.flatid,
+    // };
+    // this.residentService.postResident(event, data);
+    // this.residentService.TotalResidentsInAllFlats = this.residentService.TotalResidentsInAllFlats + 1;
+    // this.residentService.TotalResidentsInAdditionalFlat = this.residentService.TotalResidentsInAdditionalFlat + 1;
+    // this.source.refresh();
+    this.residentService.ResidentRegForm = 1;
   }
   /**
    * If user will confirm that he wants to change information about additional resident
@@ -192,16 +195,18 @@ export class ResidentTableComponent {
    * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
    */
   onSaveConfirm(event): void {
-    const data = { // values of our data that we will work with
-      'id': event.newData.id,
-      'firstname': event.newData.firstname,
-      'lastname': event.newData.lastname,
-      'postcode': event.newData.postcode,
-      'phone': event.newData.phone,
-      'email': event.newData.email,
-      'flatid': event.newData.flatid,
-    };
-    this.residentService.putResident(event, data);
+    // const data = { // values of our data that we will work with
+    //   'id': event.newData.id,
+    //   'firstname': event.newData.firstname,
+    //   'lastname': event.newData.lastname,
+    //   'postcode': event.newData.postcode,
+    //   'phone': event.newData.phone,
+    //   'email': event.newData.email,
+    //   'flatid': event.newData.flatid,
+    // };
+    // this.residentService.putResident(event, data);
+    this.residentService.selectedResident = Object.assign({}, event.data);
+    this.residentService.ResidentEditForm = 1;
   }
   /**
    * Function will be use on button,when we will click on button,
@@ -219,6 +224,38 @@ export class ResidentTableComponent {
   getFullList(): void {
     this.router.navigate(['/pages/resident/resident-table'],
     );
+  }
+  resetForm(form?: NgForm) {
+    // tslint:disable-next-line:curly
+    if (form != null)
+      form.reset();
+    this.residentService.selectedResident = {
+      id: null,
+      firstname: '',
+      lastname: '',
+      postcode: '',
+      phone: '',
+      email: '',
+      flatid: null,
+    };
+  }
+  onSubmit(form: NgForm) {
+    if (!form.value.id) {
+      this.residentService.postResident(form.value).subscribe(data => {
+        this.resetForm(form);
+        // this.toastr.success('New Record Added', 'House registered');
+      });
+    } else {
+      this.residentService.putResident(form.value.id, form.value)
+        .subscribe(data => {
+          this.resetForm(form);
+          // this.toastr.info('Record updated', 'Flat info was changed');
+        });
+    }
+  }
+  onClose(): void {
+    this.residentService.ResidentRegForm = null;
+    this.residentService.ResidentEditForm = null;
   }
 }
 

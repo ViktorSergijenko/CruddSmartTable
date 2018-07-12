@@ -43,6 +43,10 @@
       "timeEnd",
       "trace"
     ],
+    "max-classes-per-file": [
+      true,
+      1
+    ],
     "no-construct": true,
     "no-debugger": true,
     "no-duplicate-super": true,

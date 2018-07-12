@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-import { Resident } from './resident.module'; // our resident model is located here
-import { Flat } from '../../pages/flat/flat.module'; // our flat model is located here
+import { Resident } from './resident.model'; // our resident model is located here
+import { Flat } from '../../pages/flat/flat.model'; // our flat model is located here
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http'; // for http(crud) requests
 
 
@@ -15,6 +15,8 @@ export class ResidentService { // service that will contain all crud fucntions a
   TotalResidentsInAllFlats: number; // value that will contain all amount of residents that we have in database
   TotalResidentsInAdditionalFlat: number; // value that will contain  amount of residents that are living in additional flat
   sourtedResidents: Resident[] = []; // array that will contain array of residents that lives in additional flat
+  ResidentRegForm: number;
+  ResidentEditForm: number;
   constructor(private http: Http) { }
   /**
    *this function addes a new  object to our databse that is located on our backend.
@@ -27,15 +29,19 @@ export class ResidentService { // service that will contain all crud fucntions a
    * @param {*} data Object - original row data
    * @memberof ResidentService Service that contains all RESTfull functions that we need
    */
-  postResident(event, data) {
-    if (window.confirm('Are you sure you want to add a resident?')) {
-      this.http.post('http://localhost:52414/api/Resident', data).subscribe(res => {
-        console.log(res);
-        event.confirm.resolve(event.newData);
-      });
-    } else {
-      event.confirm.reject();
-    }
+  postResident(res: Resident) {
+    // if (window.confirm('Are you sure you want to add a resident?')) {
+    //   this.http.post('http://localhost:52414/api/Resident', data).subscribe(res => {
+    //     console.log(res);
+    //     event.confirm.resolve(event.newData);
+    //   });
+    // } else {
+    //   event.confirm.reject();
+    // }
+    const body = JSON.stringify(res); // why i cant use var and let instead of const here?
+    const headerOptions = new Headers({ 'Content-Type': 'application/json' });
+    const requestOptions = new RequestOptions({ method: RequestMethod.Post, headers: headerOptions });
+    return this.http.post('http://localhost:52414/api/Resident', body, requestOptions).map(x => x.json());
   }
   /**
    *this function saves all changes with our object(Resident),function sends a put request to
@@ -48,15 +54,19 @@ export class ResidentService { // service that will contain all crud fucntions a
    * @param {*} data Object - original row data
    * @memberof ResidentService Service that contains all RESTfull functions that we need
    */
-  putResident(event, data) {
-    if (window.confirm('Are you sure you want to update info about a resident?')) {
-      this.http.put('http://localhost:52414/api/Resident/' + event.newData.id, data).subscribe(res => {
-        console.log(res);
-        event.confirm.resolve(event.newData);
-      });
-    } else {
-      event.confirm.reject();
-    }
+  putResident(id, res) {
+    // if (window.confirm('Are you sure you want to update info about a resident?')) {
+    //   this.http.put('http://localhost:52414/api/Resident/' + event.newData.id, data).subscribe(res => {
+    //     console.log(res);
+    //     event.confirm.resolve(event.newData);
+    //   });
+    // } else {
+    //   event.confirm.reject();
+    // }
+    const body = JSON.stringify(res); // why i cant use var and let instead of const here?
+    const headerOptions = new Headers({ 'Content-Type': 'application/json' });
+    const requestOptions = new RequestOptions({ method: RequestMethod.Put, headers: headerOptions });
+    return this.http.put('http://localhost:52414/api/Resident/' + id, body, requestOptions).map(x => x.json());
   }
   /**
    * Function sends a get request to our backend,and returns all data.(in our case it is Flat array)

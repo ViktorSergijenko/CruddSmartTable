@@ -3,10 +3,10 @@ import { NgModule } from '@angular/core';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-import { House } from './house.module'; // our house model is located here
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http'; // for http(crud) requests
-import { Flat } from '../flat/flat.module';
+import { Flat } from '../flat/flat.model';
 import { Subject } from 'rxjs/subject';
+import { House } from './house.model';
 
 
 @Injectable()
@@ -16,6 +16,8 @@ export class HouseService { // service that will contain all crud fucntions and 
   houseList: House[]; // array to keep all House object
   SourtedFlatList: Flat[] = []; // array to keep all additional flats of one house
   TotalAmountOfHosesInTable: number; // value that keep amount houses in table
+  RegistrationHouseForm: number;
+  EditHouseForm: number;
   constructor(private http: Http) {
     console.log('hi');
   }
@@ -30,15 +32,11 @@ export class HouseService { // service that will contain all crud fucntions and 
  * @param {*} data Object - original row data
  * @memberof HouseService Service that contains all RESTfull functions that we need
  */
-  postHouse(event, data) {
-    if (window.confirm('Are you sure you want to add a House?')) {
-      this.http.post('http://localhost:52414/api/House', data).subscribe(res => {
-        console.log(res);
-        event.confirm.resolve(event.newData);
-      });
-    } else {
-      event.confirm.reject();
-    }
+  postHouse(hos: House) {
+    const body = JSON.stringify(hos); // why i cant use var and let instead of const here?
+    const headerOptions = new Headers({ 'Content-Type': 'application/json' });
+    const requestOptions = new RequestOptions({ method: RequestMethod.Post, headers: headerOptions });
+    return this.http.post('http://localhost:52414/api/House', body, requestOptions).map(x => x.json());
   }
   /**
    *this function saves all changes with our object(Resident),function sends a put request to
@@ -51,15 +49,19 @@ export class HouseService { // service that will contain all crud fucntions and 
    * @param {*} data Object - original row data
    * @memberof HouseService Service that contains all RESTfull functions that we need
    */
-  putHouse(event, data) {
-    if (window.confirm('Are you sure you want to update info about a House?')) {
-      this.http.put('http://localhost:52414/api/House/' + event.newData.id, data).subscribe(res => {
-        console.log(res);
-        event.confirm.resolve(event.newData);
-      });
-    } else {
-      event.confirm.reject();
-    }
+  putHouse(id, hos) {
+    // if (window.confirm('Are you sure you want to update info about a House?')) {
+    //   this.http.put('http://localhost:52414/api/House/' + event.newData.id, data).subscribe(res => {
+    //     console.log(res);
+    //     event.confirm.resolve(event.newData);
+    //   });
+    // } else {
+    //   event.confirm.reject();
+    // }
+    const body = JSON.stringify(hos); // why i cant use var and let instead of const here?
+    const headerOptions = new Headers({ 'Content-Type': 'application/json' });
+    const requestOptions = new RequestOptions({ method: RequestMethod.Put, headers: headerOptions });
+    return this.http.put('http://localhost:52414/api/House/' + id, body, requestOptions).map(x => x.json());
   }
   /**
    * Function sends a get request to our backend,and returns all data.(in our case it is Flat array)

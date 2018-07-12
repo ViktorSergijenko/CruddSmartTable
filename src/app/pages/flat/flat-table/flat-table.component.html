@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card *ngIf="!flatService.FlatEditForm && !flatService.FlatRegForm">
   <nb-card-header>
     <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; display: table; margin: 0 auto;">
       <div class="row">
@@ -35,16 +35,16 @@
 
 
   <nb-card-body>
-    <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" (editConfirm)="onSaveConfirm($event)"
-      (createConfirm)="onCreateConfirm($event)" (userRowSelect)="onUserRowSelect($event)">
+    <ng2-smart-table [settings]="settings" [source]="source" (delete)="onDeleteConfirm($event)" (edit)="onSaveConfirm($event)"
+      (create)="onCreateConfirm($event)" (userRowSelect)="onUserRowSelect($event)">
     </ng2-smart-table>
   </nb-card-body>
   <button class="btn btn-hero-primary btn-demo" (click)="goBack()">GoBack</button>
 </nb-card>
 
-<form class="emp-form" #flatForm="ngForm">
+<form class="emp-form" #flatForm="ngForm" (ngSubmit)="onSubmit(flatForm)" *ngIf="flatService.FlatRegForm">
   <nb-card>
-    <nb-card-header>Block form</nb-card-header>
+    <nb-card-header>Flat Registration Form</nb-card-header>
     <nb-card-body>
       <div class="row">
         <input type="hidden" *ngIf="flatService.selectedFlat && flatService.selectedFlat.id" name="id" #id="ngModel" [(ngModel)]="flatService.selectedFlat.id">
@@ -53,7 +53,6 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputstreet">Floor</label>
-            <!-- <input type="text" class="form-control" id="inputFirstName" placeholder="First Name"> -->
             <input class="form-control" id="inputfloor" name="floor" #floor="ngModel" [(ngModel)]="flatService.selectedFlat.floor" placeholder="floor"
               required>
           </div>
@@ -81,13 +80,66 @@
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputcountry">houseid</label>
+            <label for="inputhouseid">houseid</label>
             <input type="text" class="form-control" id="inputhouseid" name="houseid" #houseid="ngModel" [(ngModel)]="flatService.selectedFlat.houseid"
               placeholder="houseid" required>
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" [disabled]="!flatForm.valid" class="btn btn-primary">Submit</button>
+      <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetTheFuckingForm(flatForm)">Reset</button>
+      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(flatForm)">Close</button>
+    </nb-card-body>
+  </nb-card>
+</form>
+
+<form class="emp-form" #flatForm="ngForm" (ngSubmit)="onSubmit(flatForm)" *ngIf="flatService.FlatEditForm">
+  <nb-card>
+    <nb-card-header>Flat Edit Table</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <input type="hidden" *ngIf="flatService.selectedFlat && flatService.selectedFlat.id" name="id" #id="ngModel" [(ngModel)]="flatService.selectedFlat.id">
+        <input type="hidden" *ngIf="flatService.selectedFlat && flatService.selectedFlat.residentamount" name="residentamount" #id="ngModel"
+          [(ngModel)]="flatService.selectedFlat.residentamount">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputstreet">Floor</label>
+            <input class="form-control" id="inputfloor" name="floor" #floor="ngModel" [(ngModel)]="flatService.selectedFlat.floor" placeholder="floor"
+              required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputnumber">Flat Number</label>
+            <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="flatService.selectedFlat.number"
+              placeholder="number" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputtotalarea">TotalArea</label>
+            <input type="text" class="form-control" id="inputtotalarea" name="totalarea" #totalarea="ngModel" [(ngModel)]="flatService.selectedFlat.totalarea"
+              placeholder="totalarea" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputlivingspace">LivingSpace</label>
+            <input type="text" class="form-control" id="inputlivingspace" name="livingspace" #livingspace="ngModel" [(ngModel)]="flatService.selectedFlat.livingspace"
+              placeholder="livingspace" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputhouseid">houseid</label>
+            <input type="text" class="form-control" id="inputhouseid" name="houseid" #houseid="ngModel" [(ngModel)]="flatService.selectedFlat.houseid"
+              placeholder="houseid" required>
+          </div>
+        </div>
+      </div>
+      <button type="submit" [disabled]="!flatForm.valid" class="btn btn-primary">Submit</button>
+      <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetTheFuckingForm(flatForm)">Reset</button>
+      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(flatForm)">Close</button>
     </nb-card-body>
   </nb-card>
 </form>

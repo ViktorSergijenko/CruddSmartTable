@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-import { Flat } from './flat.module'; // our flat model is located here
-import { House } from '../../pages/house/house.module'; // our house model is located here
+import { Flat } from './flat.model'; // our flat model is located here
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http'; // for http(crud) requests
-import { Resident } from '../resident/resident.module';
+import { Resident } from '../resident/resident.model';
+import { House } from '../house/house.model';
 
 
 @Injectable()
@@ -17,6 +17,8 @@ export class FlatService { // service that will contain all crud fucntions and v
   TotalFlatsInTable: number; // value that will contain total amount of existing flats in database
   TotalFlatsInAdditionalHouse: number; // value that will contain total amount of flats that contains in additional house
   SourtedResidents: Resident[] = []; // array that will contain returned residents objects from additional flat
+  FlatRegForm: number;
+  FlatEditForm: number;
   constructor(private http: Http) { }
   /**
   *this function addes a new  object to our databse that is located on our backend.
@@ -29,15 +31,20 @@ export class FlatService { // service that will contain all crud fucntions and v
   * @param {*} data Object - original row data
   * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
   */
-  postFlat(event, data) {
-    if (window.confirm('Are you sure you want to add a Flat?')) {
-      this.http.post('http://localhost:52414/api/Flat', data).subscribe(res => {
-        console.log(res);
-        event.confirm.resolve(event.newData);
-      });
-    } else {
-      event.confirm.reject();
-    }
+  postFlat(flat: Flat) {
+    // if (window.confirm('Are you sure you want to add a Flat?')) {
+    // return this.http.post('http://localhost:52414/api/Flat', data);
+    // .subscribe(res => {
+    //   console.log(res);
+    //   // event.confirm.resolve(event.newData);
+    // });
+    // } else {
+    //   event.confirm.reject();
+    // }
+    const body = JSON.stringify(flat);
+    const headerOptions = new Headers({ 'Content-Type': 'application/json' });
+    const requestOptions = new RequestOptions({ method: RequestMethod.Post, headers: headerOptions });
+    return this.http.post('http://localhost:52414/api/Flat', body, requestOptions).map(x => x.json());
   }
   // deleteFlat(event: { _event: { data: House[] } })
   /**
@@ -51,15 +58,19 @@ export class FlatService { // service that will contain all crud fucntions and v
   * @param {*} data Object - original row data
   * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
   */
-  putFlat(event: any, data: any) {
-    if (window.confirm('Are you sure you want to update info about a Flat?')) {
-      this.http.put('http://localhost:52414/api/Flat/' + event.newData.id, data).subscribe(res => {
-        console.log(res);
-        event.confirm.resolve(event.newData);
-      });
-    } else {
-      event.confirm.reject();
-    }
+  putFlat(id, res) {
+    // if (window.confirm('Are you sure you want to update info about a Flat?')) {
+    //   this.http.put('http://localhost:52414/api/Flat/' + event.newData.id, data).subscribe(res => {
+    //     console.log(res);
+    //     event.confirm.resolve(event.newData);
+    //   });
+    // } else {
+    //   event.confirm.reject();
+    // }
+    const body = JSON.stringify(res); // why i cant use var and let instead of const here?
+    const headerOptions = new Headers({ 'Content-Type': 'application/json' });
+    const requestOptions = new RequestOptions({ method: RequestMethod.Put, headers: headerOptions });
+    return this.http.put('http://localhost:52414/api/Flat/' + id, body, requestOptions).map(x => x.json());
   }
   /**
    * Function sends a get request to our backend,and returns all data.(in our case it is Flat array)

@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { HouseService } from '../House.service';
-import { DataSource } from '../../../../../node_modules/ng2-smart-table/lib/data-source/data-source';
-import { SmartTableService } from '../../../@core/data/smart-table.service';
+import { HouseService } from '../house.service';
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
-import { House } from '../house.module';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { NgForm } from '@angular/forms';
+import { House } from '../house.model';
 
 @Component({
   selector: 'app-house-table',
@@ -19,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class HouseTableComponent {
   settings = { // setting of our smart table (buttons,columns,names......)
+    mode: 'external',
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -35,7 +35,6 @@ export class HouseTableComponent {
       deleteButtonContent: '<i class="nb-trash"></i>',
       confirmDelete: true,
     },
-    mode: 'external',
     columns: {
       street: {
         title: 'Street Name',
@@ -73,26 +72,20 @@ export class HouseTableComponent {
   // our constructor calles getHouseList() function to send a request to our backend so he could rewturn us all house objects...
   // then all this returned values will be placed in houseList from HouseService(Array of House Objects),and after that...
   // function load() from LocalDataSource class will load all this data to our smart table
-  constructor(public houseService: HouseService, private http: Http, private router: Router, private route: ActivatedRoute) {
+  constructor(
+    public houseService: HouseService, private http: Http, private router: Router, private route: ActivatedRoute,
+  ) {
+    this.houseService.RegistrationHouseForm = null;
+    this.houseService.EditHouseForm = null;
     // this.houseService.houseForForm = new House();
     // houseService.mysubject.next('My favourite value');
+    this.houseService.selectedHouse = new House();
     this.houseService.getHouseList().subscribe(resp => {
       console.log(resp.json());
       this.houseService.houseList = resp.json();
       this.source.load(resp.json());
       this.source.count();
       this.houseService.TotalAmountOfHosesInTable = this.source.count();
-      this.houseService.selectedHouse = {
-        id: null,
-        street: '',
-        number: null,
-        floors: null,
-        flatamount: null,
-        city: '',
-        country: '',
-        postindex: '',
-        flats: null,
-      };
     });
   }
   /**
@@ -109,6 +102,7 @@ export class HouseTableComponent {
   onDeleteConfirm(event): void {
     this.houseService.deleteHouse(event);
     this.houseService.TotalAmountOfHosesInTable = this.houseService.TotalAmountOfHosesInTable - 1;
+    this.source.refresh();
   }
   /**
    * If user will confirm that he wants to add a new resident,function will call
@@ -132,6 +126,7 @@ export class HouseTableComponent {
     // };
     // this.houseService.postHouse(event, data);
     // this.houseService.TotalAmountOfHosesInTable = this.houseService.TotalAmountOfHosesInTable + 1;
+    this.houseService.RegistrationHouseForm = 1;
     console.log('HEYHEY');
   }
   /**
@@ -145,15 +140,20 @@ export class HouseTableComponent {
   * @memberof HouseTableComponent HouseTableComponent - Have all setting of our resident smart table
   */
   onSaveConfirm(event): void {
-    const data = { // values of our data that we will work with
-      'id': event.newData.id,
-      'street': event.newData.street,
-      'number': event.newData.number,
-      'city': event.newData.city,
-      'country': event.newData.country,
-      'postindex': event.newData.postindex,
-    };
-    this.houseService.putHouse(event, data);
+    // const data = { // values of our data that we will work with
+    //   'id': event.newData.id,
+    //   'street': event.newData.street,
+    //   'number': event.newData.number,
+    //   'city': event.newData.city,
+    //   'country': event.newData.country,
+    //   'postindex': event.newData.postindex,
+    // };
+    // this.houseService.putHouse(event, data);
+    // this.houseService.selectedHouse = Object.assign({}, hos);S
+    console.log('asdsadsad');
+    console.log(event.data);
+    this.houseService.selectedHouse = Object.assign({}, event.data);
+    this.houseService.EditHouseForm = 1;
   }
   /**
    * give us posability to click on a row
@@ -164,6 +164,45 @@ export class HouseTableComponent {
   onUserRowSelect(event) {
     console.log('user row select: ', event.data.id);
     this.router.navigate(['/pages/flat/flat-table/' + event.data.id], { relativeTo: this.route });
+  }
+  onClose(): void {
+    this.houseService.RegistrationHouseForm = null;
+    this.houseService.EditHouseForm = null;
+  }
+  resetForm(form?: NgForm) {
+    // tslint:disable-next-line:curly
+    if (form != null)
+      form.reset();
+    this.houseService.selectedHouse = {
+      id: null,
+      street: '',
+      number: null,
+      floors: null,
+      flatamount: null,
+      city: '',
+      country: '',
+      postindex: '',
+      flats: null,
+    };
+  }
+  onSubmit(form: NgForm) {
+    if (!form.value.id) {
+      this.houseService.postHouse(form.value).subscribe(data => {
+        this.resetForm(form);
+        // this.toastr.success('New Record Added', 'House registered');
+      });
+    } else {
+      this.houseService.putHouse(form.value.id, form.value)
+        .subscribe(data => {
+          this.resetForm(form);
+          // this.toastr.info('Record updated', 'Flat info was changed');
+        });
+    }
+  }
+
+  showForedit(hos: House) {
+    // nuzno dlja togo wtobi izmenenija v objekte sohranjalisj ne srazu
+    this.houseService.selectedHouse = Object.assign({}, hos);
   }
 }
 

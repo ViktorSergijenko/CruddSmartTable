@@ -37,7 +37,8 @@ const routes: Routes = [{
   }, {
     path: 'miscellaneous',
     loadChildren: './miscellaneous/miscellaneous.module#MiscellaneousModule',
-  }, {
+  },
+  {
     path: 'house',
     loadChildren: './house/house.module#HouseModule',
   }, {
@@ -46,7 +47,8 @@ const routes: Routes = [{
   }, {
     path: 'resident',
     loadChildren: './resident/resident.module#ResidentModule',
-  }, {
+  },
+  {
     path: '',
     redirectTo: 'house/house-table',
     pathMatch: 'full',

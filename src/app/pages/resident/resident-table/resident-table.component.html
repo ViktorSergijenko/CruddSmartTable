@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card *ngIf="!residentService.ResidentEditForm && !residentService.ResidentRegForm">
   <nb-card-header>
     <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; align-items: center; display: table; margin: 0 auto;">
       <div class="row">
@@ -28,57 +28,128 @@
   </nb-card-header>
 
   <nb-card-body>
-    <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" (editConfirm)="onSaveConfirm($event)"
-      (createConfirm)="onCreateConfirm($event)">
+    <ng2-smart-table [settings]="settings" [source]="source" (delete)="onDeleteConfirm($event)" (edit)="onSaveConfirm($event)"
+      (create)="onCreateConfirm($event)">
     </ng2-smart-table>
   </nb-card-body>
   <button class="btn btn-hero-primary btn-demo" (click)="goBack()">Go Back</button>
 </nb-card>
 
-<!-- <form class="emp-form" #residentForm="ngForm">
+<form class="emp-form" #residentForm="ngForm" (ngSubmit)="onSubmit(residentForm)" *ngIf="residentService.ResidentRegForm">
   <nb-card>
-    <nb-card-header>Block form</nb-card-header>
+    <nb-card-header>Resident Registration Form</nb-card-header>
     <nb-card-body>
       <div class="row">
         <input type="hidden" *ngIf="residentService.selectedResident && residentService.selectedResident.id" name="id" #id="ngModel"
           [(ngModel)]="residentService.selectedResident.id">
+        <input type="hidden" *ngIf="residentService.selectedResident && residentService.selectedResident.flatamount" name="flatamount"
+          #id="ngModel" [(ngModel)]="residentService.selectedResident.flatamount">
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputfirstname">firstname</label>
-            <input class="form-control" id="inputfirstname" name="firstname" #firstname="ngModel" [(ngModel)]="residentService.selectedResident.firstname"
-              placeholder="firstname" required>
+            <label for="inputstreet">FirstName</label>
+            <input class="form-control" id="inputstreet" name="firstname" #firstname="ngModel" [(ngModel)]="residentService.selectedResident.firstname"
+              placeholder="FirstName" required>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputlastname">lastname</label>
-            <input type="text" class="form-control" id="inputlastname" name="lastname" #lastname="ngModel" [(ngModel)]="residentService.selectedResident.lastname"
+            <label for="inputnumber">House Number</label>
+            <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="residentService.selectedResident.lastname"
               placeholder="lastname" required>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputphone">phone</label>
-            <input type="text" class="form-control" id="inputphone" name="phone" #phone="ngModel" [(ngModel)]="residentService.selectedResident.phone"
-              placeholder="totalarea" required>
+            <label for="inputpostcode">Floors</label>
+            <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="residentService.selectedResident.postcode"
+              placeholder="postcode" required>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputemail">email</label>
-            <input type="text" class="form-control" id="inputemail" name="email" #email="ngModel" [(ngModel)]="residentService.selectedResident.email"
+            <label for="inputcity">phone</label>
+            <input type="text" class="form-control" id="inputcity" name="phone" #phone="ngModel" [(ngModel)]="residentService.selectedResident.phone"
+              placeholder="phone" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputcountry">Country</label>
+            <input type="text" class="form-control" id="inputcountry" name="email" #email="ngModel" [(ngModel)]="residentService.selectedResident.email"
               placeholder="email" required>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputcountry">flatid</label>
-            <input type="text" class="form-control" id="inputflatid" name="flatid" #flatid="ngModel" [(ngModel)]="residentService.selectedResident.flatid"
+            <label for="inputpostindex">PostIndex</label>
+            <input type="email" class="form-control" id="inputpostindex" name="flatid" #flatid="ngModel" [(ngModel)]="residentService.selectedResident.flatid"
               placeholder="flatid" required>
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" [disabled]="!residentForm.valid" class="btn btn-primary">Submit</button>
+      <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(residentForm)">Reset</button>
+      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose()">Close</button>
     </nb-card-body>
   </nb-card>
-</form> -->
+</form>
+
+<form class="emp-form" #residentForm="ngForm" (ngSubmit)="onSubmit(residentForm)" *ngIf="residentService.ResidentEditForm">
+  <nb-card>
+    <nb-card-header>Resident Edit Form</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <input type="hidden" *ngIf="residentService.selectedResident && residentService.selectedResident.id" name="id" #id="ngModel"
+          [(ngModel)]="residentService.selectedResident.id">
+        <input type="hidden" *ngIf="residentService.selectedResident && residentService.selectedResident.flatamount" name="flatamount"
+          #id="ngModel" [(ngModel)]="residentService.selectedResident.flatamount">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputstreet">FirstName</label>
+            <input class="form-control" id="inputstreet" name="firstname" #firstname="ngModel" [(ngModel)]="residentService.selectedResident.firstname"
+              placeholder="FirstName" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputnumber">House Number</label>
+            <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="residentService.selectedResident.lastname"
+              placeholder="lastname" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputpostcode">Floors</label>
+            <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="residentService.selectedResident.postcode"
+              placeholder="postcode" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputcity">phone</label>
+            <input type="text" class="form-control" id="inputcity" name="phone" #phone="ngModel" [(ngModel)]="residentService.selectedResident.phone"
+              placeholder="phone" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputcountry">Country</label>
+            <input type="text" class="form-control" id="inputcountry" name="email" #email="ngModel" [(ngModel)]="residentService.selectedResident.email"
+              placeholder="email" required>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputpostindex">PostIndex</label>
+            <input type="email" class="form-control" id="inputpostindex" name="flatid" #flatid="ngModel" [(ngModel)]="residentService.selectedResident.flatid"
+              placeholder="flatid" required>
+          </div>
+        </div>
+      </div>
+      <button type="submit" [disabled]="!residentForm.valid" class="btn btn-primary">Submit</button>
+      <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(residentForm)">Reset</button>
+      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose()">Close</button>
+
+    </nb-card-body>
+  </nb-card>
+</form>
