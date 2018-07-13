@@ -17,6 +17,7 @@ import { House } from '../house.model';
 `],
 })
 export class HouseTableComponent {
+  numberPattern = '^2[0-9]{7}';
   settings = { // setting of our smart table (buttons,columns,names......)
     mode: 'external',
     add: {

@@ -53,14 +53,14 @@
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputnumber">House Number</label>
+            <label for="inputnumber">Last Name</label>
             <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="residentService.selectedResident.lastname"
               placeholder="lastname" required>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputpostcode">Floors</label>
+            <label for="inputpostcode">postcode</label>
             <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="residentService.selectedResident.postcode"
               placeholder="postcode" required>
           </div>
@@ -74,14 +74,14 @@
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputcountry">Country</label>
+            <label for="inputcountry">Email</label>
             <input type="text" class="form-control" id="inputcountry" name="email" #email="ngModel" [(ngModel)]="residentService.selectedResident.email"
               placeholder="email" required>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputpostindex">PostIndex</label>
+            <label for="inputpostindex">FlatId</label>
             <input type="email" class="form-control" id="inputpostindex" name="flatid" #flatid="ngModel" [(ngModel)]="residentService.selectedResident.flatid"
               placeholder="flatid" required>
           </div>
@@ -89,7 +89,7 @@
       </div>
       <button type="submit" [disabled]="!residentForm.valid" class="btn btn-primary">Submit</button>
       <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(residentForm)">Reset</button>
-      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose()">Close</button>
+      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(flatForm)">Close</button>
     </nb-card-body>
   </nb-card>
 </form>
@@ -103,6 +103,8 @@
           [(ngModel)]="residentService.selectedResident.id">
         <input type="hidden" *ngIf="residentService.selectedResident && residentService.selectedResident.flatamount" name="flatamount"
           #id="ngModel" [(ngModel)]="residentService.selectedResident.flatamount">
+        <input type="hidden" *ngIf="residentService.selectedResident && residentService.selectedResident.flatid" name="flatid" #id="ngModel"
+          [(ngModel)]="residentService.selectedResident.flatid">
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputstreet">FirstName</label>
@@ -112,14 +114,14 @@
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputnumber">House Number</label>
+            <label for="inputnumber">LastName</label>
             <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="residentService.selectedResident.lastname"
               placeholder="lastname" required>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputpostcode">Floors</label>
+            <label for="inputpostcode">PostCode</label>
             <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="residentService.selectedResident.postcode"
               placeholder="postcode" required>
           </div>
@@ -133,23 +135,26 @@
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputcountry">Country</label>
+            <label for="inputcountry">Email</label>
             <input type="text" class="form-control" id="inputcountry" name="email" #email="ngModel" [(ngModel)]="residentService.selectedResident.email"
               placeholder="email" required>
           </div>
         </div>
-        <div class="col-sm-6">
+        <!-- <div class="col-sm-6">
           <div class="form-group">
             <label for="inputpostindex">PostIndex</label>
             <input type="email" class="form-control" id="inputpostindex" name="flatid" #flatid="ngModel" [(ngModel)]="residentService.selectedResident.flatid"
               placeholder="flatid" required>
           </div>
-        </div>
+        </div> -->
       </div>
       <button type="submit" [disabled]="!residentForm.valid" class="btn btn-primary">Submit</button>
       <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(residentForm)">Reset</button>
-      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose()">Close</button>
+      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(flatForm)">Close</button>
 
     </nb-card-body>
   </nb-card>
 </form>
+<pre class="code">
+  {{residentService.selectedResident | json}}
+</pre>

@@ -25,6 +25,7 @@
             <label for="inputstreet">Street</label>
             <input class="form-control" id="inputstreet" name="street" #street="ngModel" [(ngModel)]="houseService.selectedHouse.street"
               placeholder="street" required>
+            <label data-error="Required field!">street</label>
           </div>
         </div>
         <div class="col-sm-6">
@@ -32,6 +33,7 @@
             <label for="inputnumber">House Number</label>
             <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="houseService.selectedHouse.number"
               placeholder="number" required>
+            <div class="validation-error" *ngIf="number.invalid && number.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
@@ -39,6 +41,7 @@
             <label for="inputfloors">Floors</label>
             <input type="text" class="form-control" id="inputfloors" name="floors" #floors="ngModel" [(ngModel)]="houseService.selectedHouse.floors"
               placeholder="number" required>
+            <div class="validation-error" *ngIf="floors.invalid && floors.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
@@ -46,6 +49,7 @@
             <label for="inputcity">City</label>
             <input type="text" class="form-control" id="inputcity" name="city" #city="ngModel" [(ngModel)]="houseService.selectedHouse.city"
               placeholder="city" required>
+            <div class="validation-error" *ngIf="city.invalid && city.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
@@ -53,6 +57,7 @@
             <label for="inputcountry">Country</label>
             <input type="text" class="form-control" id="inputcountry" name="country" #country="ngModel" [(ngModel)]="houseService.selectedHouse.country"
               placeholder="country" required>
+            <div class="validation-error" *ngIf="country.invalid && country.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
@@ -60,6 +65,7 @@
             <label for="inputpostindex">PostIndex</label>
             <input type="email" class="form-control" id="inputpostindex" name="postindex" #postindex="ngModel" [(ngModel)]="houseService.selectedHouse.postindex"
               placeholder="postindex" required>
+            <div class="validation-error" *ngIf="postindex.invalid && postindex.touched">This field is Required</div>
           </div>
         </div>
       </div>
@@ -83,6 +89,7 @@
             <label for="inputstreet">Street</label>
             <input class="form-control" id="inputstreet" name="street" #street="ngModel" [(ngModel)]="houseService.selectedHouse.street"
               placeholder="street" required>
+            <div class="validation-error" *ngIf="street.invalid && street.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
@@ -90,6 +97,7 @@
             <label for="inputnumber">House Number</label>
             <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="houseService.selectedHouse.number"
               placeholder="number" required>
+            <div class="validation-error" *ngIf="number.invalid && number.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
@@ -97,6 +105,7 @@
             <label for="inputfloors">Floors</label>
             <input type="text" class="form-control" id="inputfloors" name="floors" #floors="ngModel" [(ngModel)]="houseService.selectedHouse.floors"
               placeholder="number" required>
+            <div class="validation-error" *ngIf="floors.invalid && floors.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
@@ -104,6 +113,7 @@
             <label for="inputcity">City</label>
             <input type="text" class="form-control" id="inputcity" name="city" #city="ngModel" [(ngModel)]="houseService.selectedHouse.city"
               placeholder="city" required>
+            <div class="validation-error" *ngIf="city.invalid && city.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
@@ -111,6 +121,7 @@
             <label for="inputcountry">Country</label>
             <input type="text" class="form-control" id="inputcountry" name="country" #country="ngModel" [(ngModel)]="houseService.selectedHouse.country"
               placeholder="country" required>
+            <div class="validation-error" *ngIf="country.invalid && country.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
@@ -118,6 +129,7 @@
             <label for="inputpostindex">PostIndex</label>
             <input type="email" class="form-control" id="inputpostindex" name="postindex" #postindex="ngModel" [(ngModel)]="houseService.selectedHouse.postindex"
               placeholder="postindex" required>
+            <div class="validation-error" *ngIf="postindex.invalid && postindex.touched">This field is Required</div>
           </div>
         </div>
       </div>

@@ -64,17 +64,17 @@ export class FlatTableComponent {
         title: 'ResidentAmount',
         type: 'number',
       },
-      houseid: {
-        editable: false,
-        title: 'HouseId',
-        type: 'html',
-        editor: {
-          type: 'list',
-          config: {
-            list: [],
-          },
-        },
-      },
+      // houseid: {
+      //   editable: false,
+      //   title: 'HouseId',
+      //   type: 'html',
+      //   editor: {
+      //     type: 'list',
+      //     config: {
+      //       list: [],
+      //     },
+      //   },
+      // },
 
     },
   };
@@ -92,6 +92,9 @@ export class FlatTableComponent {
     // first of all we get value from route,we use it to define house id as a params.id
     // then we use GetHouseFlats , getFlatList and GetOneHouse to get all needed information to load in table
     // and counting all objects
+    this.flatService.FlatEditForm = null;
+    this.flatService.FlatRegForm = null;
+    const myHouseId: number = null;
     this.flatService.selectedFlat = new Flat();
     this.route.params.subscribe((params: any) => {
       this.houseService.SourtedFlatList = [];
@@ -121,6 +124,7 @@ export class FlatTableComponent {
         // else (if we have returned param.id as a number) it will load to
         // the table all flats that include house with id that have === param.id
       } else {
+        this.resetTheFuckingForm();
         this.houseService.GetHouseFlats(params.id).subscribe(flats => {
           this.houseService.SourtedFlatList = flats.json();
           this.source.load(this.houseService.SourtedFlatList);
@@ -133,18 +137,18 @@ export class FlatTableComponent {
       this.source.refresh();
     });
 
-    const options = [];
-    this.flatService.getHouseIds().subscribe(resp => {
-      this.flatService.houseList = resp.json();
-      this.flatService.houseList.map(house => {
-        const myTest = { value: house.id, title: 'Street: ' + house.street + ' Number: ' + house.number + '  City: ' + house.city };
-        options.push(myTest);
-      });
-      this.settings.columns.houseid.editor.config.list = options;
-      this.settings = Object.assign({}, this.settings);
-      console.log(options);
-      this.source.refresh();
-    });
+    // const options = [];
+    // this.flatService.getHouseIds().subscribe(resp => {
+    //   this.flatService.houseList = resp.json();
+    //   this.flatService.houseList.map(house => {
+    //     const myTest = { value: house.id, title: 'Street: ' + house.street + ' Number: ' + house.number + '  City: ' + house.city };
+    //     options.push(myTest);
+    //   });
+    //   this.settings.columns.houseid.editor.config.list = options;
+    //   this.settings = Object.assign({}, this.settings);
+    //   console.log(options);
+    //   this.source.refresh();
+    // });
   }
   /**
   * If user will confirm that he wants to delete additional resident,
@@ -258,7 +262,7 @@ export class FlatTableComponent {
       totalarea: null,
       livingspace: null,
       residentamount: null,
-      houseid: null,
+      houseid: this.houseId,
       residents: null,
     };
   }

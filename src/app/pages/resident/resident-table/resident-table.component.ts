@@ -236,7 +236,7 @@ export class ResidentTableComponent {
       postcode: '',
       phone: '',
       email: '',
-      flatid: null,
+      flatid: this.flatId,
     };
   }
   onSubmit(form: NgForm) {
@@ -253,9 +253,10 @@ export class ResidentTableComponent {
         });
     }
   }
-  onClose(): void {
+  onClose(form?: NgForm): void {
     this.residentService.ResidentRegForm = null;
     this.residentService.ResidentEditForm = null;
+    this.resetForm(form);
   }
 }
 
