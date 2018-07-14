@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ResidentService } from '../resident.service';
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FlatService } from '../../flat/flat.service';
 import { Resident } from '../resident.model';
 import { NgForm } from '@angular/forms';
+
 @Component({
   selector: 'app-resident-table',
   templateUrl: './resident-table.component.html',
@@ -17,7 +18,8 @@ import { NgForm } from '@angular/forms';
 `],
 })
 export class ResidentTableComponent {
-  flatId: any;
+  numberPattern = '^2[0-9]{7}';
+  myflatId: any;
   // vesj html(kak vigljadjat i nazivajutsja nawi polja i td,vsja eta infa sazovivaetsja v peremennuju "settings")
   settings = { // setting of our smart table (buttons,columns,names......)
     mode: 'external',
@@ -93,7 +95,7 @@ export class ResidentTableComponent {
     this.route.params.subscribe((params: any) => {
       this.flatService.SourtedResidents = [];
       console.log('I am there');
-      this.flatId = params.id;
+      this.myflatId = params.id;
       console.log(params.id);
       this.flatService.GetFlatResidents(params.id).subscribe(myResidents => {
         this.flatService.SourtedResidents = myResidents.json();
@@ -123,6 +125,7 @@ export class ResidentTableComponent {
           this.source.load(this.flatService.SourtedResidents);
           this.residentService.TotalResidentsInAdditionalFlat = this.source.count();
           this.source.refresh();
+          this.residentService.TotalResidentsInAdditionalFlat = this.source.count();
           this.flatService.SourtedResidents = [];
         });
       }
@@ -155,6 +158,7 @@ export class ResidentTableComponent {
    */
   onDeleteConfirm(event): void {
     this.residentService.deleteResident(event);
+    this.source.remove(event.data);
     this.residentService.TotalResidentsInAllFlats = this.residentService.TotalResidentsInAllFlats - 1;
     this.residentService.TotalResidentsInAdditionalFlat = this.residentService.TotalResidentsInAdditionalFlat - 1;
   }
@@ -169,19 +173,7 @@ export class ResidentTableComponent {
    * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
    */
   onCreateConfirm(event): void {
-    // const data = { // values of our data that we will work with
-    //   'id': event.newData.id = 0,
-    //   'firstname': event.newData.firstname,
-    //   'lastname': event.newData.lastname,
-    //   'postcode': event.newData.postcode,
-    //   'phone': event.newData.phone,
-    //   'email': event.newData.email,
-    //   'flatid': event.newData.flatid,
-    // };
-    // this.residentService.postResident(event, data);
-    // this.residentService.TotalResidentsInAllFlats = this.residentService.TotalResidentsInAllFlats + 1;
-    // this.residentService.TotalResidentsInAdditionalFlat = this.residentService.TotalResidentsInAdditionalFlat + 1;
-    // this.source.refresh();
+    this.resetForm();
     this.residentService.ResidentRegForm = 1;
   }
   /**
@@ -195,16 +187,6 @@ export class ResidentTableComponent {
    * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
    */
   onSaveConfirm(event): void {
-    // const data = { // values of our data that we will work with
-    //   'id': event.newData.id,
-    //   'firstname': event.newData.firstname,
-    //   'lastname': event.newData.lastname,
-    //   'postcode': event.newData.postcode,
-    //   'phone': event.newData.phone,
-    //   'email': event.newData.email,
-    //   'flatid': event.newData.flatid,
-    // };
-    // this.residentService.putResident(event, data);
     this.residentService.selectedResident = Object.assign({}, event.data);
     this.residentService.ResidentEditForm = 1;
   }
@@ -236,18 +218,20 @@ export class ResidentTableComponent {
       postcode: '',
       phone: '',
       email: '',
-      flatid: this.flatId,
+      flatid: this.myflatId,
     };
   }
   onSubmit(form: NgForm) {
     if (!form.value.id) {
       this.residentService.postResident(form.value).subscribe(data => {
+        this.source.prepend(form.value);
         this.resetForm(form);
         // this.toastr.success('New Record Added', 'House registered');
       });
     } else {
       this.residentService.putResident(form.value.id, form.value)
         .subscribe(data => {
+          // this.source.update();
           this.resetForm(form);
           // this.toastr.info('Record updated', 'Flat info was changed');
         });

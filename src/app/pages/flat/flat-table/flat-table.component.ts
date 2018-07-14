@@ -64,20 +64,9 @@ export class FlatTableComponent {
         title: 'ResidentAmount',
         type: 'number',
       },
-      // houseid: {
-      //   editable: false,
-      //   title: 'HouseId',
-      //   type: 'html',
-      //   editor: {
-      //     type: 'list',
-      //     config: {
-      //       list: [],
-      //     },
-      //   },
-      // },
-
     },
   };
+
   source: LocalDataSource = new LocalDataSource(); // fucntionality of our ng2 smart table
   // our constructor calles getFlatList() function to send a request to our backend so he could return us all house objects...
   // then all this returned values will be placed in flatList from FlatService(Array of Flat Objects),and after that...
@@ -137,18 +126,6 @@ export class FlatTableComponent {
       this.source.refresh();
     });
 
-    // const options = [];
-    // this.flatService.getHouseIds().subscribe(resp => {
-    //   this.flatService.houseList = resp.json();
-    //   this.flatService.houseList.map(house => {
-    //     const myTest = { value: house.id, title: 'Street: ' + house.street + ' Number: ' + house.number + '  City: ' + house.city };
-    //     options.push(myTest);
-    //   });
-    //   this.settings.columns.houseid.editor.config.list = options;
-    //   this.settings = Object.assign({}, this.settings);
-    //   console.log(options);
-    //   this.source.refresh();
-    // });
   }
   /**
   * If user will confirm that he wants to delete additional resident,
@@ -163,9 +140,6 @@ export class FlatTableComponent {
   */
   onDeleteConfirm(event): void {
     this.flatService.deleteFlat(event);
-    // On success
-    this.flatService.TotalFlatsInTable--; // = this.flatService.TotalFlatsInTable - 1;
-    this.flatService.TotalFlatsInAdditionalHouse--; // = this.flatService.TotalFlatsInAdditionalHouse - 1;
     this.source.remove(event.data);
   }
   /**
@@ -179,25 +153,6 @@ export class FlatTableComponent {
    * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
    */
   onCreateConfirm(event): void {
-    // const data = { // values of our data that we will work with
-    //   'id': event.newData.id = 0,
-    //   'number': event.newData.number,
-    //   'totalarea': event.newData.totalarea,
-    //   'livingspace': event.newData.livingspace,
-    //   'phone': event.newData.phone,
-    //   'houseid': event.newData.houseid,
-    // };
-    // this.flatService.postFlat(event, data).subscribe(addedFlat => {
-    //   const addedFlatterino = addedFlat.json();
-    //   console.log(addedFlat);
-    //   addedFlatterino.floor = 'Doggo Floor';
-    //   event.confirm.resolve(addedFlatterino);
-    // }, () => {
-    //   // On error, reject aka dont add
-    //   event.confirm.reject();
-    // });
-    // this.flatService.TotalFlatsInTable = this.flatService.TotalFlatsInTable + 1;
-    // this.flatService.TotalFlatsInAdditionalHouse = this.flatService.TotalFlatsInAdditionalHouse + 1;
     this.flatService.FlatRegForm = 1;
   }
   /**
@@ -211,15 +166,6 @@ export class FlatTableComponent {
   * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
   */
   onSaveConfirm(event): void {
-    // const data = { // values of our data that we will work with
-    //   'id': event.newData.id,
-    //   'number': event.newData.number,
-    //   'totalarea': event.newData.totalarea,
-    //   'livingspace': event.newData.livingspace,
-    //   'phone': event.newData.phone,
-    //   'houseid': event.newData.houseid,
-    // };
-    // this.flatService.putFlat(event, data);
     this.flatService.selectedFlat = Object.assign({}, event.data);
     this.flatService.FlatEditForm = 1;
   }
@@ -251,6 +197,12 @@ export class FlatTableComponent {
     this.router.navigate(['/pages/flat/flat-table'],
     );
   }
+  /**
+   * Function resets all form values(edit and registration)
+   * to a values that are in this function
+   * @param {NgForm} [form]
+   * @memberof FlatTableComponent
+   */
   resetTheFuckingForm(form?: NgForm) {
     // tslint:disable-next-line:curly
     if (form != null)
@@ -266,10 +218,20 @@ export class FlatTableComponent {
       residents: null,
     };
   }
+  /**
+   * Function is used on submit button, if form value "id" is null,then function will use post request
+   * else will use put request,to send a requests on our server
+   * @param {NgForm} form
+   * @memberof FlatTableComponent
+   */
   onSubmit(form: NgForm) {
     if (!form.value.id) {
       this.flatService.postFlat(form.value).subscribe(data => {
+        this.source.prepend(form.value);
         this.resetTheFuckingForm(form);
+        this.flatService.TotalFlatsInAdditionalHouse = this.source.count();
+        this.flatService.TotalFlatsInTable += 1;
+
         // this.toastr.success('New Record Added', 'House registered');
       });
     } else {
@@ -280,6 +242,12 @@ export class FlatTableComponent {
         });
     }
   }
+  /**
+   * Function will close registration or edit form in house table
+   * Used on button in forms
+   * @param {NgForm} [form]
+   * @memberof FlatTableComponent
+   */
   onClose(form?: NgForm): void {
     this.flatService.FlatEditForm = null;
     this.flatService.FlatRegForm = null;

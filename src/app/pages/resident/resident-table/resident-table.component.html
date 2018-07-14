@@ -1,27 +1,35 @@
+<nb-flip-card *ngIf="flatService.selectedFlat">
+  <nb-card-front>
+    <nb-card accent="info" status="success">
+      <nb-card-header>
+        <h1>Resident Table</h1>
+      </nb-card-header>
+      <nb-card-body>
+        <br>Total amount of residents in all flats: {{residentService.TotalResidentsInAllFlats}} residents
+        <br>Total amount of residents in this flat: {{residentService.TotalResidentsInAdditionalFlat}} residents
+      </nb-card-body>
+    </nb-card>
+  </nb-card-front>
+  <nb-card-back>
+    <nb-card>
+      <nb-card-body>
+        <h1>Flat Info:</h1> Floor: {{ flatService.selectedFlat.floor}}
+        <br>Number: {{ flatService.selectedFlat.number}}
+        <br>Total Area: {{ flatService.selectedFlat.totalarea}}
+      </nb-card-body>
+    </nb-card>
+  </nb-card-back>
+</nb-flip-card>
+
 <nb-card *ngIf="!residentService.ResidentEditForm && !residentService.ResidentRegForm">
   <nb-card-header>
     <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; align-items: center; display: table; margin: 0 auto;">
       <div class="row">
-        <div class="col-sm-4" *ngIf="flatId">
-          <h1>Resident Table</h1> Total amount of residents in all flats: {{residentService.TotalResidentsInAllFlats}} residents
-          <br>
-          <button class="btn btn-hero-info btn-demo" (click)="getFullList()">Go To Resident List</button>
-        </div>
         <div class="col-sm-12" *ngIf="!flatId" style="text-align: center;">
           <h1>Resident Table</h1> Total amount of residents in all flats: {{residentService.TotalResidentsInAllFlats}} residents
           <i class="fas fa-door-open"></i>
           <br>
           <button class="btn btn-hero-info btn-demo" (click)="getFullList()" *ngIf="flatId">Go To Resident List</button>
-        </div>
-        <div class="col-sm-4" *ngIf="flatService.selectedFlat">
-
-          <h1>Flat Info:</h1> Floor: {{ flatService.selectedFlat.floor}}
-          <br>Number: {{ flatService.selectedFlat.number}}
-          <br>Total Area: {{ flatService.selectedFlat.totalarea}}
-          <br>
-        </div>
-        <div class="col-sm-4" *ngIf="flatId">
-          <h1>Residents in this Flat:</h1> {{residentService.TotalResidentsInAdditionalFlat}} Residents are located in this house
         </div>
       </div>
     </div>
@@ -44,11 +52,14 @@
           [(ngModel)]="residentService.selectedResident.id">
         <input type="hidden" *ngIf="residentService.selectedResident && residentService.selectedResident.flatamount" name="flatamount"
           #id="ngModel" [(ngModel)]="residentService.selectedResident.flatamount">
+        <input type="hidden" *ngIf="residentService.selectedResident && residentService.selectedResident.flatid" name="flatid" #id="ngModel"
+          [(ngModel)]="residentService.selectedResident.flatid">
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputstreet">FirstName</label>
             <input class="form-control" id="inputstreet" name="firstname" #firstname="ngModel" [(ngModel)]="residentService.selectedResident.firstname"
               placeholder="FirstName" required>
+            <div class="validation-error" *ngIf="firstname.invalid && firstname.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
@@ -56,6 +67,7 @@
             <label for="inputnumber">Last Name</label>
             <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="residentService.selectedResident.lastname"
               placeholder="lastname" required>
+            <div class="validation-error" *ngIf="lastname.invalid && lastname.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
@@ -63,13 +75,15 @@
             <label for="inputpostcode">postcode</label>
             <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="residentService.selectedResident.postcode"
               placeholder="postcode" required>
+            <div class="validation-error" *ngIf="postcode.invalid && postcode.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputcity">phone</label>
             <input type="text" class="form-control" id="inputcity" name="phone" #phone="ngModel" [(ngModel)]="residentService.selectedResident.phone"
-              placeholder="phone" required>
+              placeholder="phone" [pattern]="phonePattern" required>
+            <div class="validation-error" *ngIf="phone.invalid && phone.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
@@ -77,15 +91,10 @@
             <label for="inputcountry">Email</label>
             <input type="text" class="form-control" id="inputcountry" name="email" #email="ngModel" [(ngModel)]="residentService.selectedResident.email"
               placeholder="email" required>
+            <div class="validation-error" *ngIf="email.invalid && email.touched">This field is Required</div>
           </div>
         </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputpostindex">FlatId</label>
-            <input type="email" class="form-control" id="inputpostindex" name="flatid" #flatid="ngModel" [(ngModel)]="residentService.selectedResident.flatid"
-              placeholder="flatid" required>
-          </div>
-        </div>
+
       </div>
       <button type="submit" [disabled]="!residentForm.valid" class="btn btn-primary">Submit</button>
       <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(residentForm)">Reset</button>
@@ -110,6 +119,7 @@
             <label for="inputstreet">FirstName</label>
             <input class="form-control" id="inputstreet" name="firstname" #firstname="ngModel" [(ngModel)]="residentService.selectedResident.firstname"
               placeholder="FirstName" required>
+            <div class="validation-error" *ngIf="firstname.invalid && firstname.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
@@ -117,6 +127,7 @@
             <label for="inputnumber">LastName</label>
             <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="residentService.selectedResident.lastname"
               placeholder="lastname" required>
+            <div class="validation-error" *ngIf="lastname.invalid && lastname.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
@@ -124,13 +135,16 @@
             <label for="inputpostcode">PostCode</label>
             <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="residentService.selectedResident.postcode"
               placeholder="postcode" required>
+            <div class="validation-error" *ngIf="postcode.invalid && postcode.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputcity">phone</label>
             <input type="text" class="form-control" id="inputcity" name="phone" #phone="ngModel" [(ngModel)]="residentService.selectedResident.phone"
-              placeholder="phone" required>
+              placeholder="phone" [pattern]="phonePattern" required>
+            <label data-error="Invalid phone number!">phone</label>
+            <div class="validation-error" *ngIf="phone.invalid && phone.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
@@ -138,6 +152,7 @@
             <label for="inputcountry">Email</label>
             <input type="text" class="form-control" id="inputcountry" name="email" #email="ngModel" [(ngModel)]="residentService.selectedResident.email"
               placeholder="email" required>
+            <div class="validation-error" *ngIf="email.invalid && email.touched">This field is Required</div>
           </div>
         </div>
         <!-- <div class="col-sm-6">
