@@ -30,14 +30,6 @@ export class ResidentService { // service that will contain all crud fucntions a
    * @memberof ResidentService Service that contains all RESTfull functions that we need
    */
   postResident(res: Resident) {
-    // if (window.confirm('Are you sure you want to add a resident?')) {
-    //   this.http.post('http://localhost:52414/api/Resident', data).subscribe(res => {
-    //     console.log(res);
-    //     event.confirm.resolve(event.newData);
-    //   });
-    // } else {
-    //   event.confirm.reject();
-    // }
     const body = JSON.stringify(res); // why i cant use var and let instead of const here?
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Post, headers: headerOptions });
@@ -55,14 +47,6 @@ export class ResidentService { // service that will contain all crud fucntions a
    * @memberof ResidentService Service that contains all RESTfull functions that we need
    */
   putResident(id, res) {
-    // if (window.confirm('Are you sure you want to update info about a resident?')) {
-    //   this.http.put('http://localhost:52414/api/Resident/' + event.newData.id, data).subscribe(res => {
-    //     console.log(res);
-    //     event.confirm.resolve(event.newData);
-    //   });
-    // } else {
-    //   event.confirm.reject();
-    // }
     const body = JSON.stringify(res); // why i cant use var and let instead of const here?
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Put, headers: headerOptions });

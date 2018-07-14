@@ -50,14 +50,6 @@ export class HouseService { // service that will contain all crud fucntions and 
    * @memberof HouseService Service that contains all RESTfull functions that we need
    */
   putHouse(id, hos) {
-    // if (window.confirm('Are you sure you want to update info about a House?')) {
-    //   this.http.put('http://localhost:52414/api/House/' + event.newData.id, data).subscribe(res => {
-    //     console.log(res);
-    //     event.confirm.resolve(event.newData);
-    //   });
-    // } else {
-    //   event.confirm.reject();
-    // }
     const body = JSON.stringify(hos); // why i cant use var and let instead of const here?
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Put, headers: headerOptions });
