@@ -61,17 +61,6 @@ export class ResidentTableComponent {
         title: 'E-mail',
         type: 'string',
       },
-      flatid: {
-        editable: false,
-        title: 'FlatId',
-        type: 'html',
-        editor: {
-          type: 'list',
-          config: {
-            list: [],
-          },
-        },
-      },
     },
   };
   source: LocalDataSource = new LocalDataSource(); // fucntionality of our ng2 smart table
@@ -134,11 +123,6 @@ export class ResidentTableComponent {
     const options = [];
     this.residentService.getFlatIds().subscribe(resp => {
       this.residentService.flatList = resp.json();
-      this.residentService.flatList.map(flat => {
-        const myTest = { value: flat.id, title: flat.id };
-        options.push(myTest);
-      });
-      this.settings.columns.flatid.editor.config.list = options;
       this.settings = Object.assign({}, this.settings);
       console.log(options);
       this.source.refresh();
@@ -157,10 +141,12 @@ export class ResidentTableComponent {
    * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
    */
   onDeleteConfirm(event): void {
-    this.residentService.deleteResident(event);
-    this.source.remove(event.data);
-    this.residentService.TotalResidentsInAllFlats = this.residentService.TotalResidentsInAllFlats - 1;
-    this.residentService.TotalResidentsInAdditionalFlat = this.residentService.TotalResidentsInAdditionalFlat - 1;
+    this.residentService.deleteResident(event).subscribe(res => {
+      console.log(res);
+      this.source.remove(event.data);
+      this.residentService.TotalResidentsInAllFlats = this.residentService.TotalResidentsInAllFlats - 1;
+      this.residentService.TotalResidentsInAdditionalFlat = this.residentService.TotalResidentsInAdditionalFlat - 1;
+    });
   }
   /**
    * If user will confirm that he wants to add a new resident,function will call

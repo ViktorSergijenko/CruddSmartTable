@@ -63,7 +63,7 @@ export class HouseTableComponent {
       flatamount: {
         editable: false, // dont have posability to edit this column
         addable: false, // dont have posability to ad values in this column
-        title: 'FlatAmount',
+        title: 'Flat Amount',
         type: 'Flat',
       },
     },
@@ -84,7 +84,6 @@ export class HouseTableComponent {
       console.log(resp.json());
       this.houseService.houseList = resp.json();
       this.source.load(resp.json());
-      this.source.count();
       this.houseService.TotalAmountOfHosesInTable = this.source.count();
     });
   }
@@ -100,15 +99,10 @@ export class HouseTableComponent {
    * @memberof HouseTableComponent HouseTableComponent - Have all setting of our resident smart table
    */
   onDeleteConfirm(event): void {
-    console.log(event.data);
     this.houseService.deleteHouse(event).subscribe(res => {
       console.log(res);
-      this.source.empty();
-      this.houseService.getHouseList().subscribe(houses => {
-        this.houseService.houseList = houses.json();
-        this.source.load(this.houseService.houseList);
-        this.houseService.TotalAmountOfHosesInTable = this.source.count();
-      });
+      this.source.remove(event.data);
+      this.houseService.TotalAmountOfHosesInTable = this.source.count();
     });
   }
   /**
@@ -151,7 +145,8 @@ export class HouseTableComponent {
     console.log('user row select: ', event.data.id);
     this.router.navigate(['/pages/flat/flat-table/' + event.data.id], { relativeTo: this.route });
   }
-  onClose(): void {
+  onClose(form?: NgForm): void {
+    this.resetForm(form);
     this.houseService.RegistrationHouseForm = null;
     this.houseService.EditHouseForm = null;
   }

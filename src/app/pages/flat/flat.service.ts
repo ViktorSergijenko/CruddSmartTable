@@ -90,15 +90,7 @@ export class FlatService { // service that will contain all crud fucntions and v
    * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
    */
   deleteFlat(event) {
-    if (window.confirm('Are you sure you want to delete?')) {
-      console.log(event.data);
-      this.http.delete('http://localhost:52414/api/Flat/' + event.data.id).subscribe(res => {
-        console.log(res);
-        event.confirm.resolve(event.source.data);
-      });
-    } else {
-      event.confirm.reject();
-    }
+    return this.http.delete('http://localhost:52414/api/Flat/' + event.data.id);
   }
   /**
    * it's just a function for sending a request to our backend,so he could return
@@ -128,6 +120,12 @@ export class FlatService { // service that will contain all crud fucntions and v
    */
   GetOneFlat(id: number) {
     return this.http.get('http://localhost:52414/api/flat/' + id);
+  }
+  getAllFlatAmount() {
+    return this.http.get('http://localhost:52414/api/flat/FlatsAmount');
+  }
+  GetFlatAmountInOneHouse(id: number) {
+    return this.http.get('http://localhost:52414/api/House/' + id + '/flatAmount');
   }
 }
 

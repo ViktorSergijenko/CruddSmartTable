@@ -56,9 +56,9 @@
           [(ngModel)]="residentService.selectedResident.flatid">
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputstreet">FirstName</label>
+            <label for="inputstreet">First Name</label>
             <input class="form-control" id="inputstreet" name="firstname" #firstname="ngModel" [(ngModel)]="residentService.selectedResident.firstname"
-              placeholder="FirstName" required>
+              placeholder="First Name" required>
             <div class="validation-error" *ngIf="firstname.invalid && firstname.touched">This field is Required</div>
           </div>
         </div>
@@ -66,23 +66,23 @@
           <div class="form-group">
             <label for="inputnumber">Last Name</label>
             <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="residentService.selectedResident.lastname"
-              placeholder="lastname" required>
+              placeholder="Last Name" required>
             <div class="validation-error" *ngIf="lastname.invalid && lastname.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputpostcode">postcode</label>
+            <label for="inputpostcode">Post Code</label>
             <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="residentService.selectedResident.postcode"
-              placeholder="postcode" required>
+              placeholder="Post Code" required>
             <div class="validation-error" *ngIf="postcode.invalid && postcode.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputcity">phone</label>
+            <label for="inputcity">Phone Number</label>
             <input type="text" class="form-control" id="inputcity" name="phone" #phone="ngModel" [(ngModel)]="residentService.selectedResident.phone"
-              placeholder="phone" [pattern]="phonePattern" required>
+              placeholder="Phone Number" [pattern]="phonePattern" required>
             <div class="validation-error" *ngIf="phone.invalid && phone.touched">This field is Required</div>
           </div>
         </div>
@@ -90,7 +90,7 @@
           <div class="form-group">
             <label for="inputcountry">Email</label>
             <input type="text" class="form-control" id="inputcountry" name="email" #email="ngModel" [(ngModel)]="residentService.selectedResident.email"
-              placeholder="email" required>
+              placeholder="Email" required>
             <div class="validation-error" *ngIf="email.invalid && email.touched">This field is Required</div>
           </div>
         </div>
@@ -116,34 +116,33 @@
           [(ngModel)]="residentService.selectedResident.flatid">
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputstreet">FirstName</label>
+            <label for="inputstreet">First Name</label>
             <input class="form-control" id="inputstreet" name="firstname" #firstname="ngModel" [(ngModel)]="residentService.selectedResident.firstname"
-              placeholder="FirstName" required>
+              placeholder="First Name" required>
             <div class="validation-error" *ngIf="firstname.invalid && firstname.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputnumber">LastName</label>
+            <label for="inputnumber">Last Name</label>
             <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="residentService.selectedResident.lastname"
-              placeholder="lastname" required>
+              placeholder="Last Name" required>
             <div class="validation-error" *ngIf="lastname.invalid && lastname.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputpostcode">PostCode</label>
+            <label for="inputpostcode">Post Code</label>
             <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="residentService.selectedResident.postcode"
-              placeholder="postcode" required>
+              placeholder="Post Code" required>
             <div class="validation-error" *ngIf="postcode.invalid && postcode.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputcity">phone</label>
+            <label for="inputcity">Phone Number</label>
             <input type="text" class="form-control" id="inputcity" name="phone" #phone="ngModel" [(ngModel)]="residentService.selectedResident.phone"
-              placeholder="phone" [pattern]="phonePattern" required>
-            <label data-error="Invalid phone number!">phone</label>
+              placeholder="Phone Number" [pattern]="phonePattern" required>
             <div class="validation-error" *ngIf="phone.invalid && phone.touched">This field is Required</div>
           </div>
         </div>
@@ -151,7 +150,7 @@
           <div class="form-group">
             <label for="inputcountry">Email</label>
             <input type="text" class="form-control" id="inputcountry" name="email" #email="ngModel" [(ngModel)]="residentService.selectedResident.email"
-              placeholder="email" required>
+              placeholder="Email" required>
             <div class="validation-error" *ngIf="email.invalid && email.touched">This field is Required</div>
           </div>
         </div>

@@ -96,4 +96,5 @@ export class HouseService { // service that will contain all crud fucntions and 
   GetOneHouse(id: number) {
     return this.http.get('http://localhost:52414/api/House/' + id);
   }
+
 }

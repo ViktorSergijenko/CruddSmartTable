@@ -14,7 +14,7 @@
 
 <form class="emp-form" #houseForm="ngForm" (ngSubmit)="onSubmit(houseForm) " *ngIf="houseService.EditHouseForm">
   <nb-card>
-    <nb-card-header>House Edit Form</nb-card-header>
+    <nb-card-header>House Edit Form LOG OUT!!!!!!!!!!!!!!!!!!!!!!!!!!!</nb-card-header>
     <nb-card-body>
       <div class="row">
         <input type="hidden" *ngIf="houseService.selectedHouse && houseService.selectedHouse.id" name="id" #id="ngModel" [(ngModel)]="houseService.selectedHouse.id">
@@ -24,7 +24,7 @@
           <div class="form-group">
             <label for="inputstreet">Street</label>
             <input class="form-control" id="inputstreet" name="street" #street="ngModel" [(ngModel)]="houseService.selectedHouse.street"
-              placeholder="street" required>
+              placeholder="Street" required>
             <label data-error="Required field!">street</label>
           </div>
         </div>
@@ -32,7 +32,7 @@
           <div class="form-group">
             <label for="inputnumber">House Number</label>
             <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="houseService.selectedHouse.number"
-              placeholder="number" required>
+              placeholder="House Number" required>
             <div class="validation-error" *ngIf="number.invalid && number.touched">This field is Required</div>
           </div>
         </div>
@@ -40,7 +40,7 @@
           <div class="form-group">
             <label for="inputfloors">Floors</label>
             <input type="text" class="form-control" id="inputfloors" name="floors" #floors="ngModel" [(ngModel)]="houseService.selectedHouse.floors"
-              placeholder="number" required>
+              placeholder="Floors" required>
             <div class="validation-error" *ngIf="floors.invalid && floors.touched">This field is Required</div>
           </div>
         </div>
@@ -48,7 +48,7 @@
           <div class="form-group">
             <label for="inputcity">City</label>
             <input type="text" class="form-control" id="inputcity" name="city" #city="ngModel" [(ngModel)]="houseService.selectedHouse.city"
-              placeholder="city" required>
+              placeholder="City" required>
             <div class="validation-error" *ngIf="city.invalid && city.touched">This field is Required</div>
           </div>
         </div>
@@ -56,22 +56,22 @@
           <div class="form-group">
             <label for="inputcountry">Country</label>
             <input type="text" class="form-control" id="inputcountry" name="country" #country="ngModel" [(ngModel)]="houseService.selectedHouse.country"
-              placeholder="country" required>
+              placeholder="Country" required>
             <div class="validation-error" *ngIf="country.invalid && country.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputpostindex">PostIndex</label>
+            <label for="inputpostindex">Post Index</label>
             <input type="email" class="form-control" id="inputpostindex" name="postindex" #postindex="ngModel" [(ngModel)]="houseService.selectedHouse.postindex"
-              placeholder="postindex" required>
+              placeholder="Post Index" required>
             <div class="validation-error" *ngIf="postindex.invalid && postindex.touched">This field is Required</div>
           </div>
         </div>
       </div>
       <button type="submit" [disabled]="!houseForm.valid" class="btn btn-primary">Submit</button>
       <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(houseForm)">Reset</button>
-      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose()">Close</button>
+      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(houseForm)">Close</button>
     </nb-card-body>
   </nb-card>
 </form>
@@ -88,7 +88,7 @@
           <div class="form-group">
             <label for="inputstreet">Street</label>
             <input class="form-control" id="inputstreet" name="street" #street="ngModel" [(ngModel)]="houseService.selectedHouse.street"
-              placeholder="street" required>
+              placeholder="Street" required>
             <div class="validation-error" *ngIf="street.invalid && street.touched">This field is Required</div>
           </div>
         </div>
@@ -96,7 +96,7 @@
           <div class="form-group">
             <label for="inputnumber">House Number</label>
             <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="houseService.selectedHouse.number"
-              placeholder="number" required>
+              placeholder="House Number" required>
             <div class="validation-error" *ngIf="number.invalid && number.touched">This field is Required</div>
           </div>
         </div>
@@ -104,7 +104,7 @@
           <div class="form-group">
             <label for="inputfloors">Floors</label>
             <input type="text" class="form-control" id="inputfloors" name="floors" #floors="ngModel" [(ngModel)]="houseService.selectedHouse.floors"
-              placeholder="number" required>
+              placeholder="Floors" required>
             <div class="validation-error" *ngIf="floors.invalid && floors.touched">This field is Required</div>
           </div>
         </div>
@@ -112,30 +112,38 @@
           <div class="form-group">
             <label for="inputcity">City</label>
             <input type="text" class="form-control" id="inputcity" name="city" #city="ngModel" [(ngModel)]="houseService.selectedHouse.city"
-              placeholder="city" required>
+              placeholder="City" required>
             <div class="validation-error" *ngIf="city.invalid && city.touched">This field is Required</div>
           </div>
         </div>
+        <!-- <div class="col-sm-6">
+          <div class="form-group">
+            <label for="inputcity">flatamount</label>
+            <input type="text" class="form-control" id="inputflatamount" name="flatamount" #flatamount="ngModel" [(ngModel)]="houseService.selectedHouse.flatamount"
+              placeholder="flatamount" required>
+            <div class="validation-error" *ngIf="flatamount.invalid && flatamount.touched">This field is Required</div>
+          </div>
+        </div> -->
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputcountry">Country</label>
             <input type="text" class="form-control" id="inputcountry" name="country" #country="ngModel" [(ngModel)]="houseService.selectedHouse.country"
-              placeholder="country" required>
+              placeholder="Country" required>
             <div class="validation-error" *ngIf="country.invalid && country.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputpostindex">PostIndex</label>
+            <label for="inputpostindex">Post Index</label>
             <input type="email" class="form-control" id="inputpostindex" name="postindex" #postindex="ngModel" [(ngModel)]="houseService.selectedHouse.postindex"
-              placeholder="postindex" required>
+              placeholder="Post Index" required>
             <div class="validation-error" *ngIf="postindex.invalid && postindex.touched">This field is Required</div>
           </div>
         </div>
       </div>
       <button type="submit" [disabled]="!houseForm.valid" class="btn btn-primary">Submit</button>
       <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(houseForm)">Reset</button>
-      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose()">Close</button>
+      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(houseForm)">Close</button>
     </nb-card-body>
   </nb-card>
 </form>

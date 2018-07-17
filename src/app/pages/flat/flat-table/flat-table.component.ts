@@ -47,21 +47,21 @@ export class FlatTableComponent {
         type: 'number',
       },
       number: {
-        title: 'FLat Number',
+        title: 'Flat Number',
         type: 'number',
       },
       totalarea: {
-        title: 'TotalArea',
+        title: 'Total Area',
         type: 'number',
       },
       livingspace: {
-        title: 'LivingSpace',
+        title: 'Living Space',
         type: 'number',
       },
       residentamount: {
         editable: false,
         addable: false,
-        title: 'ResidentAmount',
+        title: 'Resident Amount',
         type: 'number',
       },
     },
@@ -88,22 +88,13 @@ export class FlatTableComponent {
     this.route.params.subscribe((params: any) => {
       this.houseService.SourtedFlatList = [];
       console.log('I am there');
-      this.houseId = params.id;
+      this.houseId = params.id; // giving houseId value of params.id
       console.log(this.houseId);
-      this.houseService.GetHouseFlats(params.id).subscribe(myFlats => {
-        this.houseService.SourtedFlatList = myFlats.json();
-        this.flatService.getFlatList().subscribe(flat => {
-          this.flatService.flatList = flat.json();
-          this.houseService.GetOneHouse(params.id).subscribe(myHouse => {
-            this.houseService.selectedHouse = myHouse.json();
-            this.flatService.TotalFlatsInTable = this.flatService.flatList.length;
-          });
-        });
-      });
       // if route returns params.id as 'all' or it is undefined then
       // programm will load all flats in to the table that we have in our database on our backend
       if (!params.id || params.id === 'all') {
         console.log(this.houseId);
+        this.houseId = null;
         this.flatService.getFlatList().subscribe(resp => {
           this.flatService.flatList = resp.json();
           this.source.load(this.flatService.flatList);
@@ -118,12 +109,12 @@ export class FlatTableComponent {
           this.houseService.SourtedFlatList = flats.json();
           this.source.load(this.houseService.SourtedFlatList);
           this.flatService.TotalFlatsInAdditionalHouse = this.source.count();
-          this.source.refresh();
-          this.houseService.SourtedFlatList = [];
+          this.flatService.getAllFlatAmount().subscribe(Amount => {
+            this.flatService.TotalFlatsInTable = Amount.json();
+            this.source.refresh();
+          });
         });
       }
-
-      this.source.refresh();
     });
 
   }
@@ -139,8 +130,19 @@ export class FlatTableComponent {
   * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
   */
   onDeleteConfirm(event): void {
-    this.flatService.deleteFlat(event);
-    this.source.remove(event.data);
+    this.flatService.deleteFlat(event).subscribe(res => {
+      console.log(res);
+      this.source.remove(event.data);
+      if (this.houseId) {
+        this.flatService.GetFlatAmountInOneHouse(this.houseId).subscribe(Amount => {
+          this.flatService.TotalFlatsInAdditionalHouse = Amount.json();
+        });
+      } else {
+        this.flatService.getAllFlatAmount().subscribe(Amount => {
+          this.flatService.TotalFlatsInTable = Amount.json();
+        });
+      }
+    });
   }
   /**
    * If user will confirm that he wants to add a new flat,function will call

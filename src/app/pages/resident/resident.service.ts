@@ -70,15 +70,7 @@ export class ResidentService { // service that will contain all crud fucntions a
    * @memberof ResidentService Service that contains all RESTfull functions that we need
    */
   deleteResident(event) {
-    if (window.confirm('Are you sure you want to delete?')) {
-      console.log(event.data);
-      this.http.delete('http://localhost:52414/api/Resident/' + event.data.id).subscribe(res => {
-        console.log(res);
-        event.confirm.resolve(event.source.data);
-      });
-    } else {
-      event.confirm.reject();
-    }
+    return this.http.delete('http://localhost:52414/api/Resident/' + event.data.id);
   }
   /**
    *function that will send a request to backend so he could returns us all...
