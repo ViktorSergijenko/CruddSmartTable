@@ -82,21 +82,9 @@ export class ResidentTableComponent {
     // then we use GetFlatResidents , getResidentList and GetOneFlat to get all needed information to load in table
     // and counting all objects
     this.route.params.subscribe((params: any) => {
-      this.flatService.SourtedResidents = [];
       console.log('I am there');
       this.myflatId = params.id;
       console.log(params.id);
-      this.flatService.GetFlatResidents(params.id).subscribe(myResidents => {
-        this.flatService.SourtedResidents = myResidents.json();
-        this.residentService.getResidentList().subscribe(myResidentsALL => {
-          this.residentService.residentList = myResidentsALL.json();
-          this.flatService.GetOneFlat(params.id).subscribe(OneFlat => {
-            this.flatService.selectedFlat = OneFlat.json();
-            console.log('BLEDJ' + OneFlat.json());
-            this.residentService.TotalResidentsInAllFlats = this.residentService.residentList.length;
-          });
-        });
-      });
       // if route returns params.id as 'all' or it is undefined then
       // programm will load all flats in to the table that we have in our database on our backend
       if (!params.id || params.id === 'all') {
@@ -109,25 +97,23 @@ export class ResidentTableComponent {
         // else (if we have returned param.id as a number) it will load to
         // the table all flats that include house with id that have === param.id
       } else {
+        this.flatService.SourtedResidents = [];
         this.flatService.GetFlatResidents(params.id).subscribe(resident => {
           this.flatService.SourtedResidents = resident.json();
           this.source.load(this.flatService.SourtedResidents);
-          this.residentService.TotalResidentsInAdditionalFlat = this.source.count();
-          this.source.refresh();
-          this.residentService.TotalResidentsInAdditionalFlat = this.source.count();
-          this.flatService.SourtedResidents = [];
+          this.flatService.GetOneFlat(params.id).subscribe(oneFlat => {
+            this.flatService.selectedFlat = oneFlat.json();
+          });
+          this.residentService.getAllResidentAmount().subscribe(resAmount => {
+            this.residentService.TotalResidentsInAllFlats = resAmount.json();
+            this.residentService.GetResidentAmountInOneFlat(params.id).subscribe(resAmountInOneFlat => {
+              this.residentService.TotalResidentsInAdditionalFlat = resAmountInOneFlat.json();
+              this.source.refresh();
+            });
+          });
         });
       }
-      this.source.refresh();
     });
-    const options = [];
-    this.residentService.getFlatIds().subscribe(resp => {
-      this.residentService.flatList = resp.json();
-      this.settings = Object.assign({}, this.settings);
-      console.log(options);
-      this.source.refresh();
-    });
-    this.residentService.TotalResidentsInAllFlats = this.source.count();
   }
   /**
    * If user will confirm that he wants to delete additional resident,
@@ -212,6 +198,13 @@ export class ResidentTableComponent {
       this.residentService.postResident(form.value).subscribe(data => {
         this.source.prepend(form.value);
         this.resetForm(form);
+        this.residentService.getAllResidentAmount().subscribe(resAmount => {
+          this.residentService.TotalResidentsInAllFlats = resAmount.json();
+          this.residentService.GetResidentAmountInOneFlat(this.myflatId).subscribe(resAmountInOneFlat => {
+            this.residentService.TotalResidentsInAdditionalFlat = resAmountInOneFlat.json();
+            this.source.refresh();
+          });
+        });
         // this.toastr.success('New Record Added', 'House registered');
       });
     } else {

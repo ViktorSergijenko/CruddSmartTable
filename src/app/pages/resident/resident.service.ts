@@ -15,8 +15,8 @@ export class ResidentService { // service that will contain all crud fucntions a
   TotalResidentsInAllFlats: number; // value that will contain all amount of residents that we have in database
   TotalResidentsInAdditionalFlat: number; // value that will contain  amount of residents that are living in additional flat
   sourtedResidents: Resident[] = []; // array that will contain array of residents that lives in additional flat
-  ResidentRegForm: number;
-  ResidentEditForm: number;
+  ResidentRegForm: number; // variable that responds for visibility of our Resident Registration Form
+  ResidentEditForm: number; // variable that responds for visibility of our Resident edit form
   constructor(private http: Http) { }
   /**
    *this function addes a new  object to our databse that is located on our backend.
@@ -27,7 +27,7 @@ export class ResidentService { // service that will contain all crud fucntions a
    *source: DataSource - table data source
    *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
    * @param {*} data Object - original row data
-   * @memberof ResidentService Service that contains all RESTfull functions that we need
+   * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
    */
   postResident(res: Resident) {
     const body = JSON.stringify(res); // why i cant use var and let instead of const here?
@@ -44,7 +44,7 @@ export class ResidentService { // service that will contain all crud fucntions a
    *source: DataSource - table data source
    *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
    * @param {*} data Object - original row data
-   * @memberof ResidentService Service that contains all RESTfull functions that we need
+   * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
    */
   putResident(id, res) {
     const body = JSON.stringify(res); // why i cant use var and let instead of const here?
@@ -54,7 +54,7 @@ export class ResidentService { // service that will contain all crud fucntions a
   }
   /**
    * Function sends a get request to our backend,and returns all data.(in our case it is Flat array)
-   * @memberof ResidentService Service that contains all RESTfull functions that we need
+   * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
    */
   getResidentList() {
     return this.http.get('http://localhost:52414/api/Resident');
@@ -67,7 +67,7 @@ export class ResidentService { // service that will contain all crud fucntions a
    *newData: Object - edited data
    *source: DataSource - table data source
    *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
-   * @memberof ResidentService Service that contains all RESTfull functions that we need
+   * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
    */
   deleteResident(event) {
     return this.http.delete('http://localhost:52414/api/Resident/' + event.data.id);
@@ -76,10 +76,30 @@ export class ResidentService { // service that will contain all crud fucntions a
    *function that will send a request to backend so he could returns us all...
    *flat objects
    * @returns Flat list(all flat objects)
-   * @memberof ResidentService Service that contains all RESTfull functions that we need
+   * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
    */
   getFlatIds() {
     return this.http.get('http://localhost:52414/api/Flat');
+  }
+
+  /**
+   * Function that sends a get request to our backend  and returns
+   * a value as a number
+   * @returns number value(Resident amount in all database)
+   * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
+   */
+  getAllResidentAmount() {
+    return this.http.get('http://localhost:52414/api/resident/ResidentsAmount');
+  }
+  /**
+   * Function that sends a get request to our backend  and returns
+   * a value as a number
+   * @param {number} id id- flat id number
+   * @returns a number value(Resident amount in one additional flat)
+   * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
+   */
+  GetResidentAmountInOneFlat(id: number) {
+    return this.http.get('http://localhost:52414/api/flat/' + id + '/ResidentAmount');
   }
 }
 

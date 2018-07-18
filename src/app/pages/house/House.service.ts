@@ -16,8 +16,8 @@ export class HouseService { // service that will contain all crud fucntions and 
   houseList: House[]; // array to keep all House object
   SourtedFlatList: Flat[] = []; // array to keep all additional flats of one house
   TotalAmountOfHosesInTable: number; // value that keep amount houses in table
-  RegistrationHouseForm: number;
-  EditHouseForm: number;
+  RegistrationHouseForm: number; // value that responds for visibility of our House Registration Form
+  EditHouseForm: number; // value that responds for visibility of our House Edit Form
   constructor(private http: Http) {
     console.log('hi');
   }

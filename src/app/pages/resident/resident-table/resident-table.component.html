@@ -1,4 +1,4 @@
-<nb-flip-card *ngIf="flatService.selectedFlat">
+<!-- <nb-flip-card *ngIf="flatService.selectedFlat">
   <nb-card-front>
     <nb-card accent="info" status="success">
       <nb-card-header>
@@ -19,7 +19,34 @@
       </nb-card-body>
     </nb-card>
   </nb-card-back>
-</nb-flip-card>
+</nb-flip-card> -->
+
+
+<div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;  ">
+  <nb-card status="success" *ngIf="flatService.selectedFlat">
+    <nb-card-header>
+      <h1>Flat Info:</h1>
+    </nb-card-header>
+    <nb-card-body>
+      Floor: {{ flatService.selectedFlat.floor}}
+      <br>Number: {{ flatService.selectedFlat.number}}
+      <br>Total Area: {{ flatService.selectedFlat.totalarea}}
+      <br>Living Space: {{flatService.selectedFlat.livingspace}}
+      <br>Resident Amount: {{ residentService.TotalResidentsInAdditionalFlat}}
+    </nb-card-body>
+  </nb-card>
+
+  <nb-card status="success" *ngIf="flatService.selectedFlat">
+    <nb-card-header>
+      <h1>Resident Table</h1>
+    </nb-card-header>
+    <nb-card-body>
+      <br>
+      <h3>Total amount of residents in all flats: {{residentService.TotalResidentsInAllFlats}} residents</h3>
+      <h3>Total amount of residents in this flat: {{residentService.TotalResidentsInAdditionalFlat}} residents</h3>
+    </nb-card-body>
+  </nb-card>
+</div>
 
 <nb-card *ngIf="!residentService.ResidentEditForm && !residentService.ResidentRegForm">
   <nb-card-header>
@@ -96,9 +123,22 @@
         </div>
 
       </div>
-      <button type="submit" [disabled]="!residentForm.valid" class="btn btn-primary">Submit</button>
-      <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(residentForm)">Reset</button>
-      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(flatForm)">Close</button>
+      <!-- <div class="row" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; align-items: center; display: table; margin: 0 auto;"> -->
+      <div>
+        <button type="submit" [disabled]="!residentForm.valid" class="btn btn-primary">Submit</button>
+      </div>
+      <div>
+        <button type="button" class="btn btn-hero-success btn-demo" (click)="resetForm(residentForm)">Reset</button>
+      </div>
+      <div style="padding-left: 260px">
+        <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(flatForm)">Close</button>
+      </div>
+      <!-- <button style="padding-right: 260px" type="submit" [disabled]="!residentForm.valid" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-hero-success btn-demo" (click)="resetForm(residentForm)">Reset</button>
+        <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(flatForm)">Close</button> -->
+
+
+
     </nb-card-body>
   </nb-card>
 </form>
@@ -154,16 +194,8 @@
             <div class="validation-error" *ngIf="email.invalid && email.touched">This field is Required</div>
           </div>
         </div>
-        <!-- <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputpostindex">PostIndex</label>
-            <input type="email" class="form-control" id="inputpostindex" name="flatid" #flatid="ngModel" [(ngModel)]="residentService.selectedResident.flatid"
-              placeholder="flatid" required>
-          </div>
-        </div> -->
       </div>
       <button type="submit" [disabled]="!residentForm.valid" class="btn btn-primary">Submit</button>
-      <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(residentForm)">Reset</button>
       <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(flatForm)">Close</button>
 
     </nb-card-body>

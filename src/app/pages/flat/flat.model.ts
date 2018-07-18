@@ -1,6 +1,11 @@
 import { Resident } from '../resident/resident.model';
 
 export class Flat {
+    constructor(houseId: number) {
+        if (houseId) {
+            this.houseid = houseId;
+        }
+    }
     /**
      * Creats a new flat
      */

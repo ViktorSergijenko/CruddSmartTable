@@ -17,8 +17,8 @@ export class FlatService { // service that will contain all crud fucntions and v
   TotalFlatsInTable: number; // value that will contain total amount of existing flats in database
   TotalFlatsInAdditionalHouse: number; // value that will contain total amount of flats that contains in additional house
   SourtedResidents: Resident[] = []; // array that will contain returned residents objects from additional flat
-  FlatRegForm: number;
-  FlatEditForm: number;
+  FlatRegForm: number; // variable that responds for visibility of our Flat Registration form
+  FlatEditForm: number; // variable that responds for visibility of our Flat edit form
   constructor(private http: Http) { }
   /**
   *this function addes a new  object to our databse that is located on our backend.
@@ -121,9 +121,22 @@ export class FlatService { // service that will contain all crud fucntions and v
   GetOneFlat(id: number) {
     return this.http.get('http://localhost:52414/api/flat/' + id);
   }
+  /**
+   * Function that sends a get request to our backend  and returns
+   * a value as a number
+   * @returns number value(Flat amount in all database)
+   * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
+   */
   getAllFlatAmount() {
     return this.http.get('http://localhost:52414/api/flat/FlatsAmount');
   }
+  /**
+   * Function that sends a get request to our backend  and returns
+   * a value as a number
+   * @param {number} id id- house id number
+   * @returns a number value(Flat amount in one additional house)
+   * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
+   */
   GetFlatAmountInOneHouse(id: number) {
     return this.http.get('http://localhost:52414/api/House/' + id + '/flatAmount');
   }

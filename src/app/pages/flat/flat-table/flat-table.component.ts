@@ -19,7 +19,7 @@ import { NgForm } from '@angular/forms';
 `],
 })
 export class FlatTableComponent {
-  houseId: any;
+  houseId: any = null;
   // vesj html(kak vigljadjat i nazivajutsja nawi polja i td,vsja eta infa sazovivaetsja v peremennuju "settings")
   settings = { // setting of our smart table (buttons,columns,names......)
     mode: 'external',
@@ -87,14 +87,14 @@ export class FlatTableComponent {
     this.flatService.selectedFlat = new Flat();
     this.route.params.subscribe((params: any) => {
       this.houseService.SourtedFlatList = [];
-      console.log('I am there');
+
       this.houseId = params.id; // giving houseId value of params.id
-      console.log(this.houseId);
+      this.flatService.selectedFlat.houseid = this.houseId;
+
       // if route returns params.id as 'all' or it is undefined then
       // programm will load all flats in to the table that we have in our database on our backend
       if (!params.id || params.id === 'all') {
-        console.log(this.houseId);
-        this.houseId = null;
+
         this.flatService.getFlatList().subscribe(resp => {
           this.flatService.flatList = resp.json();
           this.source.load(this.flatService.flatList);
@@ -104,7 +104,7 @@ export class FlatTableComponent {
         // else (if we have returned param.id as a number) it will load to
         // the table all flats that include house with id that have === param.id
       } else {
-        this.resetTheFuckingForm();
+        // this.resetTheFuckingForm();
         this.houseService.GetHouseFlats(params.id).subscribe(flats => {
           this.houseService.SourtedFlatList = flats.json();
           this.source.load(this.houseService.SourtedFlatList);
@@ -112,6 +112,9 @@ export class FlatTableComponent {
           this.flatService.getAllFlatAmount().subscribe(Amount => {
             this.flatService.TotalFlatsInTable = Amount.json();
             this.source.refresh();
+            this.houseService.GetOneHouse(params.id).subscribe(house => {
+              this.houseService.selectedHouse = house.json();
+            });
           });
         });
       }
@@ -136,6 +139,9 @@ export class FlatTableComponent {
       if (this.houseId) {
         this.flatService.GetFlatAmountInOneHouse(this.houseId).subscribe(Amount => {
           this.flatService.TotalFlatsInAdditionalHouse = Amount.json();
+          this.flatService.getAllFlatAmount().subscribe(allAmount => {
+            this.flatService.TotalFlatsInTable = allAmount.json();
+          });
         });
       } else {
         this.flatService.getAllFlatAmount().subscribe(Amount => {
@@ -206,19 +212,24 @@ export class FlatTableComponent {
    * @memberof FlatTableComponent
    */
   resetTheFuckingForm(form?: NgForm) {
-    // tslint:disable-next-line:curly
-    if (form != null)
-      form.reset();
-    this.flatService.selectedFlat = {
-      id: null,
-      floor: null,
-      number: null,
-      totalarea: null,
-      livingspace: null,
-      residentamount: null,
-      houseid: this.houseId,
-      residents: null,
-    };
+    // if (form != null) {
+    // form.reset();
+    // form.value.houseid = this.houseId;
+    this.flatService.selectedFlat = new Flat(this.houseId);
+    // this.flatService.selectedFlat.houseid = this.houseId;
+
+    // this.flatService.selectedFlat = {
+    //   id: null,
+    //   floor: null,
+    //   number: null,
+    //   totalarea: null,
+    //   livingspace: null,
+    //   residentamount: null,
+    //   houseid: this.houseId,
+    //   residents: null,
+    // };
+    // }
+
   }
   /**
    * Function is used on submit button, if form value "id" is null,then function will use post request
@@ -230,10 +241,16 @@ export class FlatTableComponent {
     if (!form.value.id) {
       this.flatService.postFlat(form.value).subscribe(data => {
         this.source.prepend(form.value);
-        this.resetTheFuckingForm(form);
-        this.flatService.TotalFlatsInAdditionalHouse = this.source.count();
-        this.flatService.TotalFlatsInTable += 1;
 
+        this.resetTheFuckingForm(form);
+
+
+        this.flatService.GetFlatAmountInOneHouse(this.houseId).subscribe(flatAmountInOneHouse => {
+          this.flatService.TotalFlatsInAdditionalHouse = flatAmountInOneHouse.json();
+          this.flatService.getAllFlatAmount().subscribe(allAmount => {
+            this.flatService.TotalFlatsInTable = allAmount.json();
+          });
+        });
         // this.toastr.success('New Record Added', 'House registered');
       });
     } else {

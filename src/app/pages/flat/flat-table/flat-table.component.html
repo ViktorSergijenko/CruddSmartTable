@@ -1,32 +1,29 @@
-<nb-flip-card *ngIf="houseService.selectedHouse">
-  <nb-card-front>
-    <nb-card accent="info" status="success">
-      <nb-card-header>
-        <h1>Flat Table</h1>
-      </nb-card-header>
-      <nb-card-body>
-        <br>
-        <h3>Total amount of flats in all houses: {{flatService.TotalFlatsInTable}} flats</h3>
-        <h3>Flats in this House: {{flatService.TotalFlatsInAdditionalHouse}} Flats are located in this house</h3>
-      </nb-card-body>
-    </nb-card>
-  </nb-card-front>
-  <nb-card-back>
-    <nb-card accent="info" status="success">
-      <nb-card-header>
-        <h1>House Info:</h1>
-      </nb-card-header>
-      <nb-card-body>
-        Street: {{houseService.selectedHouse.street}}
-        <br>Number: {{houseService.selectedHouse.number}}
-        <br>Floors: {{houseService.selectedHouse.floors}}
-        <br>City: {{houseService.selectedHouse.city}}
-        <br>Country: {{houseService.selectedHouse.country}}
-        <br>Postindex: {{houseService.selectedHouse.postindex}}
-      </nb-card-body>
-    </nb-card>
-  </nb-card-back>
-</nb-flip-card>
+<div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;  ">
+  <nb-card status="success" *ngIf="houseService.selectedHouse">
+    <nb-card-header>
+      <h1>House Info:</h1>
+    </nb-card-header>
+    <nb-card-body>
+      Street: {{houseService.selectedHouse.street}}
+      <br>Number: {{houseService.selectedHouse.number}}
+      <br>Floors: {{houseService.selectedHouse.floors}}
+      <br>City: {{houseService.selectedHouse.city}}
+      <br>Country: {{houseService.selectedHouse.country}}
+      <br>Postindex: {{houseService.selectedHouse.postindex}}
+    </nb-card-body>
+  </nb-card>
+
+  <nb-card status="success" *ngIf="houseService.selectedHouse" style="height: 250px;">
+    <nb-card-header>
+      <h1>Flat Table</h1>
+    </nb-card-header>
+    <nb-card-body>
+      <br>
+      <h3>Total amount of flats in all houses: {{flatService.TotalFlatsInTable}} flats</h3>
+      <h3>Flats in this House: {{flatService.TotalFlatsInAdditionalHouse}} Flats are located in this house</h3>
+    </nb-card-body>
+  </nb-card>
+</div>
 
 <nb-card *ngIf="!flatService.FlatEditForm && !flatService.FlatRegForm">
   <nb-card-header>
@@ -97,9 +94,11 @@
           </div>
         </div>
       </div>
-      <button type="submit" [disabled]="!flatForm.valid" class="btn btn-primary">Submit</button>
-      <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetTheFuckingForm(flatForm)">Reset</button>
-      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(flatForm)">Close</button>
+      <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;  ">
+        <button type="submit" [disabled]="!flatForm.valid" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-hero-success btn-demo" (click)="resetTheFuckingForm(flatForm)">Reset</button>
+        <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(flatForm)">Close</button>
+      </div>
     </nb-card-body>
   </nb-card>
 </form>
@@ -146,9 +145,10 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-      <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetTheFuckingForm(flatForm)">Reset</button>
-      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(flatForm)">Close</button>
+      <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;  ">
+        <button type="submit" [disabled]="!flatForm.valid" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(flatForm)">Close</button>
+      </div>
     </nb-card-body>
   </nb-card>
 </form>

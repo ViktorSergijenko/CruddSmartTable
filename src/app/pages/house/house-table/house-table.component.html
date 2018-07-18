@@ -14,7 +14,7 @@
 
 <form class="emp-form" #houseForm="ngForm" (ngSubmit)="onSubmit(houseForm) " *ngIf="houseService.EditHouseForm">
   <nb-card>
-    <nb-card-header>House Edit Form LOG OUT!!!!!!!!!!!!!!!!!!!!!!!!!!!</nb-card-header>
+    <nb-card-header>House Edit Form </nb-card-header>
     <nb-card-body>
       <div class="row">
         <input type="hidden" *ngIf="houseService.selectedHouse && houseService.selectedHouse.id" name="id" #id="ngModel" [(ngModel)]="houseService.selectedHouse.id">
@@ -70,7 +70,6 @@
         </div>
       </div>
       <button type="submit" [disabled]="!houseForm.valid" class="btn btn-primary">Submit</button>
-      <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(houseForm)">Reset</button>
       <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(houseForm)">Close</button>
     </nb-card-body>
   </nb-card>
@@ -116,14 +115,6 @@
             <div class="validation-error" *ngIf="city.invalid && city.touched">This field is Required</div>
           </div>
         </div>
-        <!-- <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputcity">flatamount</label>
-            <input type="text" class="form-control" id="inputflatamount" name="flatamount" #flatamount="ngModel" [(ngModel)]="houseService.selectedHouse.flatamount"
-              placeholder="flatamount" required>
-            <div class="validation-error" *ngIf="flatamount.invalid && flatamount.touched">This field is Required</div>
-          </div>
-        </div> -->
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputcountry">Country</label>
@@ -141,9 +132,11 @@
           </div>
         </div>
       </div>
-      <button type="submit" [disabled]="!houseForm.valid" class="btn btn-primary">Submit</button>
-      <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(houseForm)">Reset</button>
-      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(houseForm)">Close</button>
+      <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;  ">
+        <button type="submit" [disabled]="!houseForm.valid" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-hero-success btn-demo" (click)="resetForm(houseForm)">Reset</button>
+        <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(houseForm)">Close</button>
+      </div>
     </nb-card-body>
   </nb-card>
 </form>
