@@ -75,7 +75,7 @@ export class ResidentTableComponent {
     private route: ActivatedRoute,
     private router: Router,
   ) {
-    this.residentService.selectedResident = new Resident();
+    this.residentService.selectedResident = new Resident(this.myflatId);
     this.residentService.ResidentEditForm = null;
     this.residentService.ResidentRegForm = null;
     // first of all we get value from route,we use it to define house id as a params.id
@@ -97,7 +97,7 @@ export class ResidentTableComponent {
         // else (if we have returned param.id as a number) it will load to
         // the table all flats that include house with id that have === param.id
       } else {
-        this.flatService.SourtedResidents = [];
+        this.resetForm();
         this.flatService.GetFlatResidents(params.id).subscribe(resident => {
           this.flatService.SourtedResidents = resident.json();
           this.source.load(this.flatService.SourtedResidents);
@@ -181,17 +181,7 @@ export class ResidentTableComponent {
   }
   resetForm(form?: NgForm) {
     // tslint:disable-next-line:curly
-    if (form != null)
-      form.reset();
-    this.residentService.selectedResident = {
-      id: null,
-      firstname: '',
-      lastname: '',
-      postcode: '',
-      phone: '',
-      email: '',
-      flatid: this.myflatId,
-    };
+    this.residentService.selectedResident = new Resident(this.myflatId);
   }
   onSubmit(form: NgForm) {
     if (!form.value.id) {

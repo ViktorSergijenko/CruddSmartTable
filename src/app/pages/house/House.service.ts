@@ -53,7 +53,7 @@ export class HouseService { // service that will contain all crud fucntions and 
     const body = JSON.stringify(hos); // why i cant use var and let instead of const here?
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Put, headers: headerOptions });
-    return this.http.put('http://localhost:52414/api/House/' + id, body, requestOptions).map(x => x.json());
+    return this.http.put('http://localhost:52414/api/House/' + id, body, requestOptions);
   }
   /**
    * Function sends a get request to our backend,and returns all data.(in our case it is Flat array)

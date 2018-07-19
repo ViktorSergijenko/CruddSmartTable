@@ -44,7 +44,7 @@
 
   <nb-card-body>
     <ng2-smart-table [settings]="settings" [source]="source" (delete)="onDeleteConfirm($event)" (edit)="onSaveConfirm($event)"
-      (create)="onCreateConfirm($event)" (userRowSelect)="onUserRowSelect($event)">
+      (create)="onCreateConfirm($event)">
     </ng2-smart-table>
   </nb-card-body>
   <button class="btn btn-hero-primary btn-demo" (click)="goBack()">GoBack</button>

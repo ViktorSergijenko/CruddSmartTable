@@ -64,6 +64,20 @@ export class FlatTableComponent {
         title: 'Resident Amount',
         type: 'number',
       },
+      actions:
+        {
+          addable: false,
+          editable: false,
+          title: 'Details',
+          type: 'html',
+          valuePrepareFunction: (cell, row) => {
+            return `<a title ="See Detail House" href="#/pages/resident/resident-table/${row.id}"><i class=""material-icons">Details</i></a>`;
+          },
+          id: {
+            title: 'ID',
+            type: 'number',
+          },
+        },
     },
   };
 
@@ -83,14 +97,11 @@ export class FlatTableComponent {
     // and counting all objects
     this.flatService.FlatEditForm = null;
     this.flatService.FlatRegForm = null;
-    const myHouseId: number = null;
-    this.flatService.selectedFlat = new Flat();
+    this.flatService.selectedFlat = new Flat(this.houseId);
     this.route.params.subscribe((params: any) => {
       this.houseService.SourtedFlatList = [];
-
       this.houseId = params.id; // giving houseId value of params.id
-      this.flatService.selectedFlat.houseid = this.houseId;
-
+      // this.flatService.selectedFlat.houseid = this.houseId;
       // if route returns params.id as 'all' or it is undefined then
       // programm will load all flats in to the table that we have in our database on our backend
       if (!params.id || params.id === 'all') {
@@ -104,7 +115,7 @@ export class FlatTableComponent {
         // else (if we have returned param.id as a number) it will load to
         // the table all flats that include house with id that have === param.id
       } else {
-        // this.resetTheFuckingForm();
+        this.resetTheFuckingForm();
         this.houseService.GetHouseFlats(params.id).subscribe(flats => {
           this.houseService.SourtedFlatList = flats.json();
           this.source.load(this.houseService.SourtedFlatList);

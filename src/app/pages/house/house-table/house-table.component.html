@@ -6,7 +6,8 @@
 
   <nb-card-body>
     <ng2-smart-table #table [settings]="settings" [source]="source" (delete)="onDeleteConfirm($event)" (edit)="onSaveConfirm($event)"
-      (create)="onCreateConfirm()" (userRowSelect)="onUserRowSelect($event)">
+      (create)="onCreateConfirm()">
+      <!-- (userRowSelect)="onUserRowSelect($event)" -->
     </ng2-smart-table>
   </nb-card-body>
 </nb-card>
@@ -69,8 +70,10 @@
           </div>
         </div>
       </div>
-      <button type="submit" [disabled]="!houseForm.valid" class="btn btn-primary">Submit</button>
-      <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(houseForm)">Close</button>
+      <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;  ">
+        <button type="submit" [disabled]="!houseForm.valid" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(houseForm)">Close</button>
+      </div>
     </nb-card-body>
   </nb-card>
 </form>

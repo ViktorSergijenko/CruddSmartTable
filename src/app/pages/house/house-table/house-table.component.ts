@@ -6,6 +6,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 import { House } from '../house.model';
+import { error } from '@angular/compiler/src/util';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-house-table',
@@ -17,6 +19,7 @@ import { House } from '../house.model';
 `],
 })
 export class HouseTableComponent {
+  myError: string;
   settings = { // setting of our smart table (buttons,columns,names......)
     mode: 'external',
     add: {
@@ -66,6 +69,20 @@ export class HouseTableComponent {
         title: 'Flat Amount',
         type: 'Flat',
       },
+      actions:
+        {
+          addable: false,
+          editable: false,
+          title: 'Details',
+          type: 'html',
+          valuePrepareFunction: (cell, row) => {
+            return `<a title ="See Detail House" href="#/pages/flat/flat-table/${row.id}"><i class=""material-icons">Details</i></a>`;
+          },
+          id: {
+            title: 'ID',
+            type: 'number',
+          },
+        },
     },
   };
   source: LocalDataSource = new LocalDataSource(); // ng2 smart table functionality
@@ -83,7 +100,7 @@ export class HouseTableComponent {
     this.houseService.getHouseList().subscribe(resp => {
       console.log(resp.json());
       this.houseService.houseList = resp.json();
-      this.source.load(resp.json());
+      this.source.load(this.houseService.houseList);
       this.houseService.TotalAmountOfHosesInTable = this.source.count();
     });
   }
@@ -175,15 +192,16 @@ export class HouseTableComponent {
   onSubmit(form: NgForm) {
     if (!form.value.id) {
       this.houseService.postHouse(form.value).subscribe(data => {
+        this.source.prepend(form.value);
         this.resetForm(form);
-        this.source.empty();
-        this.houseService.getHouseList().subscribe(houses => {
-          this.houseService.houseList = houses.json();
-          this.source.load(this.houseService.houseList);
-          this.houseService.TotalAmountOfHosesInTable = this.source.count();
-        });
+        this.houseService.TotalAmountOfHosesInTable = this.source.count();
         // this.toastr.success('New Record Added', 'House registered');
-      });
+      }, (error) => {
+        this.myError = error.json();
+        console.log('this is my errorito: ' + this.myError);
+        this.handleError(error);
+      },
+      );
     } else {
       this.houseService.putHouse(form.value.id, form.value)
         .subscribe(data => {
@@ -196,6 +214,11 @@ export class HouseTableComponent {
           // this.toastr.info('Record updated', 'Flat info was changed');
         });
     }
+  }
+  private handleError(error: any) {
+    const errMsg = (error.message) ? error.message : error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+    console.log('Messegito' + errMsg);
+    return Observable.throw(error);
   }
 }
 
