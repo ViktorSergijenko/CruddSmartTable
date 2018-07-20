@@ -30,7 +30,7 @@ export class FlatService { // service that will contain all crud fucntions and v
     const body = JSON.stringify(flat);
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Post, headers: headerOptions });
-    return this.http.post('http://localhost:52414/api/Flat', body, requestOptions).map(x => x.json());
+    return this.http.post('http://localhost:52414/api/Flat', body, requestOptions).map(newFlat => newFlat.json());
   }
   /**
    * function sends a put request to the server to edit a object
