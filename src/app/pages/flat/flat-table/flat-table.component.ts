@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { Flat } from '../flat.model';
 import { NgForm } from '@angular/forms';
+import { Toast, ToasterService } from '../../../../../node_modules/angular2-toaster';
 @Component({
   selector: 'app-flat-table',
   templateUrl: './flat-table.component.html',
@@ -19,8 +20,8 @@ import { NgForm } from '@angular/forms';
 `],
 })
 export class FlatTableComponent {
-  houseId: any = null;
-  // vesj html(kak vigljadjat i nazivajutsja nawi polja i td,vsja eta infa sazovivaetsja v peremennuju "settings")
+  houseId: any = null; // variable that will contain value that will come from our param.id
+  myError: string = null; // variable that will contain value that will come from server(if server returned an error)
   settings = { // setting of our smart table (buttons,columns,names......)
     mode: 'external',
     noDataMessage: 'Sorry, but there is no Flats in this house,if you want to watch all Flats,Press GET FULL LIST button ',
@@ -65,25 +66,25 @@ export class FlatTableComponent {
         type: 'number',
       },
       actions:
-        {
-          addable: false,
-          editable: false,
-          title: 'Details',
-          type: 'html',
-          valuePrepareFunction: (cell, row) => {
-            return `<a title ="See Detail House" href="#/pages/resident/resident-table/${row.id}"><i class=""material-icons">Details</i></a>`;
-          },
-          id: {
-            title: 'ID',
-            type: 'number',
-          },
+      {
+        addable: false,
+        editable: false,
+        title: 'Details',
+        type: 'html',
+        valuePrepareFunction: (cell, row) => {
+          return `<a title ="See Detail House" href="#/pages/resident/resident-table/${row.id}"><i class=""material-icons">Details</i></a>`;
         },
+        id: {
+          title: 'ID',
+          type: 'number',
+        },
+      },
     },
   };
 
   source: LocalDataSource = new LocalDataSource(); // fucntionality of our ng2 smart table
-  // our constructor calles getFlatList() function to send a request to our backend so he could return us all house objects...
-  // then all this returned values will be placed in flatList from FlatService(Array of Flat Objects),and after that...
+  // our constructor calles getFlatList() function to send a request to our backend so he could return us all flat objects...
+  // then all this returned values will be placed in flatList(Array of Flat Objects) from FlatService,and after that...
   // function load() from LocalDataSource class will load all this data to our smart table
   constructor(
     public flatService: FlatService,
@@ -91,6 +92,7 @@ export class FlatTableComponent {
     private location: Location,
     private route: ActivatedRoute,
     private router: Router,
+    private toasterService: ToasterService,
   ) {
     // first of all we get value from route,we use it to define house id as a params.id
     // then we use GetHouseFlats , getFlatList and GetOneHouse to get all needed information to load in table
@@ -162,8 +164,7 @@ export class FlatTableComponent {
     });
   }
   /**
-   * If user will confirm that he wants to add a new flat,function will call
-   * "postFlat" function that will make a post request to other localhost
+   * If user will click on 'Plus' button it will open registration form
    * @param {*} event event-Object, consist of:
    * data: Object - original row data
    * newData: Object - edited data
@@ -175,8 +176,7 @@ export class FlatTableComponent {
     this.flatService.FlatRegForm = 1;
   }
   /**
-  * If user will confirm that he wants to change information about additional resident
-  * function will call other function called "putFlat",that will send put request to our backend
+  * If user will click on 'pencil' button, it will open edit form
   * @param {*} event event-Object, consist of:
   * data: Object - original row data
   * newData: Object - edited data
@@ -185,8 +185,8 @@ export class FlatTableComponent {
   * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
   */
   onSaveConfirm(event): void {
-    this.flatService.selectedFlat = Object.assign({}, event.data);
-    this.flatService.FlatEditForm = 1;
+    this.flatService.selectedFlat = Object.assign({}, event.data); // this will send all values that has our object that we want to edit to our form
+    this.flatService.FlatEditForm = 1; // if FlatEditForm value is not 0, then it will be shown
   }
   /**
    * Function will be use on button,when we will click on button,
@@ -219,64 +219,63 @@ export class FlatTableComponent {
   /**
    * Function resets all form values(edit and registration)
    * to a values that are in this function
-   * @param {NgForm} [form]
-   * @memberof FlatTableComponent
+   * @param {NgForm} [form] form-this property will say on what form will be used this function
+   * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
    */
   resetTheFuckingForm(form?: NgForm) {
-    // if (form != null) {
-    // form.reset();
-    // form.value.houseid = this.houseId;
     this.flatService.selectedFlat = new Flat(this.houseId);
-    // this.flatService.selectedFlat.houseid = this.houseId;
-
-    // this.flatService.selectedFlat = {
-    //   id: null,
-    //   floor: null,
-    //   number: null,
-    //   totalarea: null,
-    //   livingspace: null,
-    //   residentamount: null,
-    //   houseid: this.houseId,
-    //   residents: null,
-    // };
-    // }
-
   }
   /**
-   * Function is used on submit button, if form value "id" is null,then function will use post request
-   * else will use put request,to send a requests on our server
-   * @param {NgForm} form
-   * @memberof FlatTableComponent
+   * Function is used on button submit in registration or edit form,if in form our object id is null
+   * then when user will click in submit button it will send a post request to server, to create a new object in database,if server
+   * will return an error then user will see the message error that will ensure him what did he do wrong.
+   * If our object in form has id,then when user will click submit button it will send a put request to our server, to
+   * change our object values in database to a new one,if server
+   * will return an error then user will see the message error that will ensure him what did he do wrong.
+   * @param {NgForm} form form-this property will say on what form will be used this function
+   * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
    */
   onSubmit(form: NgForm) {
     if (!form.value.id) {
       this.flatService.postFlat(form.value).subscribe(data => {
         this.source.prepend(form.value);
-
+        this.toasterService.popAsync('success', 'Flat was added');
         this.resetTheFuckingForm(form);
-
-
         this.flatService.GetFlatAmountInOneHouse(this.houseId).subscribe(flatAmountInOneHouse => {
           this.flatService.TotalFlatsInAdditionalHouse = flatAmountInOneHouse.json();
           this.flatService.getAllFlatAmount().subscribe(allAmount => {
             this.flatService.TotalFlatsInTable = allAmount.json();
           });
         });
-        // this.toastr.success('New Record Added', 'House registered');
-      });
+      },
+        (err) => {
+          this.myError = <any>err; // .json();
+          console.log('this is my errorito: ' + err.text());
+          this.myError = err.text();
+          console.log('myerrorito' + this.myError);
+          this.toasterService.popAsync('error', 'Custom error in component', this.myError);
+        },
+      );
     } else {
       this.flatService.putFlat(form.value.id, form.value)
         .subscribe(data => {
           this.resetTheFuckingForm(form);
-          // this.toastr.info('Record updated', 'Flat info was changed');
-        });
+          this.toasterService.popAsync('Record updated', 'Flat info was changed');
+        },
+          (err) => {
+            this.myError = <any>err; // .json();
+            console.log('this is my errorito: ' + err.text());
+            this.myError = err.text();
+            console.log('myerrorito' + this.myError);
+            this.toasterService.popAsync('error', 'Custom error in component', this.myError);
+          });
     }
   }
   /**
    * Function will close registration or edit form in house table
    * Used on button in forms
-   * @param {NgForm} [form]
-   * @memberof FlatTableComponent
+   * @param {NgForm} [form] form-this property will say on what form will be used this function
+   * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
    */
   onClose(form?: NgForm): void {
     this.flatService.FlatEditForm = null;

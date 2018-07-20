@@ -21,53 +21,26 @@ export class FlatService { // service that will contain all crud fucntions and v
   FlatEditForm: number; // variable that responds for visibility of our Flat edit form
   constructor(private http: Http) { }
   /**
-  *this function addes a new  object to our databse that is located on our backend.
-  *Function sends a post request to other local server(backend),sends a new object that has to be added
-  * @param {*} event event-Object, consist of:
-  *data: Object - original row data
-  *newData: Object - edited data
-  *source: DataSource - table data source
-  *confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
-  * @param {*} data Object - original row data
-  * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
-  */
+   * function sends a post request to the server to create a new object
+   * @param {Flat} flat flat-flat object
+   * @returns post request to the server
+   * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
+   */
   postFlat(flat: Flat) {
-    // if (window.confirm('Are you sure you want to add a Flat?')) {
-    // return this.http.post('http://localhost:52414/api/Flat', data);
-    // .subscribe(res => {
-    //   console.log(res);
-    //   // event.confirm.resolve(event.newData);
-    // });
-    // } else {
-    //   event.confirm.reject();
-    // }
     const body = JSON.stringify(flat);
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Post, headers: headerOptions });
     return this.http.post('http://localhost:52414/api/Flat', body, requestOptions).map(x => x.json());
   }
-  // deleteFlat(event: { _event: { data: House[] } })
   /**
-  * this function saves all changes with our object(Flat),function sends a put request to
-  * our database that is located on backend,it sends a new information about flat to chnage information about him
-  * @param {*} event event-Object, consist of:
-  * data: Object - original row data
-  * newData: Object - edited data
-  * source: DataSource - table data source
-  * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
-  * @param {*} data Object - original row data
-  * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
-  */
-  putFlat(id, res) {
-    // if (window.confirm('Are you sure you want to update info about a Flat?')) {
-    //   this.http.put('http://localhost:52414/api/Flat/' + event.newData.id, data).subscribe(res => {
-    //     console.log(res);
-    //     event.confirm.resolve(event.newData);
-    //   });
-    // } else {
-    //   event.confirm.reject();
-    // }
-    const body = JSON.stringify(res); // why i cant use var and let instead of const here?
+   * function sends a put request to the server to edit a object
+   * @param {*} id id-id of an object that we want to edit
+   * @param {*} fla fla-Flat object with new values
+   * @returns put request to the server
+   * @memberof FlatService FlatService - Service that contains all RESTfull functions that we need
+   */
+  putFlat(id, fla) {
+    const body = JSON.stringify(fla);
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Put, headers: headerOptions });
     return this.http.put('http://localhost:52414/api/Flat/' + id, body, requestOptions).map(x => x.json());

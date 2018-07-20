@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FlatService } from '../../flat/flat.service';
 import { Resident } from '../resident.model';
 import { NgForm } from '@angular/forms';
+import { ToasterModule, ToasterService } from '../../../../../node_modules/angular2-toaster';
 
 @Component({
   selector: 'app-resident-table',
@@ -18,9 +19,9 @@ import { NgForm } from '@angular/forms';
 `],
 })
 export class ResidentTableComponent {
-  numberPattern = '^2[0-9]{7}';
-  myflatId: any;
-  // vesj html(kak vigljadjat i nazivajutsja nawi polja i td,vsja eta infa sazovivaetsja v peremennuju "settings")
+  numberPattern = '^2[0-9]{7}'; // pattern for our phone number, but still didnt manage to use it...
+  myflatId: any; // variable that will contain value that will come from our param.id
+  myError: string = null; // variable that will contain value that will come from server(if server returned an error)
   settings = { // setting of our smart table (buttons,columns,names......)
     mode: 'external',
     noDataMessage: 'Sorry, but there is no Residents in this house,if you want to watch all Residents,Press GO TO RESIDENT LIST button ',
@@ -74,11 +75,12 @@ export class ResidentTableComponent {
     private location: Location,
     private route: ActivatedRoute,
     private router: Router,
+    private toasterService: ToasterService,
   ) {
     this.residentService.selectedResident = new Resident(this.myflatId);
     this.residentService.ResidentEditForm = null;
     this.residentService.ResidentRegForm = null;
-    // first of all we get value from route,we use it to define house id as a params.id
+    // first of all we get value from route,we use it to define flat id as a params.id
     // then we use GetFlatResidents , getResidentList and GetOneFlat to get all needed information to load in table
     // and counting all objects
     this.route.params.subscribe((params: any) => {
@@ -94,8 +96,8 @@ export class ResidentTableComponent {
           this.residentService.TotalResidentsInAllFlats = this.source.count();
           this.flatService.selectedFlat = null;
         });
-        // else (if we have returned param.id as a number) it will load to
-        // the table all flats that include house with id that have === param.id
+        // else (if we have returned param.id as a number(not null or undefined)) it will load to
+        // tot the table only those residents,that are located in flat that  id is equal to the value that has param.id
       } else {
         this.resetForm();
         this.flatService.GetFlatResidents(params.id).subscribe(resident => {
@@ -135,8 +137,7 @@ export class ResidentTableComponent {
     });
   }
   /**
-   * If user will confirm that he wants to add a new resident,function will call
-   *"postResident" function that will make a post request to other localhost
+   * If user will click on 'Plus' button it will open registration form
    * @param {*} event event-Object, consist of:
    * data: Object - original row data
    * newData: Object - edited data
@@ -149,8 +150,7 @@ export class ResidentTableComponent {
     this.residentService.ResidentRegForm = 1;
   }
   /**
-   * If user will confirm that he wants to change information about additional resident
-   * function will call other function called "putResident",that will send put request to our backend
+   * If user will click on 'pencil' button, it will open edit form
    * @param {*} event event-Object, consist of:
    * data: Object - original row data
    * newData: Object - edited data
@@ -159,8 +159,9 @@ export class ResidentTableComponent {
    * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
    */
   onSaveConfirm(event): void {
-    this.residentService.selectedResident = Object.assign({}, event.data);
-    this.residentService.ResidentEditForm = 1;
+    // tslint:disable-next-line:max-line-length
+    this.residentService.selectedResident = Object.assign({}, event.data); // this will send all values that has our object that we want to edit to our form
+    this.residentService.ResidentEditForm = 1; // if ResidentEditForm value is not 0, then it will be shown
   }
   /**
    * Function will be use on button,when we will click on button,
@@ -179,14 +180,32 @@ export class ResidentTableComponent {
     this.router.navigate(['/pages/resident/resident-table'],
     );
   }
+
+  /**
+   * Function will reset our object values un form
+   * @param {NgForm} [form] form-this property will say on what form will be used this function
+   * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+   */
   resetForm(form?: NgForm) {
     // tslint:disable-next-line:curly
     this.residentService.selectedResident = new Resident(this.myflatId);
   }
+
+  /**
+   * Function is used on button submit in registration or edit form,if in form our object id is null
+   * then when user will click in submit button it will send a post request to server, to create a new object in database,if server
+   * will return an error then user will see the message error that will ensure him what did he do wrong.
+   * If our object in form has id,then when user will click submit button it will send a put request to our server, to
+   * change our object values in database to a new one,if server
+   * will return an error then user will see the message error that will ensure him what did he do wrong.
+   * @param {NgForm} form form-this property will say on what form will be used this function
+   * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+   */
   onSubmit(form: NgForm) {
     if (!form.value.id) {
       this.residentService.postResident(form.value).subscribe(data => {
         this.source.prepend(form.value);
+        this.toasterService.popAsync('success', 'Resident was added');
         this.resetForm(form);
         this.residentService.getAllResidentAmount().subscribe(resAmount => {
           this.residentService.TotalResidentsInAllFlats = resAmount.json();
@@ -195,17 +214,35 @@ export class ResidentTableComponent {
             this.source.refresh();
           });
         });
-        // this.toastr.success('New Record Added', 'House registered');
-      });
+      }, (err) => {
+        this.myError = <any>err; // .json();
+        console.log('this is my errorito: ' + err.text());
+        this.myError = err.text();
+        console.log('myerrorito' + this.myError);
+        this.toasterService.popAsync('error', 'Custom error in component', this.myError);
+      },
+      );
     } else {
       this.residentService.putResident(form.value.id, form.value)
         .subscribe(data => {
-          // this.source.update();
+          this.toasterService.popAsync('Record updated', 'Resident info was changed');
           this.resetForm(form);
-          // this.toastr.info('Record updated', 'Flat info was changed');
-        });
+        },
+          (err) => {
+            this.myError = <any>err; // .json();
+            console.log('this is my errorito: ' + err.text());
+            this.myError = err.text();
+            console.log('myerrorito' + this.myError);
+            this.toasterService.popAsync('error', 'Custom error in component', this.myError);
+          });
     }
   }
+  /**
+  * Function will close registration or edit form in resident table
+  * Used on button in forms
+  * @param {NgForm} [form] form-this property will say on what form will be used this function
+  * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+  */
   onClose(form?: NgForm): void {
     this.residentService.ResidentRegForm = null;
     this.residentService.ResidentEditForm = null;

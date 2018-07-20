@@ -1,3 +1,4 @@
+<toaster-container></toaster-container>
 <nb-card *ngIf="!houseService.RegistrationHouseForm && !houseService.EditHouseForm">
   <nb-card-header>
     <h1>House Table</h1> Total amount of houses in Table: {{this.houseService.TotalAmountOfHosesInTable}} houses
@@ -26,7 +27,7 @@
             <label for="inputstreet">Street</label>
             <input class="form-control" id="inputstreet" name="street" #street="ngModel" [(ngModel)]="houseService.selectedHouse.street"
               placeholder="Street" required>
-            <label data-error="Required field!">street</label>
+            <div class="validation-error" *ngIf="street.invalid && street.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">

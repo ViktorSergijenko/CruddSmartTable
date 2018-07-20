@@ -3,6 +3,7 @@
  * Copyright Akveo. All Rights Reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
+import 'style-loader!angular2-toaster/toaster.css';
 import { APP_BASE_HREF } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,7 +15,8 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ThemeModule } from './@theme/theme.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-// import { ToastrModule } from 'ngx-toastr';
+import { ProcessHttpMsgService } from './process-httpmsg.service';
+import { ToasterModule } from 'angular2-toaster';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,13 +27,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AppRoutingModule,
     FormsModule,
     NgbModule.forRoot(),
-    // ToastrModule.forRoot(),
     ThemeModule.forRoot(),
     CoreModule.forRoot(),
+    ToasterModule,
   ],
   bootstrap: [AppComponent],
   providers: [
     { provide: APP_BASE_HREF, useValue: '/' },
+    ProcessHttpMsgService,
   ],
 })
 export class AppModule {

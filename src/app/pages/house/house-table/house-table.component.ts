@@ -1,3 +1,5 @@
+import 'style-loader!angular2-toaster/toaster.css';
+
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { HouseService } from '../house.service';
@@ -6,8 +8,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 import { House } from '../house.model';
-import { error } from '@angular/compiler/src/util';
 import { Observable } from 'rxjs';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ProcessHttpMsgService } from '../../../process-httpmsg.service';
+import { ToasterService } from '../../../../../node_modules/angular2-toaster';
+
 
 @Component({
   selector: 'app-house-table',
@@ -19,6 +24,7 @@ import { Observable } from 'rxjs';
 `],
 })
 export class HouseTableComponent {
+
   myError: string;
   settings = { // setting of our smart table (buttons,columns,names......)
     mode: 'external',
@@ -70,32 +76,37 @@ export class HouseTableComponent {
         type: 'Flat',
       },
       actions:
-        {
-          addable: false,
-          editable: false,
-          title: 'Details',
-          type: 'html',
-          valuePrepareFunction: (cell, row) => {
-            return `<a title ="See Detail House" href="#/pages/flat/flat-table/${row.id}"><i class=""material-icons">Details</i></a>`;
-          },
-          id: {
-            title: 'ID',
-            type: 'number',
-          },
+      {
+        addable: false,
+        editable: false,
+        title: 'Details',
+        type: 'html',
+        valuePrepareFunction: (cell, row) => {
+          return `<a title ="See Detail House" href="#/pages/flat/flat-table/${row.id}"><i class=""material-icons">Details</i></a>`;
         },
+        id: {
+          title: 'ID',
+          type: 'number',
+        },
+      },
     },
   };
   source: LocalDataSource = new LocalDataSource(); // ng2 smart table functionality
-  // our constructor calles getHouseList() function to send a request to our backend so he could rewturn us all house objects...
-  // then all this returned values will be placed in houseList from HouseService(Array of House Objects),and after that...
+  // our constructor calles getHouseList() function to send a request to our server to get all existing houses in database
+  // then all this returned values(House objects) will be placed in houseList(array that can contain only house objects)
+  // from HouseService,and after that...
   // function load() from LocalDataSource class will load all this data to our smart table
+  // when objects will be loaded in to the table,function count will count how many houses are in table
   constructor(
-    public houseService: HouseService, private http: Http, private router: Router, private route: ActivatedRoute,
+    public houseService: HouseService,
+    private http: Http,
+    private router: Router,
+    private route: ActivatedRoute,
+    private errorHandler: ProcessHttpMsgService,
+    private toasterService: ToasterService,
   ) {
     this.houseService.RegistrationHouseForm = null;
     this.houseService.EditHouseForm = null;
-    // this.houseService.houseForForm = new House();
-    // houseService.mysubject.next('My favourite value');
     this.houseService.selectedHouse = new House();
     this.houseService.getHouseList().subscribe(resp => {
       console.log(resp.json());
@@ -105,9 +116,8 @@ export class HouseTableComponent {
     });
   }
   /**
-   * If user will confirm that he wants to delete additional resident,
+   * If user will click on 'Plus' button it will open registration form
    * then this function will call "deleteResident" fucntion that will make a delete request
-   *
    * @param {*} event - event-Object, consist of:
    * data: Object - original row data
    * newData: Object - edited data
@@ -123,8 +133,7 @@ export class HouseTableComponent {
     });
   }
   /**
-   * If user will confirm that he wants to add a new resident,function will call
-   * "postResident" function that will make a post request to other localhost
+   * If user will click on 'Plus' button it will open registration form
    * @param {*} event event-Object, consist of:
    * data: Object - original row data
    * newData: Object - edited data
@@ -133,12 +142,11 @@ export class HouseTableComponent {
    * @memberof HouseTableComponent HouseTableComponent - Have all setting of our resident smart table
    */
   onCreateConfirm(): void {
-    this.houseService.RegistrationHouseForm = 1;
+    this.houseService.RegistrationHouseForm = 1; // if RegistrationHouseForm value is not 0, then it will be shown
     console.log('HEYHEY');
   }
   /**
-  * If user will confirm that he wants to change information about additional resident
-  * function will call other function called "putResident",that will send put request to our backend
+  * If user will click on 'pencil' button, it will open edit form
   * @param {*} event event-Object, consist of:
   * data: Object - original row data
   * newData: Object - edited data
@@ -149,8 +157,8 @@ export class HouseTableComponent {
   onSaveConfirm(event): void {
     console.log('asdsadsad');
     console.log(event.data);
-    this.houseService.selectedHouse = Object.assign({}, event.data);
-    this.houseService.EditHouseForm = 1;
+    this.houseService.selectedHouse = Object.assign({}, event.data); // this will send all values that has our object that we want to edit to our form
+    this.houseService.EditHouseForm = 1; // if EditHouseForm value is not 0, then it will be shown
   }
   /**
    * give us posability to click on a row
@@ -162,11 +170,24 @@ export class HouseTableComponent {
     console.log('user row select: ', event.data.id);
     this.router.navigate(['/pages/flat/flat-table/' + event.data.id], { relativeTo: this.route });
   }
+
+  /**
+   * Function will close registration or edit form in resident table
+   * Used on button in forms
+   * @param {NgForm} [form] form-this property will say on what form will be used this function
+   * @memberof HouseTableComponent HouseTableComponent - Have all setting of our resident smart table
+   */
   onClose(form?: NgForm): void {
     this.resetForm(form);
     this.houseService.RegistrationHouseForm = null;
     this.houseService.EditHouseForm = null;
   }
+
+  /**
+   * Function will reset our object values un form
+   * @param {NgForm} [form] form-this property will say on what form will be used this function
+   * @memberof HouseTableComponent HouseTableComponent - Have all setting of our resident smart table
+   */
   resetForm(form?: NgForm) {
     // tslint:disable-next-line:curly
     if (form != null)
@@ -184,41 +205,46 @@ export class HouseTableComponent {
     };
   }
   /**
-  * Function is used on submit button, if form value "id" is null,then function will use post request
-  * else will use put request,to send a requests on our server
-  * @param {NgForm} form form - paramater that will be our form that we use
-  * @memberof HouseTableComponent HouseTableComponent - Have all setting of our resident smart table
-  */
+   * Function is used on button submit in registration or edit form,if in form our object id is null
+   * then when user will click in submit button it will send a post request to server, to create a new object in database,if server
+   * will return an error then user will see the message error that will ensure him what did he do wrong.
+   * If our object in form has id,then when user will click submit button it will send a put request to our server, to
+   * change our object values in database to a new one,if server
+   * will return an error then user will see the message error that will ensure him what did he do wrong.
+   * @param {NgForm} form form - paramater that will be our form that we use
+   * @memberof HouseTableComponent HouseTableComponent - Have all setting of our resident smart table
+   */
   onSubmit(form: NgForm) {
     if (!form.value.id) {
       this.houseService.postHouse(form.value).subscribe(data => {
         this.source.prepend(form.value);
         this.resetForm(form);
         this.houseService.TotalAmountOfHosesInTable = this.source.count();
-        // this.toastr.success('New Record Added', 'House registered');
-      }, (error) => {
-        this.myError = error.json();
-        console.log('this is my errorito: ' + this.myError);
-        this.handleError(error);
+        // this.toasterService.('New Record Added', 'House registered');
+        this.toasterService.popAsync('success', 'House was added');
+      }, (err) => {
+        this.myError = <any>err; // .json();
+        console.log('this is my errorito: ' + err.text());
+        this.myError = err.text();
+        console.log('myerrorito' + this.myError);
+        this.toasterService.popAsync('error', 'Custom error in component', this.myError);
       },
       );
     } else {
       this.houseService.putHouse(form.value.id, form.value)
         .subscribe(data => {
+          this.source.update(event, form.value);
           this.resetForm(form);
-          this.source.empty();
-          this.houseService.getHouseList().subscribe(houses => {
-            this.houseService.houseList = houses.json();
-            this.source.load(this.houseService.houseList);
-          });
-          // this.toastr.info('Record updated', 'Flat info was changed');
-        });
+          this.toasterService.popAsync('Record updated', 'House info was changed');
+        }, (err) => {
+          this.myError = <any>err; // .json();
+          console.log('this is my errorito: ' + err.text());
+          this.myError = err.text();
+          console.log('myerrorito' + this.myError);
+          this.toasterService.popAsync('error', 'Custom error in component', this.myError);
+        },
+      );
     }
-  }
-  private handleError(error: any) {
-    const errMsg = (error.message) ? error.message : error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    console.log('Messegito' + errMsg);
-    return Observable.throw(error);
   }
 }
 
