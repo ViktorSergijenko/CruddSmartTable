@@ -1,27 +1,6 @@
-<!-- <nb-flip-card *ngIf="flatService.selectedFlat">
-  <nb-card-front>
-    <nb-card accent="info" status="success">
-      <nb-card-header>
-        <h1>Resident Table</h1>
-      </nb-card-header>
-      <nb-card-body>
-        <br>Total amount of residents in all flats: {{residentService.TotalResidentsInAllFlats}} residents
-        <br>Total amount of residents in this flat: {{residentService.TotalResidentsInAdditionalFlat}} residents
-      </nb-card-body>
-    </nb-card>
-  </nb-card-front>
-  <nb-card-back>
-    <nb-card>
-      <nb-card-body>
-        <h1>Flat Info:</h1> Floor: {{ flatService.selectedFlat.floor}}
-        <br>Number: {{ flatService.selectedFlat.number}}
-        <br>Total Area: {{ flatService.selectedFlat.totalarea}}
-      </nb-card-body>
-    </nb-card>
-  </nb-card-back>
-</nb-flip-card> -->
-
-<toaster-container></toaster-container>
+<toaster-container>
+</toaster-container>
+<!-- this is cards with additional info,it will be shown only if we are looking on residents that are living in additional flat -->
 <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;  ">
   <nb-card status="success" *ngIf="flatService.selectedFlat">
     <nb-card-header>
@@ -35,7 +14,7 @@
       <br>Resident Amount: {{ residentService.TotalResidentsInAdditionalFlat}}
     </nb-card-body>
   </nb-card>
-
+  <!-- this is cards with additional info,it will be shown only if we are looking on residents that are living in additional flat -->
   <nb-card status="success" *ngIf="flatService.selectedFlat">
     <nb-card-header>
       <h1>Resident Table</h1>
@@ -47,7 +26,7 @@
     </nb-card-body>
   </nb-card>
 </div>
-
+<!-- this is cards with additional info,it will be shown only if we are looking on all residents that exist -->
 <nb-card *ngIf="!residentService.ResidentEditForm && !residentService.ResidentRegForm">
   <nb-card-header>
     <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; align-items: center; display: table; margin: 0 auto;">
@@ -61,7 +40,7 @@
       </div>
     </div>
   </nb-card-header>
-
+  <!-- this is my ng smart table -->
   <nb-card-body>
     <ng2-smart-table [settings]="settings" [source]="source" (delete)="onDeleteConfirm($event)" (edit)="onSaveConfirm($event)"
       (create)="onCreateConfirm($event)">
@@ -69,7 +48,7 @@
   </nb-card-body>
   <button class="btn btn-hero-primary btn-demo" (click)="goBack()">Go Back</button>
 </nb-card>
-
+<!-- this is my registration form -->
 <form class="emp-form" #residentForm="ngForm" (ngSubmit)="onSubmit(residentForm)" *ngIf="residentService.ResidentRegForm">
   <nb-card>
     <nb-card-header>Resident Registration Form</nb-card-header>
@@ -134,7 +113,7 @@
     </nb-card-body>
   </nb-card>
 </form>
-
+<!-- This is my edit form -->
 <form class="emp-form" #residentForm="ngForm" (ngSubmit)="onSubmit(residentForm)" *ngIf="residentService.ResidentEditForm">
   <nb-card>
     <nb-card-header>Resident Edit Form</nb-card-header>
@@ -195,6 +174,6 @@
     </nb-card-body>
   </nb-card>
 </form>
-<pre class="code">
+<!-- <pre class="code">
   {{residentService.selectedResident | json}}
-</pre>
+</pre> -->

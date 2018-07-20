@@ -1,10 +1,11 @@
 <toaster-container></toaster-container>
+<!-- this is cards with additional info -->
 <nb-card *ngIf="!houseService.RegistrationHouseForm && !houseService.EditHouseForm">
   <nb-card-header>
     <h1>House Table</h1> Total amount of houses in Table: {{this.houseService.TotalAmountOfHosesInTable}} houses
   </nb-card-header>
 
-
+  <!-- this is our ng2 smart table -->
   <nb-card-body>
     <ng2-smart-table #table [settings]="settings" [source]="source" (delete)="onDeleteConfirm($event)" (edit)="onSaveConfirm($event)"
       (create)="onCreateConfirm()">
@@ -13,7 +14,7 @@
   </nb-card-body>
 </nb-card>
 
-
+<!-- this is our edit form -->
 <form class="emp-form" #houseForm="ngForm" (ngSubmit)="onSubmit(houseForm) " *ngIf="houseService.EditHouseForm">
   <nb-card>
     <nb-card-header>House Edit Form </nb-card-header>
@@ -78,7 +79,7 @@
     </nb-card-body>
   </nb-card>
 </form>
-
+<!-- this is our registration form -->
 <form class="emp-form" #houseForm="ngForm" (ngSubmit)="onSubmit(houseForm) " *ngIf="houseService.RegistrationHouseForm">
   <nb-card>
     <nb-card-header>House Registration Form</nb-card-header>
