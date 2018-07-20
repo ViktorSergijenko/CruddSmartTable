@@ -29,7 +29,7 @@ export class ResidentService { // service that will contain all crud fucntions a
     const body = JSON.stringify(res); // why i cant use var and let instead of const here?
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Post, headers: headerOptions });
-    return this.http.post('http://localhost:52414/api/Resident', body, requestOptions).map(x => x.json());
+    return this.http.post('http://localhost:52414/api/Resident', body, requestOptions).map(resident => resident.json());
   }
 
   /**
@@ -43,7 +43,7 @@ export class ResidentService { // service that will contain all crud fucntions a
     const body = JSON.stringify(res); // why i cant use var and let instead of const here?
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Put, headers: headerOptions });
-    return this.http.put('http://localhost:52414/api/Resident/' + id, body, requestOptions).map(x => x.json());
+    return this.http.put('http://localhost:52414/api/Resident/' + id, body, requestOptions).map(resident => resident.json());
   }
   /**
    * Function sends a get request to our backend,and returns all data.(in our case it is Resident array)
