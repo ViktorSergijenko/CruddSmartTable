@@ -197,7 +197,7 @@ export class HouseTableComponent {
       street: '',
       number: null,
       floors: null,
-      flatamount: null,
+      flatamount: 0,
       city: '',
       country: '',
       postindex: '',
