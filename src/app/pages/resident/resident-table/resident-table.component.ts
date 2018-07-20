@@ -22,6 +22,7 @@ export class ResidentTableComponent {
   numberPattern = '^2[0-9]{7}'; // pattern for our phone number, but still didnt manage to use it...
   myflatId: any; // variable that will contain value that will come from our param.id
   myError: string = null; // variable that will contain value that will come from server(if server returned an error)
+  myReturnedResident;
   settings = { // setting of our smart table (buttons,columns,names......)
     mode: 'external',
     noDataMessage: 'Sorry, but there is no Residents in this house,if you want to watch all Residents,Press GO TO RESIDENT LIST button ',
@@ -160,6 +161,7 @@ export class ResidentTableComponent {
    */
   onSaveConfirm(event): void {
     // tslint:disable-next-line:max-line-length
+    this.myReturnedResident = event;
     this.residentService.selectedResident = Object.assign({}, event.data); // this will send all values that has our object that we want to edit to our form
     this.residentService.ResidentEditForm = 1; // if ResidentEditForm value is not 0, then it will be shown
   }
@@ -203,8 +205,8 @@ export class ResidentTableComponent {
    */
   onSubmit(form: NgForm) {
     if (!form.value.id) {
-      this.residentService.postResident(form.value).subscribe(data => {
-        this.source.prepend(form.value);
+      this.residentService.postResident(form.value).subscribe(newResident => {
+        this.source.prepend(newResident);
         this.toasterService.popAsync('success', 'Resident was added');
         this.resetForm(form);
         this.residentService.getAllResidentAmount().subscribe(resAmount => {
@@ -224,7 +226,8 @@ export class ResidentTableComponent {
       );
     } else {
       this.residentService.putResident(form.value.id, form.value)
-        .subscribe(data => {
+        .subscribe(editedResident => {
+          this.source.update(this.myReturnedResident.data, editedResident);
           this.toasterService.popAsync('Record updated', 'Resident info was changed');
           this.resetForm(form);
         },

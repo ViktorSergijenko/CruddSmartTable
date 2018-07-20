@@ -108,9 +108,9 @@ export class HouseTableComponent {
     this.houseService.RegistrationHouseForm = null;
     this.houseService.EditHouseForm = null;
     this.houseService.selectedHouse = new House();
-    this.houseService.getHouseList().subscribe(resp => {
-      console.log(resp.json());
-      this.houseService.houseList = resp.json();
+    this.houseService.getHouseList().subscribe(Houses => {
+      console.log(Houses.json());
+      this.houseService.houseList = Houses.json();
       this.source.load(this.houseService.houseList);
       this.houseService.TotalAmountOfHosesInTable = this.source.count();
     });
@@ -126,8 +126,8 @@ export class HouseTableComponent {
    * @memberof HouseTableComponent HouseTableComponent - Have all setting of our resident smart table
    */
   onDeleteConfirm(event): void {
-    this.houseService.deleteHouse(event).subscribe(res => {
-      console.log(res);
+    this.houseService.deleteHouse(event).subscribe(delHouse => {
+      console.log(delHouse);
       this.source.remove(event.data);
       this.houseService.TotalAmountOfHosesInTable = this.source.count();
     });
@@ -154,9 +154,13 @@ export class HouseTableComponent {
   * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
   * @memberof HouseTableComponent HouseTableComponent - Have all setting of our resident smart table
   */
+
+  myChangedHouse;
+
   onSaveConfirm(event): void {
     console.log('asdsadsad');
     console.log(event.data);
+    this.myChangedHouse = event;
     this.houseService.selectedHouse = Object.assign({}, event.data); // this will send all values that has our object that we want to edit to our form
     this.houseService.EditHouseForm = 1; // if EditHouseForm value is not 0, then it will be shown
   }
@@ -192,17 +196,7 @@ export class HouseTableComponent {
     // tslint:disable-next-line:curly
     if (form != null)
       form.reset();
-    this.houseService.selectedHouse = {
-      id: null,
-      street: '',
-      number: null,
-      floors: null,
-      flatamount: 0,
-      city: '',
-      country: '',
-      postindex: '',
-      flats: null,
-    };
+    this.houseService.selectedHouse = new House();
   }
   /**
    * Function is used on button submit in registration or edit form,if in form our object id is null
@@ -216,8 +210,8 @@ export class HouseTableComponent {
    */
   onSubmit(form: NgForm) {
     if (!form.value.id) {
-      this.houseService.postHouse(form.value).subscribe(data => {
-        this.source.prepend(form.value);
+      this.houseService.postHouse(form.value).subscribe(newHouse => {
+        this.source.prepend(newHouse);
         this.resetForm(form);
         this.houseService.TotalAmountOfHosesInTable = this.source.count();
         // this.toasterService.('New Record Added', 'House registered');
@@ -232,8 +226,8 @@ export class HouseTableComponent {
       );
     } else {
       this.houseService.putHouse(form.value.id, form.value)
-        .subscribe(data => {
-          this.source.update(event, form.value);
+        .subscribe(editedHouse => {
+          this.source.update(this.myChangedHouse.data, editedHouse.json());
           this.resetForm(form);
           this.toasterService.popAsync('Record updated', 'House info was changed');
         }, (err) => {

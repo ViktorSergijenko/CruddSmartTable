@@ -43,7 +43,7 @@ export class FlatService { // service that will contain all crud fucntions and v
     const body = JSON.stringify(fla);
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Put, headers: headerOptions });
-    return this.http.put('http://localhost:52414/api/Flat/' + id, body, requestOptions).map(x => x.json());
+    return this.http.put('http://localhost:52414/api/Flat/' + id, body, requestOptions);
   }
   /**
    * Function sends a get request to our backend,and returns all data.(in our case it is Flat array)

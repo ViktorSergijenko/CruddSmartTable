@@ -22,6 +22,7 @@ import { Toast, ToasterService } from '../../../../../node_modules/angular2-toas
 export class FlatTableComponent {
   houseId: any = null; // variable that will contain value that will come from our param.id
   myError: string = null; // variable that will contain value that will come from server(if server returned an error)
+  myReturnedFlat;
   settings = { // setting of our smart table (buttons,columns,names......)
     mode: 'external',
     noDataMessage: 'Sorry, but there is no Flats in this house,if you want to watch all Flats,Press GET FULL LIST button ',
@@ -185,6 +186,7 @@ export class FlatTableComponent {
   * @memberof FlatTableComponent FlatTableComponent - Have all setting of our resident smart table
   */
   onSaveConfirm(event): void {
+    this.myReturnedFlat = event;
     this.flatService.selectedFlat = Object.assign({}, event.data); // this will send all values that has our object that we want to edit to our form
     this.flatService.FlatEditForm = 1; // if FlatEditForm value is not 0, then it will be shown
   }
@@ -237,8 +239,8 @@ export class FlatTableComponent {
    */
   onSubmit(form: NgForm) {
     if (!form.value.id) {
-      this.flatService.postFlat(form.value).subscribe(data => {
-        this.source.prepend(form.value);
+      this.flatService.postFlat(form.value).subscribe(newFlat => {
+        this.source.prepend(newFlat);
         this.toasterService.popAsync('success', 'Flat was added');
         this.resetTheFuckingForm(form);
         this.flatService.GetFlatAmountInOneHouse(this.houseId).subscribe(flatAmountInOneHouse => {
@@ -258,7 +260,8 @@ export class FlatTableComponent {
       );
     } else {
       this.flatService.putFlat(form.value.id, form.value)
-        .subscribe(data => {
+        .subscribe(editedFlat => {
+          this.source.update(this.myReturnedFlat.data, editedFlat.json());
           this.resetTheFuckingForm(form);
           this.toasterService.popAsync('Record updated', 'Flat info was changed');
         },

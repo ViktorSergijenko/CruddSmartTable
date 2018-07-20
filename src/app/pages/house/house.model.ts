@@ -4,6 +4,9 @@ export class House {
     /**
      * Creats a new house
      */
+    constructor() {
+        this.flatamount = 0;
+    }
     id: number;
     street: string;
     number: number;
