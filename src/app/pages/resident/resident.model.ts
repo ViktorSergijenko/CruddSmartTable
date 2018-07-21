@@ -1,5 +1,12 @@
+/**
+ * FIXME💩: JSDOCS
+ */
+
 export class Resident {
     constructor(myFlatId: number) {
+        /**
+         * FIXME💩: Comments
+         */
         if (myFlatId) {
             this.flatid = myFlatId;
         }

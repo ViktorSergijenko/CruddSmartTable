@@ -15,6 +15,9 @@ import { ToasterModule } from '../../../../node_modules/angular2-toaster';
     ...routedComponents,
   ],
   providers: [
+    /**
+ * FIXME💩: Comment probably not relative anymore
+ */
     ResidentService, // owibka ne v etom
   ],
 })
