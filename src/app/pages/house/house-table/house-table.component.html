@@ -1,8 +1,8 @@
 <toaster-container></toaster-container>
 <!-- this is cards with additional info -->
-<nb-card *ngIf="!houseService.RegistrationHouseForm && !houseService.EditHouseForm">
+<nb-card>
   <nb-card-header>
-    <h1>House Table</h1> Total amount of houses in Table: {{this.houseService.TotalAmountOfHosesInTable}} houses
+    <h1>House Table</h1> Total amount of houses in Table: {{totalAmountOfHosesInTable}} houses
   </nb-card-header>
 
   <!-- this is our ng2 smart table -->
@@ -15,26 +15,25 @@
 </nb-card>
 
 <!-- this is our edit form -->
-<form class="emp-form" #houseForm="ngForm" (ngSubmit)="onSubmit(houseForm) " *ngIf="houseService.EditHouseForm">
+<form class="emp-form" #houseForm="ngForm" (ngSubmit)="onSubmit(houseForm) " *ngIf="editHouseForm">
   <nb-card>
     <nb-card-header>House Edit Form </nb-card-header>
     <nb-card-body>
       <div class="row">
-        <input type="hidden" *ngIf="houseService.selectedHouse && houseService.selectedHouse.id" name="id" #id="ngModel" [(ngModel)]="houseService.selectedHouse.id">
-        <input type="hidden" *ngIf="houseService.selectedHouse && houseService.selectedHouse.flatamount" name="flatamount" #id="ngModel"
-          [(ngModel)]="houseService.selectedHouse.flatamount">
+        <input type="hidden" *ngIf="selectedHouse && selectedHouse.id" name="id" #id="ngModel" [(ngModel)]="selectedHouse.id">
+        <input type="hidden" *ngIf="selectedHouse && selectedHouse.flatamount" name="flatamount" #id="ngModel" [(ngModel)]="selectedHouse.flatamount">
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputstreet">Street</label>
-            <input class="form-control" id="inputstreet" name="street" #street="ngModel" [(ngModel)]="houseService.selectedHouse.street"
-              placeholder="Street" required>
+            <input class="form-control" id="inputstreet" name="street" #street="ngModel" [(ngModel)]="selectedHouse.street" placeholder="Street"
+              required>
             <div class="validation-error" *ngIf="street.invalid && street.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputnumber">House Number</label>
-            <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="houseService.selectedHouse.number"
+            <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="selectedHouse.number"
               placeholder="House Number" required>
             <div class="validation-error" *ngIf="number.invalid && number.touched">This field is Required</div>
           </div>
@@ -42,7 +41,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputfloors">Floors</label>
-            <input type="text" class="form-control" id="inputfloors" name="floors" #floors="ngModel" [(ngModel)]="houseService.selectedHouse.floors"
+            <input type="text" class="form-control" id="inputfloors" name="floors" #floors="ngModel" [(ngModel)]="selectedHouse.floors"
               placeholder="Floors" required>
             <div class="validation-error" *ngIf="floors.invalid && floors.touched">This field is Required</div>
           </div>
@@ -50,15 +49,15 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputcity">City</label>
-            <input type="text" class="form-control" id="inputcity" name="city" #city="ngModel" [(ngModel)]="houseService.selectedHouse.city"
-              placeholder="City" required>
+            <input type="text" class="form-control" id="inputcity" name="city" #city="ngModel" [(ngModel)]="selectedHouse.city" placeholder="City"
+              required>
             <div class="validation-error" *ngIf="city.invalid && city.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputcountry">Country</label>
-            <input type="text" class="form-control" id="inputcountry" name="country" #country="ngModel" [(ngModel)]="houseService.selectedHouse.country"
+            <input type="text" class="form-control" id="inputcountry" name="country" #country="ngModel" [(ngModel)]="selectedHouse.country"
               placeholder="Country" required>
             <div class="validation-error" *ngIf="country.invalid && country.touched">This field is Required</div>
           </div>
@@ -66,9 +65,9 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputpostindex">Post Index</label>
-            <input type="email" class="form-control" id="inputpostindex" name="postindex" #postindex="ngModel" [(ngModel)]="houseService.selectedHouse.postindex"
+            <input type="email" class="form-control" id="inputpostindex" name="postIndex" #postIndex="ngModel" [(ngModel)]="selectedHouse.postIndex"
               placeholder="Post Index" required>
-            <div class="validation-error" *ngIf="postindex.invalid && postindex.touched">This field is Required</div>
+            <div class="validation-error" *ngIf="postIndex.invalid && postIndex.touched">This field is Required</div>
           </div>
         </div>
       </div>
@@ -80,26 +79,25 @@
   </nb-card>
 </form>
 <!-- this is our registration form -->
-<form class="emp-form" #houseForm="ngForm" (ngSubmit)="onSubmit(houseForm) " *ngIf="houseService.RegistrationHouseForm">
+<form class="emp-form" #houseForm="ngForm" (ngSubmit)="onSubmit(houseForm) " *ngIf="registrationHouseForm">
   <nb-card>
     <nb-card-header>House Registration Form</nb-card-header>
     <nb-card-body>
       <div class="row">
-        <input type="hidden" *ngIf="houseService.selectedHouse && houseService.selectedHouse.id" name="id" #id="ngModel" [(ngModel)]="houseService.selectedHouse.id">
-        <input type="hidden" *ngIf="houseService.selectedHouse && houseService.selectedHouse.flatamount" name="flatamount" #id="ngModel"
-          [(ngModel)]="houseService.selectedHouse.flatamount">
+        <input type="hidden" *ngIf="selectedHouse && selectedHouse.id" name="id" #id="ngModel" [(ngModel)]="selectedHouse.id">
+        <input type="hidden" *ngIf="selectedHouse && selectedHouse.flatamount" name="flatamount" #id="ngModel" [(ngModel)]="selectedHouse.flatamount">
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputstreet">Street</label>
-            <input class="form-control" id="inputstreet" name="street" #street="ngModel" [(ngModel)]="houseService.selectedHouse.street"
-              placeholder="Street" required>
+            <input class="form-control" id="inputstreet" name="street" #street="ngModel" [(ngModel)]="selectedHouse.street" placeholder="Street"
+              required>
             <div class="validation-error" *ngIf="street.invalid && street.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputnumber">House Number</label>
-            <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="houseService.selectedHouse.number"
+            <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="selectedHouse.number"
               placeholder="House Number" required>
             <div class="validation-error" *ngIf="number.invalid && number.touched">This field is Required</div>
           </div>
@@ -107,7 +105,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputfloors">Floors</label>
-            <input type="text" class="form-control" id="inputfloors" name="floors" #floors="ngModel" [(ngModel)]="houseService.selectedHouse.floors"
+            <input type="text" class="form-control" id="inputfloors" name="floors" #floors="ngModel" [(ngModel)]="selectedHouse.floors"
               placeholder="Floors" required>
             <div class="validation-error" *ngIf="floors.invalid && floors.touched">This field is Required</div>
           </div>
@@ -115,15 +113,15 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputcity">City</label>
-            <input type="text" class="form-control" id="inputcity" name="city" #city="ngModel" [(ngModel)]="houseService.selectedHouse.city"
-              placeholder="City" required>
+            <input type="text" class="form-control" id="inputcity" name="city" #city="ngModel" [(ngModel)]="selectedHouse.city" placeholder="City"
+              required>
             <div class="validation-error" *ngIf="city.invalid && city.touched">This field is Required</div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputcountry">Country</label>
-            <input type="text" class="form-control" id="inputcountry" name="country" #country="ngModel" [(ngModel)]="houseService.selectedHouse.country"
+            <input type="text" class="form-control" id="inputcountry" name="country" #country="ngModel" [(ngModel)]="selectedHouse.country"
               placeholder="Country" required>
             <div class="validation-error" *ngIf="country.invalid && country.touched">This field is Required</div>
           </div>
@@ -131,7 +129,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputpostindex">Post Index</label>
-            <input type="email" class="form-control" id="inputpostindex" name="postindex" #postindex="ngModel" [(ngModel)]="houseService.selectedHouse.postindex"
+            <input type="email" class="form-control" id="inputpostindex" name="postindex" #postindex="ngModel" [(ngModel)]="selectedHouse.postindex"
               placeholder="Post Index" required>
             <div class="validation-error" *ngIf="postindex.invalid && postindex.touched">This field is Required</div>
           </div>

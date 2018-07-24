@@ -10,4 +10,11 @@
 
 export const environment = {
   production: false,
+  HousesUrl: 'http://localhost:52414/api/House',
+  HouseUrl: 'http://localhost:52414/api/House/',
+  FlatsUrl: 'http://localhost:52414/api/flat',
+  FlatUrl: 'http://localhost:52414/api/flat/',
+  ResidentsUlr: '',
+  ResidentUlr: '',
+  FlatAmountUrl: 'http://localhost:52414/api/flat/FlatsAmount',
 };

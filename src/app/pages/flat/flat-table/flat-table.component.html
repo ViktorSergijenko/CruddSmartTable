@@ -1,72 +1,58 @@
 <toaster-container></toaster-container>
 <!-- this is cards with additional info,it will be shown only if we are looking on flats that are located in additional house -->
-<div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;  ">
-  <nb-card status="success" *ngIf="houseService.selectedHouse">
+<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;  ">
+  <nb-card *ngIf="selectedHouse" style="height: 620px;">
     <nb-card-header>
-      <h1>House Info:</h1>
+      <h2>House Info:</h2>
     </nb-card-header>
     <nb-card-body>
-      Street: {{houseService.selectedHouse.street}}
-      <br>Number: {{houseService.selectedHouse.number}}
-      <br>Floors: {{houseService.selectedHouse.floors}}
-      <br>City: {{houseService.selectedHouse.city}}
-      <br>Country: {{houseService.selectedHouse.country}}
-      <br>Postindex: {{houseService.selectedHouse.postindex}}
+      Street: {{selectedHouse.street}}
+      <br>Number: {{selectedHouse.number}}
+      <br>Floors: {{selectedHouse.floors}}
+      <br>City: {{selectedHouse.city}}
+      <br>Country: {{selectedHouse.country}}
+      <br>Postindex: {{selectedHouse.postIndex}}
+      <br>Flat Amount: {{totalFlatsInAdditionalHouse}}
     </nb-card-body>
   </nb-card>
   <!-- this is cards with additional info,it will be shown only if we are looking on flats that are located in additional house -->
-  <nb-card status="success" *ngIf="houseService.selectedHouse" style="height: 250px;">
+  <!-- this is cards with additional info,it will be shown only if we are looking on all flats that exist -->
+  <nb-card *ngIf="!flatService.FlatEditForm && !flatService.FlatRegForm">
     <nb-card-header>
-      <h1>Flat Table</h1>
-    </nb-card-header>
-    <nb-card-body>
-      <br>
-      <h3>Total amount of flats in all houses: {{flatService.TotalFlatsInTable}} flats</h3>
-      <h3>Flats in this House: {{flatService.TotalFlatsInAdditionalHouse}} Flats are located in this house</h3>
-    </nb-card-body>
-  </nb-card>
-</div>
-<!-- this is cards with additional info,it will be shown only if we are looking on all flats that exist -->
-<nb-card *ngIf="!flatService.FlatEditForm && !flatService.FlatRegForm">
-  <nb-card-header>
-    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; display: table; margin: 0 auto;">
-      <div class="row">
+      <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; display: table; margin: 0 auto;">
+        <div class="row">
 
-        <div class="col-sm-12" *ngIf="!houseId" style="text-align: center;">
-          <h1>Flat Table</h1> Total amount of flats in all houses: {{flatService.TotalFlatsInTable}} flats
-          <br>
-          <button class="btn btn-hero-info btn-demo" (click)="getFullList()" *ngIf="houseId">Get Full List</button>
+          <div class="col-sm-12" *ngIf="!houseId" style="text-align: center;">
+            <h1>Flat Table</h1>
+            <button class="btn btn-hero-info btn-demo" (click)="getFullList()" *ngIf="houseId">Get Full List</button>
+          </div>
         </div>
       </div>
-    </div>
-
-
-  </nb-card-header>
-
-  <!-- this is our ng2 smart table -->
-  <nb-card-body>
-    <ng2-smart-table [settings]="settings" [source]="source" (delete)="onDeleteConfirm($event)" (edit)="onSaveConfirm($event)"
-      (create)="onCreateConfirm($event)">
-    </ng2-smart-table>
-  </nb-card-body>
-  <button class="btn btn-hero-primary btn-demo" (click)="goBack()">GoBack</button>
-</nb-card>
+    </nb-card-header>
+    <!-- this is our ng2 smart table -->
+    <nb-card-body>
+      <ng2-smart-table [settings]="settings" [source]="source" (delete)="onDeleteConfirm($event)" (edit)="onSaveConfirm($event)"
+        (create)="onCreateConfirm($event)">
+      </ng2-smart-table>
+    </nb-card-body>
+    <button class="btn btn-hero-primary btn-demo" (click)="goBack()">GoBack</button>
+  </nb-card>
+</div>
 
 
 <!-- this is our registration form -->
-<form class="emp-form" #flatForm="ngForm" (ngSubmit)="onSubmit(flatForm)" *ngIf="flatService.FlatRegForm">
+<form class="emp-form" #flatForm="ngForm" (ngSubmit)="onSubmit(flatForm)" *ngIf="flatRegForm">
   <nb-card>
     <nb-card-header>Flat Registration Form</nb-card-header>
     <nb-card-body>
       <div class="row">
-        <input type="hidden" *ngIf="flatService.selectedFlat && flatService.selectedFlat.id" name="id" #id="ngModel" [(ngModel)]="flatService.selectedFlat.id">
-        <input type="hidden" *ngIf="flatService.selectedFlat && flatService.selectedFlat.residentamount" name="residentamount" #id="ngModel"
-          [(ngModel)]="flatService.selectedFlat.residentamount">
-        <input type="hidden" *ngIf="flatService.selectedFlat && flatService.selectedFlat.houseid" name="houseid" #id="ngModel" [(ngModel)]="flatService.selectedFlat.houseid">
+        <input type="hidden" *ngIf="selectedFlat && selectedFlat.id" name="id" #id="ngModel" [(ngModel)]="selectedFlat.id">
+        <input type="hidden" *ngIf="selectedFlat && selectedFlat.residentamount" name="residentamount" #id="ngModel" [(ngModel)]="selectedFlat.residentamount">
+        <input type="hidden" *ngIf="selectedFlat && selectedFlat.houseid" name="houseid" #id="ngModel" [(ngModel)]="selectedFlat.houseid">
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputstreet">Floor</label>
-            <input class="form-control" id="inputfloor" name="floor" #floor="ngModel" [(ngModel)]="flatService.selectedFlat.floor" placeholder="Floor"
+            <input class="form-control" id="inputfloor" name="floor" #floor="ngModel" [(ngModel)]="selectedFlat.floor" placeholder="Floor"
               required>
             <div class="validation-error" *ngIf="floor.invalid && floor.touched">This field is Required</div>
           </div>
@@ -74,7 +60,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputnumber">Flat Number</label>
-            <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="flatService.selectedFlat.number"
+            <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="selectedFlat.number"
               placeholder="Flat Number" required>
             <div class="validation-error" *ngIf="number.invalid && number.touched">This field is Required</div>
           </div>
@@ -82,7 +68,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputtotalarea">Total Area</label>
-            <input type="text" class="form-control" id="inputtotalarea" name="totalarea" #totalarea="ngModel" [(ngModel)]="flatService.selectedFlat.totalarea"
+            <input type="text" class="form-control" id="inputtotalarea" name="totalarea" #totalarea="ngModel" [(ngModel)]="selectedFlat.totalarea"
               placeholder="Total Area" required>
             <div class="validation-error" *ngIf="totalarea.invalid && totalarea.touched">This field is Required</div>
           </div>
@@ -90,7 +76,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputlivingspace">Living Space</label>
-            <input type="text" class="form-control" id="inputlivingspace" name="livingspace" #livingspace="ngModel" [(ngModel)]="flatService.selectedFlat.livingspace"
+            <input type="text" class="form-control" id="inputlivingspace" name="livingspace" #livingspace="ngModel" [(ngModel)]="selectedFlat.livingspace"
               placeholder="Living Space" required>
             <div class="validation-error" *ngIf="livingspace.invalid && livingspace.touched">This field is Required</div>
           </div>
@@ -105,19 +91,18 @@
   </nb-card>
 </form>
 <!-- this is our edit form -->
-<form class="emp-form" #flatForm="ngForm" (ngSubmit)="onSubmit(flatForm)" *ngIf="flatService.FlatEditForm">
+<form class="emp-form" #flatForm="ngForm" (ngSubmit)="onSubmit(flatForm)" *ngIf="flatEditForm">
   <nb-card>
     <nb-card-header>Flat Edit Table</nb-card-header>
     <nb-card-body>
       <div class="row">
-        <input type="hidden" *ngIf="flatService.selectedFlat && flatService.selectedFlat.id" name="id" #id="ngModel" [(ngModel)]="flatService.selectedFlat.id">
-        <input type="hidden" *ngIf="flatService.selectedFlat && flatService.selectedFlat.residentamount" name="residentamount" #id="ngModel"
-          [(ngModel)]="flatService.selectedFlat.residentamount">
-        <input type="hidden" *ngIf="flatService.selectedFlat && flatService.selectedFlat.houseid" name="houseid" #id="ngModel" [(ngModel)]="flatService.selectedFlat.houseid">
+        <input type="hidden" *ngIf="selectedFlat && selectedFlat.id" name="id" #id="ngModel" [(ngModel)]="selectedFlat.id">
+        <input type="hidden" *ngIf="selectedFlat && selectedFlat.residentamount" name="residentamount" #id="ngModel" [(ngModel)]="selectedFlat.residentamount">
+        <input type="hidden" *ngIf="selectedFlat && selectedFlat.houseid" name="houseid" #id="ngModel" [(ngModel)]="selectedFlat.houseid">
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputstreet">Floor</label>
-            <input class="form-control" id="inputfloor" name="floor" #floor="ngModel" [(ngModel)]="flatService.selectedFlat.floor" placeholder="Floor"
+            <input class="form-control" id="inputfloor" name="floor" #floor="ngModel" [(ngModel)]="selectedFlat.floor" placeholder="Floor"
               required>
             <div class="validation-error" *ngIf="floor.invalid && floor.touched">This field is Required</div>
           </div>
@@ -125,7 +110,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputnumber">Flat Number</label>
-            <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="flatService.selectedFlat.number"
+            <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="selectedFlat.number"
               placeholder="Flat Number" required>
             <div class="validation-error" *ngIf="number.invalid && number.touched">This field is Required</div>
           </div>
@@ -133,7 +118,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputtotalarea">Total Area</label>
-            <input type="text" class="form-control" id="inputtotalarea" name="totalarea" #totalarea="ngModel" [(ngModel)]="flatService.selectedFlat.totalarea"
+            <input type="text" class="form-control" id="inputtotalarea" name="totalarea" #totalarea="ngModel" [(ngModel)]="selectedFlat.totalarea"
               placeholder="Total Area" required>
             <div class="validation-error" *ngIf="totalarea.invalid && totalarea.touched">This field is Required</div>
           </div>
@@ -141,7 +126,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="Living Space">Living Space</label>
-            <input type="text" class="form-control" id="inputlivingspace" name="livingspace" #livingspace="ngModel" [(ngModel)]="flatService.selectedFlat.livingspace"
+            <input type="text" class="form-control" id="inputlivingspace" name="livingspace" #livingspace="ngModel" [(ngModel)]="selectedFlat.livingspace"
               placeholder="livingspace" required>
             <div class="validation-error" *ngIf="livingspace.invalid && livingspace.touched">This field is Required</div>
           </div>
@@ -154,6 +139,6 @@
     </nb-card-body>
   </nb-card>
 </form>
-<!-- <pre class="code" *ngIf="flatService.selectedFlat">
-  {{flatService.selectedFlat | json}}
+<!-- <pre class="code" *ngIf="selectedFlat">
+  {{selectedFlat | json}}
 </pre> -->

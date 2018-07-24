@@ -3,37 +3,36 @@
 <!-- this is cards with additional info,it will be shown only if we are looking on residents that are living in additional flat -->
 <!-- FIXME💩: INLINE STYLE ... 💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩 +display: flex ... try something other -->
 <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;  ">
-  <nb-card status="success" *ngIf="flatService.selectedFlat">
+  <nb-card status="success" *ngIf="selectedFlat">
     <nb-card-header>
       <h1>Flat Info:</h1>
     </nb-card-header>
     <nb-card-body>
-      Floor: {{ flatService.selectedFlat.floor}}
-      <br>Number: {{ flatService.selectedFlat.number}}
-      <br>Total Area: {{ flatService.selectedFlat.totalarea}}
-      <br>Living Space: {{flatService.selectedFlat.livingspace}}
-      <br>Resident Amount: {{ residentService.TotalResidentsInAdditionalFlat}}
+      Floor: {{ selectedFlat.floor}}
+      <br>Number: {{ selectedFlat.number}}
+      <br>Total Area: {{ selectedFlat.totalarea}}
+      <br>Living Space: {{selectedFlat.livingspace}}
+      <br>Resident Amount: {{ totalResidentsInAdditionalFlat}}
     </nb-card-body>
   </nb-card>
   <!-- this is cards with additional info,it will be shown only if we are looking on residents that are living in additional flat -->
-  <nb-card status="success" *ngIf="flatService.selectedFlat">
+  <nb-card status="success" *ngIf="selectedFlat">
     <nb-card-header>
       <h1>Resident Table</h1>
     </nb-card-header>
     <nb-card-body>
       <br>
-      <h3>Total amount of residents in all flats: {{residentService.TotalResidentsInAllFlats}} residents</h3>
-      <h3>Total amount of residents in this flat: {{residentService.TotalResidentsInAdditionalFlat}} residents</h3>
+      <h3>Total amount of residents in this flat: {{totalResidentsInAdditionalFlat}} residents</h3>
     </nb-card-body>
   </nb-card>
 </div>
 <!-- this is cards with additional info,it will be shown only if we are looking on all residents that exist -->
-<nb-card *ngIf="!residentService.ResidentEditForm && !residentService.ResidentRegForm">
+<nb-card *ngIf="!residentEditForm && !residentRegForm">
   <nb-card-header>
     <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; align-items: center; display: table; margin: 0 auto;">
       <div class="row">
         <div class="col-sm-12" *ngIf="!flatId" style="text-align: center;">
-          <h1>Resident Table</h1> Total amount of residents in all flats: {{residentService.TotalResidentsInAllFlats}} residents
+          <h1>Resident Table</h1> Total amount of residents in all flats: {{residentService.totalResidentsInAllFlats}} residents
           <i class="fas fa-door-open"></i>
           <br>
           <button class="btn btn-hero-info btn-demo" (click)="getFullList()" *ngIf="flatId">Go To Resident List</button>
@@ -50,21 +49,18 @@
   <button class="btn btn-hero-primary btn-demo" (click)="goBack()">Go Back</button>
 </nb-card>
 <!-- this is my registration form -->
-<form class="emp-form" #residentForm="ngForm" (ngSubmit)="onSubmit(residentForm)" *ngIf="residentService.ResidentRegForm">
+<form class="emp-form" #residentForm="ngForm" (ngSubmit)="onSubmit(residentForm)" *ngIf="residentRegForm">
   <nb-card>
     <nb-card-header>Resident Registration Form</nb-card-header>
     <nb-card-body>
       <div class="row">
-        <input type="hidden" *ngIf="residentService.selectedResident && residentService.selectedResident.id" name="id" #id="ngModel"
-          [(ngModel)]="residentService.selectedResident.id">
-        <input type="hidden" *ngIf="residentService.selectedResident && residentService.selectedResident.flatamount" name="flatamount"
-          #id="ngModel" [(ngModel)]="residentService.selectedResident.flatamount">
-        <input type="hidden" *ngIf="residentService.selectedResident && residentService.selectedResident.flatid" name="flatid" #id="ngModel"
-          [(ngModel)]="residentService.selectedResident.flatid">
+        <input type="hidden" *ngIf="selectedResident && selectedResident.id" name="id" #id="ngModel" [(ngModel)]="selectedResident.id">
+        <input type="hidden" *ngIf="selectedResident && selectedResident.flatamount" name="flatamount" #id="ngModel" [(ngModel)]="selectedResident.flatamount">
+        <input type="hidden" *ngIf="selectedResident && selectedResident.flatid" name="flatid" #id="ngModel" [(ngModel)]="selectedResident.flatid">
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputstreet">First Name</label>
-            <input class="form-control" id="inputstreet" name="firstname" #firstname="ngModel" [(ngModel)]="residentService.selectedResident.firstname"
+            <input class="form-control" id="inputstreet" name="firstname" #firstname="ngModel" [(ngModel)]="selectedResident.firstname"
               placeholder="First Name" required>
             <div class="validation-error" *ngIf="firstname.invalid && firstname.touched">This field is Required</div>
           </div>
@@ -72,7 +68,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputnumber">Last Name</label>
-            <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="residentService.selectedResident.lastname"
+            <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="selectedResident.lastname"
               placeholder="Last Name" required>
             <div class="validation-error" *ngIf="lastname.invalid && lastname.touched">This field is Required</div>
           </div>
@@ -80,7 +76,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputpostcode">Post Code</label>
-            <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="residentService.selectedResident.postcode"
+            <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="selectedResident.postcode"
               placeholder="Post Code" required>
             <div class="validation-error" *ngIf="postcode.invalid && postcode.touched">This field is Required</div>
           </div>
@@ -88,7 +84,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputcity">Phone Number</label>
-            <input type="text" class="form-control" id="inputcity" name="phone" #phone="ngModel" [(ngModel)]="residentService.selectedResident.phone"
+            <input type="text" class="form-control" id="inputcity" name="phone" #phone="ngModel" [(ngModel)]="selectedResident.phone"
               placeholder="Phone Number" [pattern]="phonePattern" required>
             <div class="validation-error" *ngIf="phone.invalid && phone.touched">This field is Required</div>
           </div>
@@ -96,7 +92,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputcountry">Email</label>
-            <input type="text" class="form-control" id="inputcountry" name="email" #email="ngModel" [(ngModel)]="residentService.selectedResident.email"
+            <input type="text" class="form-control" id="inputcountry" name="email" #email="ngModel" [(ngModel)]="selectedResident.email"
               placeholder="Email" required>
             <div class="validation-error" *ngIf="email.invalid && email.touched">This field is Required</div>
           </div>
@@ -115,21 +111,18 @@
   </nb-card>
 </form>
 <!-- This is my edit form -->
-<form class="emp-form" #residentForm="ngForm" (ngSubmit)="onSubmit(residentForm)" *ngIf="residentService.ResidentEditForm">
+<form class="emp-form" #residentForm="ngForm" (ngSubmit)="onSubmit(residentForm)" *ngIf="residentService.residentEditForm">
   <nb-card>
     <nb-card-header>Resident Edit Form</nb-card-header>
     <nb-card-body>
       <div class="row">
-        <input type="hidden" *ngIf="residentService.selectedResident && residentService.selectedResident.id" name="id" #id="ngModel"
-          [(ngModel)]="residentService.selectedResident.id">
-        <input type="hidden" *ngIf="residentService.selectedResident && residentService.selectedResident.flatamount" name="flatamount"
-          #id="ngModel" [(ngModel)]="residentService.selectedResident.flatamount">
-        <input type="hidden" *ngIf="residentService.selectedResident && residentService.selectedResident.flatid" name="flatid" #id="ngModel"
-          [(ngModel)]="residentService.selectedResident.flatid">
+        <input type="hidden" *ngIf="selectedResident && selectedResident.id" name="id" #id="ngModel" [(ngModel)]="selectedResident.id">
+        <input type="hidden" *ngIf="selectedResident && selectedResident.flatamount" name="flatamount" #id="ngModel" [(ngModel)]="selectedResident.flatamount">
+        <input type="hidden" *ngIf="selectedResident && selectedResident.flatid" name="flatid" #id="ngModel" [(ngModel)]="selectedResident.flatid">
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputstreet">First Name</label>
-            <input class="form-control" id="inputstreet" name="firstname" #firstname="ngModel" [(ngModel)]="residentService.selectedResident.firstname"
+            <input class="form-control" id="inputstreet" name="firstname" #firstname="ngModel" [(ngModel)]="selectedResident.firstname"
               placeholder="First Name" required>
             <div class="validation-error" *ngIf="firstname.invalid && firstname.touched">This field is Required</div>
           </div>
@@ -137,7 +130,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputnumber">Last Name</label>
-            <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="residentService.selectedResident.lastname"
+            <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="selectedResident.lastname"
               placeholder="Last Name" required>
             <div class="validation-error" *ngIf="lastname.invalid && lastname.touched">This field is Required</div>
           </div>
@@ -145,7 +138,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputpostcode">Post Code</label>
-            <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="residentService.selectedResident.postcode"
+            <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="selectedResident.postcode"
               placeholder="Post Code" required>
             <div class="validation-error" *ngIf="postcode.invalid && postcode.touched">This field is Required</div>
           </div>
@@ -153,7 +146,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputcity">Phone Number</label>
-            <input type="text" class="form-control" id="inputcity" name="phone" #phone="ngModel" [(ngModel)]="residentService.selectedResident.phone"
+            <input type="text" class="form-control" id="inputcity" name="phone" #phone="ngModel" [(ngModel)]="selectedResident.phone"
               placeholder="Phone Number" [pattern]="phonePattern" required>
             <div class="validation-error" *ngIf="phone.invalid && phone.touched">This field is Required</div>
           </div>
@@ -161,7 +154,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputcountry">Email</label>
-            <input type="text" class="form-control" id="inputcountry" name="email" #email="ngModel" [(ngModel)]="residentService.selectedResident.email"
+            <input type="text" class="form-control" id="inputcountry" name="email" #email="ngModel" [(ngModel)]="selectedResident.email"
               placeholder="Email" required>
             <div class="validation-error" *ngIf="email.invalid && email.touched">This field is Required</div>
           </div>
@@ -176,5 +169,5 @@
   </nb-card>
 </form>
 <!-- <pre class="code">
-  {{residentService.selectedResident | json}}
+  {{selectedResident | json}}
 </pre> -->

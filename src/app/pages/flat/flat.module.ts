@@ -5,8 +5,6 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { SmartTableService } from '../../@core/data/smart-table.service';
 import { FlatService } from './flat.service';
 import { ToasterModule } from '../../../../node_modules/angular2-toaster';
-import { Router } from '@angular/router';
-import { Resident } from '../resident/resident.model';
 @NgModule({
   imports: [
     ThemeModule,
@@ -19,7 +17,7 @@ import { Resident } from '../resident/resident.model';
   ],
   providers: [
     SmartTableService,
-    FlatService, // owibka ne v etom
+    FlatService,
   ],
 
 })

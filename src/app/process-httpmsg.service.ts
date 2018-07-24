@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-// FIXME💩: Unused imports
-import { Http, Response } from '@angular/http';
+import { Response } from '@angular/http';
 import 'rxjs/add/observable/throw';
 import { ToasterService } from 'angular2-toaster';
 
@@ -26,9 +25,7 @@ export class ProcessHttpMsgService {
         } else {
             errMsg = error.message ? error.message : error.toString();
         }
-        // FIXME💩: console.log
-        console.log('HANDLER MATH EGO' + errMsg);
         this.toasterService.popAsync('warning', 'Error handling', errMsg);
-        return Observable.throw(errMsg);
+        return errMsg;
     }
 }
