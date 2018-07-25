@@ -1,32 +1,24 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
-import { Resident } from './resident.model'; // our resident model is located here
-import { Flat } from '../../pages/flat/flat.model'; // our flat model is located here
-import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http'; // for http(crud) requests
-/**
- * FIXME💩: Unused imports
- */
+import { Resident } from './resident.model';
+import { Http, Headers, RequestOptions, RequestMethod } from '@angular/http';
+import { environment } from '../../../environments/environment';
 
-@Injectable()
+
 /**
- * FIXME💩: Comments with capital letter (Better to use JSDocs instead of comments here)
+ * Service that will contain all crud functions.
+ * @export
+ * @class ResidentService
  */
-export class ResidentService { // service that will contain all crud fucntions and values for them for resident model
+@Injectable()
+
+export class ResidentService {
+
   /**
-   * Value that will contain an additional resident object(just one)
-   *
-   * @type {Resident}
+   *Creates an instance of ResidentService.
+   * @param {Http} http HTTP requests
    * @memberof ResidentService
    */
-  selectedResident: Resident;
-  residentList: Resident[]; // array that will contain all returned house objects
-  residentFlatIdList: any[] = []; // array that will hold all flat idies that exist in database
-  flatList: Flat[]; // array that will contain all returned flat objects
-  TotalResidentsInAllFlats: number; // value that will contain all amount of residents that we have in database
-  TotalResidentsInAdditionalFlat: number; // value that will contain  amount of residents that are living in additional flat
-  sourtedResidents: Resident[] = []; // array that will contain array of residents that lives in additional flat
-  ResidentRegForm: number; // variable that responds for visibility of our Resident Registration Form
-  ResidentEditForm: number; // variable that responds for visibility of our Resident edit form
   constructor(
     private http: Http,
   ) { }
@@ -44,7 +36,7 @@ export class ResidentService { // service that will contain all crud fucntions a
     const body = JSON.stringify(res); // why i cant use var and let instead of const here?
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Post, headers: headerOptions });
-    return this.http.post('http://localhost:52414/api/Resident', body, requestOptions).map(resident => resident.json());
+    return this.http.post(environment.residentUlr, body, requestOptions).map(resident => resident.json());
   }
 
   /*
@@ -64,41 +56,27 @@ export class ResidentService { // service that will contain all crud fucntions a
     const body = JSON.stringify(res);
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Put, headers: headerOptions });
-    return this.http.put('http://localhost:52414/api/Resident/' + id, body, requestOptions).map(resident => resident.json());
+    return this.http.put(environment.residentUlr + id, body, requestOptions).map(resident => resident.json());
   }
 
-  /*
-  * FIXME💩: Wrong JSDocs (no returns) + Description with capital letter
-  */
   /**
-   * Function sends a get request to our backend,and returns all data.(in our case it is Resident array)
-   * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
+   * Function sends a get request to our server to get all Residens.
+   * @memberof ResidentService
    */
   getResidentList() {
-    return this.http.get('http://localhost:52414/api/Resident');
+    return this.http.get(environment.residentsUlr).map(residents => residents.json());
   }
 
-  /*
-* FIXME💩: Wrong JSDocs (no returns) + Description with capital letter
-*/
   /**
-   * function sends a delete request on our (backend) to delete a object that user wants to delete
-   *
-   * @param {*} event event-Object, consist of: FIXME💩: Specific object model
-   * data: Object - original row data
-   * newData: Object - edited data
-   * source: DataSource - table data source
-   * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
-   * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
+   * Function sends a delete request to server to delete a object.
+   * @param {*} event event- Resident Object
+   * @memberof ResidentService
    */
   /*
   * FIXME💩: Types
   */
   deleteResident(event) {
-    /*
-    * FIXME💩: API Url - environment variable
-    */
-    return this.http.delete('http://localhost:52414/api/Resident/' + event.data.id);
+    return this.http.delete(environment.residentUlr + event.data.id);
   }
   /**
    * function that will send a request to backend so he could returns us all...
@@ -107,10 +85,7 @@ export class ResidentService { // service that will contain all crud fucntions a
    * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
    */
   getFlatIds() {
-    /*
-    * FIXME💩: API Url - environment variable
-    */
-    return this.http.get('http://localhost:52414/api/Flat');
+    return this.http.get(environment.flatsUrl);
   }
 
   /**
@@ -120,10 +95,7 @@ export class ResidentService { // service that will contain all crud fucntions a
    * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
    */
   getAllResidentAmount() {
-    /*
-     * FIXME💩: API Url - environment variable
-     */
-    return this.http.get('http://localhost:52414/api/resident/ResidentsAmount');
+    return this.http.get(environment.residentAmountUrl).map(residentAmount => residentAmount.json());
   }
   /**
    * Function that sends a request to get resident amount in specific flat
@@ -131,14 +103,8 @@ export class ResidentService { // service that will contain all crud fucntions a
    * @returns Returns resident amount in specific flat
    * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
    */
-  /**
-   * FIXME💩: camelCase
-   */
-  GetResidentAmountInOneFlat(id: number) {
-    /*
-    * FIXME💩: API Url - environment variable
-    */
-    return this.http.get('http://localhost:52414/api/flat/' + id + '/ResidentAmount');
+  getResidentAmountInOneFlat(id: number) {
+    return this.http.get(environment.flatUrl + id + '/ResidentAmount').map(residentAmount => residentAmount.json());
   }
 }
 

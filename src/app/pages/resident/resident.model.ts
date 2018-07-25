@@ -1,19 +1,22 @@
-/**
- * FIXME💩: JSDOCS
- */
 
+
+/**
+ * Class(model) that stores all needed properties of resident information,
+ * used in crud functions.
+ * @export
+ * @class Resident
+ */
 export class Resident {
-    constructor(myFlatId: number) {
-        /**
-         * FIXME💩: Comments
-         */
-        if (myFlatId) {
-            this.flatid = myFlatId;
+    /**
+     *Creates an instance of Resident, where our additionalFlatId param will give our flatid property his value,if it has any.
+     * @param {number} additionalFlatId
+     * @memberof Resident
+     */
+    constructor(additionalFlatId: number) {
+        if (additionalFlatId) {
+            this.flatid = additionalFlatId;
         }
     }
-    /**
-     * Creats a new flat
-     */
     id: number;
     firstname: string;
     lastname: string;

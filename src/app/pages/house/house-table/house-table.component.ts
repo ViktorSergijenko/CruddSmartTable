@@ -128,9 +128,11 @@ export class HouseTableComponent implements OnInit {
     this.editHouseForm = null;
     this.selectedHouse = new House();
   }
+
   ngOnInit() {
+    // Getting all houses from server and loading them in to the table and count their amount.
     this.houseService.getHouseList().subscribe(Houses => {
-      this.source.load(Houses.json());
+      this.source.load(Houses);
       this.totalAmountOfHosesInTable = this.source.count();
     });
   }

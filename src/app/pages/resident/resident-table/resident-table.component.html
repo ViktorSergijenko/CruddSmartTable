@@ -16,15 +16,6 @@
     </nb-card-body>
   </nb-card>
   <!-- this is cards with additional info,it will be shown only if we are looking on residents that are living in additional flat -->
-  <nb-card status="success" *ngIf="selectedFlat">
-    <nb-card-header>
-      <h1>Resident Table</h1>
-    </nb-card-header>
-    <nb-card-body>
-      <br>
-      <h3>Total amount of residents in this flat: {{totalResidentsInAdditionalFlat}} residents</h3>
-    </nb-card-body>
-  </nb-card>
 </div>
 <!-- this is cards with additional info,it will be shown only if we are looking on all residents that exist -->
 <nb-card *ngIf="!residentEditForm && !residentRegForm">
@@ -42,6 +33,7 @@
   </nb-card-header>
   <!-- this is my ng smart table -->
   <nb-card-body>
+
     <ng2-smart-table [settings]="settings" [source]="source" (delete)="onDeleteConfirm($event)" (edit)="onSaveConfirm($event)"
       (create)="onCreateConfirm($event)">
     </ng2-smart-table>

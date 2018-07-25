@@ -14,48 +14,7 @@ import { environment } from '../../../environments/environment';
  */
 @Injectable()
 export class HouseService {
-  /**
-   * @property {selectedHouse} - Property(variable) that can contain one house object.
-   * @type {House}
-   * @memberof HouseService
-   */
-  selectedHouse: House;
-  /**
-   * @property {houseList} - Property(array) that can contain array of house objects.
-   * @type {House[]} - House objects array.
-   * @memberof HouseService
-   */
-  houseList: House[];
-  /**
-   * @property {SourtedFlatList} - Property(array) that can contain array of flat objects,
-   * used to contain all flats that are located in additional house.
-   * @type {Flat[]}
-   * @memberof HouseService
-   */
-  sourtedFlatList: Flat[] = [];
-  /**
-   * @property {TotalAmountOfHosesInTable} - Property(variable) that contains information about amount of houses in table.
-   * @type {number}
-   * @memberof HouseService
-   */
-  totalAmountOfHosesInTable: number;
-  /**
-   * @property {RegistrationHouseForm} - Property(variable) that responds for Registration form visability.
-   * @type {number}
-   * @memberof HouseService
-   */
-  registrationHouseForm: number;
-  /**
-   * @property {EditHouseForm} - Property(variable) that responds for Edit form visability.
-   * @type {number}
-   * @memberof HouseService
-   */
-  editHouseForm: number;
-  /**
-   *Creates an instance of HouseService.
-   * @param {Http} http HTTP request.
-   * @memberof HouseService
-   */
+
   constructor(private http: Http) {
   }
 
@@ -69,7 +28,7 @@ export class HouseService {
     const body = JSON.stringify(hos); // why i cant use var and let instead of const here?
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Post, headers: headerOptions });
-    return this.http.post(environment.HousesUrl, body, requestOptions).map(newHouse => newHouse.json());
+    return this.http.post(environment.housesUrl, body, requestOptions).map(newHouse => newHouse.json());
   }
 
   /**
@@ -83,14 +42,14 @@ export class HouseService {
     const body = JSON.stringify(hos);
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Put, headers: headerOptions });
-    return this.http.put(environment.HouseUrl + id, body, requestOptions).map(editedHouse => editedHouse.json());
+    return this.http.put(environment.houseUrl + id, body, requestOptions).map(editedHouse => editedHouse.json());
   }
   /**
    * Function sends a get request to our backend,and returns all data.(in our case it is Flat array)
    * @memberof HouseService
    */
   getHouseList() {
-    return this.http.get(environment.HousesUrl);
+    return this.http.get(environment.housesUrl).map(houses => houses.json());
   }
   /**
    * Function sends a delete request on our (backend) to delete a object that user wants to delete
@@ -103,7 +62,7 @@ export class HouseService {
    */
   deleteHouse(event) {
 
-    return this.http.delete(environment.HouseUrl + event.data.id);
+    return this.http.delete(environment.houseUrl + event.data.id);
   }
   /**
    * Function sends a get request to our backend to get all all flats,
@@ -113,7 +72,7 @@ export class HouseService {
    * @memberof HouseService
    */
   getHouseFlats(id: number) {
-    return this.http.get(environment.HouseUrl + id + '/flats');
+    return this.http.get(environment.houseUrl + id + '/flats').map(flats => flats.json());
   }
   /**
    * Function sends a get request to get one additional house that we need.
@@ -122,7 +81,7 @@ export class HouseService {
    * @memberof HouseService
    */
   getOneHouse(id: number) {
-    return this.http.get(environment.HouseUrl + id);
+    return this.http.get(environment.houseUrl + id).map(house => house.json());
   }
 
 }

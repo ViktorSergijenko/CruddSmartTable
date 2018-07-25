@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ResidentService } from '../resident.service';
 import { Http } from '@angular/http';
@@ -29,7 +29,7 @@ import { Flat } from '../../flat/flat.model';
   }
 `],
 })
-export class ResidentTableComponent {
+export class ResidentTableComponent implements OnInit {
 
   /**
    * Used as a pattern for phone number.
@@ -41,7 +41,7 @@ export class ResidentTableComponent {
    * @type {number}
    * @memberof ResidentTableComponent
    */
-  additionalFlatId: number = null;
+  additionalFlatId: any = null;
   /**
    * Variable that contains an error text.
    * @type {string}
@@ -111,10 +111,9 @@ export class ResidentTableComponent {
   };
 
 
-  source: LocalDataSource = new LocalDataSource(); // Fucntionality of our ng2 smart table
+  source: LocalDataSource = new LocalDataSource();
 
   constructor(
-    // FIXME💩: Dont use public here. You can avoid it
     private residentService: ResidentService,
     private flatService: FlatService,
     private location: Location,
@@ -122,71 +121,65 @@ export class ResidentTableComponent {
     private router: Router,
     private toasterService: ToasterService,
   ) {
-    // FIXME💩: camelCase + do you really need it ?
-    // + Dont store this info in service variables, you can and should do it in this component since you are not using it anywhere else
-    this.selectedResident = new Resident(this.additionalFlatId);
-    this.residentEditForm = null;
-    this.residentRegForm = null;
-    // FIXME💩: Comment with capital letter
-    // first of all we get value from route. We use it to define flat id as a params.id
-    // then we use GetFlatResidents, getResidentList and GetOneFlat to get all needed information to load in table
-    // and counting all objects
-    // FIXME💩: params should be subscribed to in ngOnInit (best practices)
-    // TODO: Use take(1) for params. See Discord (angular2 channel) for more info
+    this.residentEditForm = null; // Using this in constructor,to make Edit form Invisible at the beggining.
+    this.residentRegForm = null;  // Using this in constructor,to make Registration form Invisible at the beggining.
+  }
+  ngOnInit() {
+    this.gettingFlatIdFromRoute(); // First we get a flat id,to ensure that we will load exactly those residents that we want to load.
+    // Also there can be  cases when there can be no flat id in our Route.
+    if (!this.additionalFlatId || this.additionalFlatId === 'all') { // If we dont have flat id.
+      this.resetForm(); // We will reset form,to avoid problems with our form values.
+      this.loadAllResidentsInTableAndCountThem(); // Then we will load all residents in to our table.
+    } else { // If we have flat id.
+      this.resetForm(); // We will reset form,to avoid problems with our form values.
+      this.loadAdditionalHouseFlatsAndCountThem(); // Then we will load only those resdients,that are located ...
+      // In flat that id is equal to "additionalFlatId" value.
+    }
+  }
+
+  /**
+   * Function gets Flat id value from route params.
+   * @memberof ResidentTableComponent
+   */
+  gettingFlatIdFromRoute() {
+    // Getting a route param from our routing.
     this.route.params.take(1).subscribe((params: any) => {
-      // FIXME💩: console.logs
-      console.log('I am there');
-      this.additionalFlatId = params.id;
-      console.log(params.id);
-      // FIXME💩: Comment with capital letter
-      // if route returns params.id as 'all' or it is undefined then
-      // programm will load all flats in to the table FIXME💩: Hard to understand next text: that we have in our database on our backend
-      if (!params.id || params.id === 'all') {
-        this.residentService.getResidentList().subscribe(resident => {
-          // FIXME💩: More comments would be lovely + better to do .json() in service
-          this.residentList = resident.json();
-          // FIXME💩: Do you really need to store residentList in service if you won't use it ?
-          // Better to load just residents
-          this.source.load(this.residentList);
-          // FIXME💩: Variable names with camelCase
-          this.totalResidentsInAllFlats = this.source.count();
-          this.selectedFlat = null;
-        });
-        // FIXME💩: Comment with capital letter + Some mistakes in comment
-        // else (if we have returned param.id as a number(not null or undefined)) it will load to
-        // FIXME💩: Some mistakes here: tot the table only those residents,that are located in flat that
-        // FIXME💩: Also hard to understand:  id is equal to the value that has param.id
-      } else {
-        // FIXME💩: Add some comments on why are you doing stuff, like why are you resetting form here and doing other stuff (More comments)
-        this.resetForm();
-        // FIXME💩: Service method names and variable names as camelCase + params.id you can store in another variable and then reuse
-        // FIXME💩: Refactor this whole constructor to make it less complex (divide into separated, logical methods)
-        // TODO: Simple RxJs example usage
-        // forkJoin(
-        //   this.flatService.GetFlatResidents(params.id),
-        //   this.residentService.getAllResidentAmount(),
-        // ).subscribe(responses => {
-        //   this.source.load(responses[0].json());
-        //  // And other logic here...
-        // });
-        this.flatService.getFlatResidents(params.id).subscribe(resident => {
-          // FIXME💩: .json() should be done in service
-          // FIXME💩: Use reactive programming (RxJS) advantages (See example above)
-          this.sourtedResidents = resident.json();
-          this.source.load(this.sourtedResidents);
-          this.flatService.getOneFlat(params.id).subscribe(oneFlat => {
-            this.selectedFlat = oneFlat.json();
-          });
-          this.residentService.getAllResidentAmount().subscribe(resAmount => {
-            this.totalResidentsInAllFlats = resAmount.json();
-            this.residentService.GetResidentAmountInOneFlat(params.id).subscribe(resAmountInOneFlat => {
-              this.totalResidentsInAdditionalFlat = resAmountInOneFlat.json();
-              // FIXME💩: Do you need refresh here?
-              this.source.refresh();
-            });
-          });
-        });
-      }
+      this.additionalFlatId = params.id; // Putting this route param in to our locate variable "additionalFlatId".
+      this.selectedResident = new Resident(this.additionalFlatId); // Using additionalFlatId variable in Resident object constructor.
+      this.sourtedResidents = []; // To avoid problems with table loading, we clear all that could be in our sourtedResidents array.
+    });
+  }
+
+  /**
+   * Function will load all existing residents to our table,and count their amount.
+   * @memberof ResidentTableComponent
+   */
+  loadAllResidentsInTableAndCountThem() {
+    // Getting all residents from server.
+    this.residentService.getResidentList().subscribe(residents => {
+      this.source.load(residents); // Loading this residents in to our table.
+      this.totalResidentsInAllFlats = this.source.count(); // Counting amount of residents that was laoded in to our table.
+      this.selectedFlat = null; // So,because we have loaded all residents,then we dont need flat info.
+      // Flat information is used only in those cases,when we are loading residents from additional flat.
+    });
+  }
+  /**
+   * Function will load to our table only those residents, that are located in additional flat,and count their amount.
+   * @memberof ResidentTableComponent
+   */
+  loadAdditionalHouseFlatsAndCountThem() {
+    forkJoin(
+      // Getting residents that are located in flat, that has id equal to "additionalFlatId" value.
+      this.flatService.getFlatResidents(this.additionalFlatId),
+      // Getting Info about flat, where our residents are living.
+      this.flatService.getOneFlat(this.additionalFlatId),
+    ).subscribe(flatAndItsResidents => {
+      // Loading this residents to our table.
+      this.source.load(flatAndItsResidents[0]);
+      // Counting amount of loaded residents.
+      this.totalResidentsInAdditionalFlat = this.source.count();
+      // Putting our flat in to selectedFlat variable,to get flat info later.
+      this.selectedFlat = flatAndItsResidents[1];
     });
   }
 
@@ -212,81 +205,55 @@ export class ResidentTableComponent {
     });
   }
 
-  // FIXME💩: Types + JSDoc param description should be moved to specific model and it should be described
-  // + you dont need "-" after param name. Good example: @param {*} event Event of something
-  // + Better to use "ENTER"s between methods
+
   /**
-   * If user will click on 'Plus' button it will open registration form
-   * @param {*} event event-Object, consist of:
-   * data: Object - original row data
-   * newData: Object - edited data
-   * source: DataSource - table data source
-   * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
-   * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+   * If user will click on 'Plus' button it will open registration form.
+   * @memberof ResidentTableComponent
    */
-  onCreateConfirm(event): void {
-    this.resetForm();
-    // FIXME💩: camelCase + Not clear what are you doing here, so +comments
-    this.residentRegForm = 1;
+  onCreateConfirm(): void {
+    this.residentRegForm = 1; // if residentRegForm value is not 0, then Registration form will be shown.
   }
 
   /**
-   * If user will click on 'pencil' button, it will open edit form
-   * @param {*} event event-Object, consist of:
-   * data: Object - original row data
-   * newData: Object - edited data
-   * source: DataSource - table data source
-   * confirm: Deferred - Deferred object with resolve(newData: Object) and reject() methods
-   * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
+   * If user will click on 'pencil' button, it will open edit form.
+   * @param {*} event event-Resident Object,
+   * @memberof ResidentTableComponent
    */
   onSaveConfirm(event): void {
-    // FIXME💩: 💩TSLINT DISABLE! NEVER! USE! THIS! 💩
-    // tslint:disable-next-line:max-line-length
-    // FIXME💩: This is not your returned resident, it is a ng2-smart-table event, which contains some information (resident, for example)
     this.residentThatWeWantToChange = event;
-    // FIXME💩: You get max-line-length error because you are adding comment to the side which increases line length,
-    // so better to write it above + add some more comments
-    this.selectedResident = Object.assign({}, event.data); // this will send all values that has our object that we want to edit to our form
-    this.residentEditForm = 1; // if ResidentEditForm value is not 0, then it will be shown
+    this.selectedResident = Object.assign({}, event.data); // This will send all values that has our object that we want to edit to our form.
+    this.residentEditForm = 1; // if residentEditForm value is not 0, then it will be shown.
   }
 
-  // FIXME💩: Hard to understand what is going on. Please rewrite this description
   /**
    * Function will be use on button,when we will click on button,
-   * function will send FIXME💩: uss on other page
-   * @memberof ResidentTableComponent ResidentTableComponent FIXME💩: This should not be added here:- Have all setting of our resident smart table
+   * function will send uss on previous page.
+   * @memberof ResidentTableComponent
    */
   goBack(): void {
     this.location.back();
   }
 
-  // FIXME💩: Hard to understand what is going on. Please rewrite this description
   /**
-   * This function is use on a button,when we will press button,it will
-   * send uss on a Flat table page,where will be loaded all flats that we have in database
-   * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
-   */
+  * This function is used on a button,when we will press button,it will
+  * send uss on a House table page, where we will be able to see all houses that exists.
+  * @memberof ResidentTableComponent
+  */
   getFullList(): void {
     this.router.navigate(['/pages/resident/resident-table'],
     );
   }
 
-  // FIXME💩: JSDocs are a little wrong (properties). See FIXME above for similar
   /**
-   * Function will reset our object values on form
-   * @param {NgForm} [form] form-this property will say on what form will be used this function
-   * @memberof ResidentTableComponent ResidentTableComponent FIXME💩: Remove:- Have all setting of our resident smart table
+   * Function resets all form values(edit and registration)
+   * to a default values.
+   * @param {NgForm} [form] form - Form that we want to reset.
+   * @memberof ResidentTableComponent
    */
-  // FIXME💩: Why do you need "?" 💩💩💩 Dont use, if don't know why
   resetForm(form?: NgForm) {
-    // FIXME💩: 💩TSLINT DISABLE! NEVER! USE! THIS! 💩
-    // tslint:disable-next-line:curly
     this.selectedResident = new Resident(this.additionalFlatId);
   }
 
-  // FIXME💩: Too much information in description + information about what is going on on server
-  // not always is correct and known, so don't describe it. For some tech stuff you can add
-  // comments in appropriate places
   /**
    * Function is used on button submit in registration or edit form,if in form our object id is null
    * then when user will click in submit button it will send a post request to server, to create a new object in database,if server
@@ -295,52 +262,40 @@ export class ResidentTableComponent {
    * change our object values in database to a new one,if server
    * will return an error then user will see the message error that will ensure him what did he do wrong.
    * @param {NgForm} form form-this property will say on what form will be used this function
-   * @memberof ResidentTableComponent ResidentTableComponent FIXME💩: Remove:- Have all setting of our resident smart table
+   * @memberof ResidentTableComponent
    */
-  // FIXME💩: Too much logic in one method. You should divide it
   onSubmit(form: NgForm) {
     if (!form.value.id) {
-      this.residentService.postResident(form.value).subscribe(newResident => {
-        // FIXME💩: Overall, needed more comments
-        this.source.prepend(newResident);
-        this.toasterService.popAsync('success', 'Resident was added');
-        this.resetForm(form);
-        // FIXME💩: .json() should be done in service
-        this.residentService.getAllResidentAmount().subscribe(resAmount => {
-          this.totalResidentsInAllFlats = resAmount.json();
-          this.residentService.GetResidentAmountInOneFlat(this.additionalFlatId).subscribe(resAmountInOneFlat => {
-            this.totalResidentsInAdditionalFlat = resAmountInOneFlat.json();
-            // FIXME💩: Do you really need it ? If yes, comment why
-            this.source.refresh();
-          });
-        });
-        // FIXME💩: Types
-        // TODO: Pass err to error handler and handle errors there
-      }, (err) => {
-        // FIXME💩: Comment why you cast to "any" and + "any" is bad
-        this.errorFromServer = <any>err; // .json();
-        // FIXME💩: console.log
-        console.log('this is my errorito: ' + err.text());
-        this.errorFromServer = err.text();
-        console.log('myerrorito' + this.errorFromServer);
-        this.toasterService.popAsync('error', 'Custom error in component', this.errorFromServer);
-      });
+      this.postRequestFunctionInForm(form);
     } else {
-      this.residentService.putResident(form.value.id, form.value)
-        .subscribe(editedResident => {
-          this.source.update(this.residentThatWeWantToChange.data, editedResident);
-          this.toasterService.popAsync('Record updated', 'Resident info was changed');
-          this.resetForm(form);
-        },
-          // FIXME💩: Types
-          (err) => {
-            this.errorFromServer = <any>err; // .json();
-            console.log('this is my errorito: ' + err.text());
-            this.errorFromServer = err.text();
-            console.log('myerrorito' + this.errorFromServer);
-            this.toasterService.popAsync('error', 'Custom error in component', this.errorFromServer);
-          });
+      this.putRequestFunctionInForm(form);
     }
+  }
+  postRequestFunctionInForm(form: NgForm) {
+    forkJoin(
+      this.residentService.postResident(form.value),
+      this.residentService.getResidentAmountInOneFlat(this.additionalFlatId),
+    ).subscribe(newResidentAndResidentAmount => {
+      this.source.prepend(newResidentAndResidentAmount[0]);
+      this.toasterService.popAsync('success', 'Resident was added');
+      this.resetForm(form);
+      this.totalResidentsInAdditionalFlat = newResidentAndResidentAmount[1];
+    }, (err) => {
+      this.errorFromServer = err.text();
+      this.toasterService.popAsync('error', 'Custom error in component', this.errorFromServer);
+    });
+  }
+  putRequestFunctionInForm(form: NgForm) {
+    this.residentService.putResident(form.value.id, form.value)
+      .subscribe(editedResident => {
+        this.source.update(this.residentThatWeWantToChange.data, editedResident);
+        this.toasterService.popAsync('Record updated', 'Resident info was changed');
+        this.resetForm(form);
+      },
+        (err) => {
+          this.errorFromServer = err.text();
+          this.toasterService.popAsync('error', 'Custom error in component', this.errorFromServer);
+        });
   }
 
   // FIXME💩: JSDocs are a little wrong (properties). See FIXME above for similar
@@ -348,11 +303,10 @@ export class ResidentTableComponent {
   * Function will close registration or edit form in resident table  
   * Used on button in forms
   * @param {NgForm} [form] form-this property will say on what form will be used this function
-  * @memberof ResidentTableComponent ResidentTableComponent FIXME💩: Remove: - Have all setting of our resident smart table
+  * @memberof ResidentTableComponent
   */
-  // FIXME💩: Why do you need "?" 💩💩💩 Dont use, if don't know why
   onClose(form?: NgForm): void {
-    // FIXME💩: camelCase + comments
+
     this.residentRegForm = null;
     this.residentEditForm = null;
     this.resetForm(form);

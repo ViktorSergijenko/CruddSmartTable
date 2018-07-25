@@ -9,6 +9,7 @@ import { Flat } from '../flat.model';
 import { NgForm } from '@angular/forms';
 import { ToasterService } from '../../../../../node_modules/angular2-toaster';
 import { House } from '../../house/house.model';
+import { forkJoin } from '../../../../../node_modules/rxjs';
 @Component({
   selector: 'app-flat-table',
   templateUrl: './flat-table.component.html',
@@ -36,13 +37,44 @@ export class FlatTableComponent implements OnInit {
    * @memberof FlatTableComponent
    */
   selectedFlat: Flat;
+  /**
+   * @property {flatList} - Property(array) that can contain array of flat objects.
+   * @type {Flat[]}
+   * @memberof FlatTableComponent
+   */
   flatList: Flat[];
+  /**
+   * @property {selectedHouse} - Property(variable) that can contain one house object.
+   * @type {House}
+   * @memberof FlatTableComponent
+   */
   selectedHouse: House;
+  /**
+   * @property {totalFlatsInTable} - Property(variable) that contains information about amount of flats in table.
+   * @type {number}
+   * @memberof FlatTableComponent
+   */
   totalFlatsInTable: number;
   flatThatWeWantToChange;
+  /**
+   * @property {totalFlatsInAdditionalHouse} - Property(variable) that contains information about amount of flats in additional house.
+   * @type {number}
+   * @memberof FlatTableComponent
+   */
   totalFlatsInAdditionalHouse: number;
+  /**
+   * @property {flatRegForm} - Property(variable) that responds for Registration form visability.
+   * @type {number}
+   * @memberof FlatTableComponent
+   */
   flatRegForm: number;
+  /**
+   * @property {flatEditForm} - Property(variable) that responds for Edit form visability.
+   * @type {number}
+   * @memberof FlatTableComponent
+   */
   flatEditForm: number;
+  sourtedFlatList: Flat[];
   /**
    * Settings is a ng2 smart table property where we can set all needed setings for our table(columns names,actions.....)
    * @memberof FlatTableComponent
@@ -151,7 +183,7 @@ export class FlatTableComponent implements OnInit {
     this.route.params.subscribe((params: any) => {
       this.additionalHouseId = params.id; // Putting this route param in to our locate variable "additionalHouseId".
       this.selectedFlat = new Flat(this.additionalHouseId); // Using additionalHouseId variable in Flat object constructor.
-      this.houseService.sourtedFlatList = []; // To avoid problems with table loading, we clear all that could be in our sourtedFlatList array.
+      this.sourtedFlatList = []; // To avoid problems with table loading, we clear all that could be in our sourtedFlatList array.
     });
   }
   /**
@@ -161,7 +193,7 @@ export class FlatTableComponent implements OnInit {
   loadAllFlatsInTableAndCountThem() {
     // Getting all flats from server.
     this.flatService.getFlatList().subscribe(flats => {
-      this.flatList = flats.json(); // Putting this flats in to flatList array.
+      this.flatList = flats; // Putting this flats in to flatList array.
       this.source.load(this.flatList); // Loading this flats in to our table.
       this.totalFlatsInTable = this.source.count(); // Counting amount of flats that was laoded in to our table.
       this.selectedHouse = null; // So,because we have loaded all flats,then we dont need house info.
@@ -173,14 +205,18 @@ export class FlatTableComponent implements OnInit {
    * @memberof FlatTableComponent
    */
   loadAdditionalHouseFlatsAndCountThem() {
-    // Getting flats that are located in house, that has id equal to "additionalHouseId".
-    this.houseService.getHouseFlats(this.additionalHouseId).subscribe(additionalFlats => {
-      this.houseService.sourtedFlatList = additionalFlats.json(); // Putting them in to a sourtedFlatList array.
-      this.source.load(this.houseService.sourtedFlatList); // Loading this flats to our table.
-      this.totalFlatsInAdditionalHouse = this.source.count(); // Counting amount of loaded flats.
-      this.houseService.getOneHouse(this.additionalHouseId).subscribe(house => { // Getting Info about house, where our falts are located.
-        this.selectedHouse = house.json(); // Putting our house info in to selectedHouse variable.
-      });
+    forkJoin(
+      // Getting flats that are located in house, that has id equal to "additionalHouseId" value.
+      this.houseService.getHouseFlats(this.additionalHouseId),
+      // Getting Info about house, where our falts are located.
+      this.houseService.getOneHouse(this.additionalHouseId),
+    ).subscribe(houseAndItsFlats => {
+      // Loading this flats to our table.
+      this.source.load(houseAndItsFlats[0]);
+      // Counting amount of loaded flats.
+      this.totalFlatsInAdditionalHouse = this.source.count();
+      // Putting our house in to selectedHouse variable,to get house info later.
+      this.selectedHouse = houseAndItsFlats[1];
     });
   }
 
@@ -196,12 +232,12 @@ export class FlatTableComponent implements OnInit {
         // Because if our additionalHouseId variable is not null,then our table has loaded flats from additional house
         // That has id equal to additionalHouseId value.
         this.flatService.getFlatAmountInOneHouse(this.additionalHouseId).subscribe(Amount => {
-          this.totalFlatsInAdditionalHouse = Amount.json();
+          this.totalFlatsInAdditionalHouse = Amount;
         });
         // If our table has loaded all flats that exists,then it will count all flat amount in database.
       } else {
         this.flatService.getAllFlatAmount().subscribe(Amount => {
-          this.totalFlatsInTable = Amount.json();
+          this.totalFlatsInTable = Amount;
         });
       }
     });
@@ -240,7 +276,7 @@ export class FlatTableComponent implements OnInit {
    */
   onUserRowSelect(event) {
     console.log('user row select: ', event.data.id);
-    this.router.navigate(['/pages/resident/resident-table/' + event.data.id], { relativeTo: this.route });
+    this.router.navigate(['/pages/resident/resident-table/' + event.data.id]);
   }
   /**
    * This function is used on a button,when we will press button,it will
@@ -286,7 +322,7 @@ export class FlatTableComponent implements OnInit {
       this.toasterService.popAsync('success', 'Flat was added'); // Will make a Toastr message.
       this.resetTheFuckingForm(form); // Resets a form values to default.
       this.flatService.getFlatAmountInOneHouse(this.additionalHouseId).subscribe(flatAmountInOneHouse => {
-        this.totalFlatsInAdditionalHouse = flatAmountInOneHouse.json();
+        this.totalFlatsInAdditionalHouse = flatAmountInOneHouse;
       });
     },
       (err) => {

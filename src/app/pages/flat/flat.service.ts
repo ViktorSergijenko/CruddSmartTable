@@ -80,7 +80,7 @@ export class FlatService {
     const body = JSON.stringify(flat);
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Post, headers: headerOptions });
-    return this.http.post(environment.FlatsUrl, body, requestOptions).map(newFlat => newFlat.json());
+    return this.http.post(environment.flatsUrl, body, requestOptions).map(newFlat => newFlat.json());
   }
   /**
    * Function sends a put request to the server to edit a object.
@@ -93,14 +93,14 @@ export class FlatService {
     const body = JSON.stringify(flat);
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Put, headers: headerOptions });
-    return this.http.put(environment.FlatUrl + id, body, requestOptions).map(editedFlat => editedFlat.json());
+    return this.http.put(environment.flatUrl + id, body, requestOptions).map(editedFlat => editedFlat.json());
   }
   /**
    * Function sends a get request to our server,and returns all data.(in our case it is Flat array).
    * @memberof FlatService
    */
   getFlatList() {
-    return this.http.get(environment.FlatsUrl);
+    return this.http.get(environment.flatsUrl).map(flats => flats.json());
   }
   /**
    *Function sends a delete request on our server to delete a object that user wants to.
@@ -108,7 +108,7 @@ export class FlatService {
    * @memberof FlatService
    */
   deleteFlat(event) {
-    return this.http.delete(environment.FlatUrl + event.data.id);
+    return this.http.delete(environment.flatUrl + event.data.id);
   }
 
   /**
@@ -119,7 +119,7 @@ export class FlatService {
    * @memberof FlatService
    */
   getFlatResidents(id: number) {
-    return this.http.get(environment.FlatUrl + id + '/residents');
+    return this.http.get(environment.flatUrl + id + '/residents').map(flatResidents => flatResidents.json());
   }
   /**
    * Function will send get request to our server to get one additional flat that we want to.
@@ -128,7 +128,7 @@ export class FlatService {
    * @memberof FlatService
    */
   getOneFlat(id: number) {
-    return this.http.get(environment.FlatUrl + id);
+    return this.http.get(environment.flatUrl + id).map(oneFlat => oneFlat.json());
   }
   /**
    * Function that sends a get request to our server.
@@ -136,7 +136,7 @@ export class FlatService {
    * @memberof FlatService
    */
   getAllFlatAmount() {
-    return this.http.get(environment.FlatAmountUrl);
+    return this.http.get(environment.flatAmountUrl).map(flatAmount => flatAmount.json());
   }
   /**
    * Function that sends a get request to our server.
@@ -145,7 +145,7 @@ export class FlatService {
    * @memberof FlatService
    */
   getFlatAmountInOneHouse(id: number) {
-    return this.http.get(environment.HouseUrl + id + '/flatAmount');
+    return this.http.get(environment.houseUrl + id + '/flatAmount').map(flatAmount => flatAmount.json());
   }
 }
 
