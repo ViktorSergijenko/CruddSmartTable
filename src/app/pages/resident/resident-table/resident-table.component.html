@@ -93,9 +93,9 @@
       </div>
 
       <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;  ">
-        <button type="submit" [disabled]="!residentForm.valid" class="btn btn-primary">Submit</button>
-        <button type="button" class="btn btn-hero-success btn-demo" (click)="resetForm(residentForm)">Reset</button>
-        <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(flatForm)">Close</button>
+        <button type="submit" [disabled]="!residentForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
+        <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(residentForm)">Reset</button>
+        <button type="button" class="btn btn-hero-danger btn-demo" (click)="onClose(flatForm)">Close</button>
       </div>
 
 
@@ -153,8 +153,8 @@
         </div>
       </div>
       <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;  ">
-        <button type="submit" [disabled]="!residentForm.valid" class="btn btn-primary">Submit</button>
-        <button type="button" class="btn btn-hero-warning btn-demo" (click)="onClose(flatForm)">Close</button>
+        <button type="submit" [disabled]="!residentForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
+        <button type="button" class="btn btn-hero-danger btn-demo" (click)="onClose(flatForm)">Close</button>
       </div>
 
     </nb-card-body>
