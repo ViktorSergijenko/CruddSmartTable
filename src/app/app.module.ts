@@ -17,6 +17,7 @@ import { ThemeModule } from './@theme/theme.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProcessHttpMsgService } from './process-httpmsg.service';
 import { ToasterModule } from 'angular2-toaster';
+import { InternationalPhoneModule } from 'ng4-intl-phone';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,6 +31,7 @@ import { ToasterModule } from 'angular2-toaster';
     ThemeModule.forRoot(),
     CoreModule.forRoot(),
     ToasterModule,
+    InternationalPhoneModule,
   ],
   bootstrap: [AppComponent],
   providers: [

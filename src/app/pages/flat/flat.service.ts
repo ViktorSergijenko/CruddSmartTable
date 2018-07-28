@@ -76,7 +76,7 @@ export class FlatService {
    * @returns Post request to the server.
    * @memberof FlatService 
    */
-  postFlat(flat: Flat) {
+  addFlat(flat: Flat) {
     const body = JSON.stringify(flat);
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Post, headers: headerOptions });
@@ -89,7 +89,7 @@ export class FlatService {
    * @returns Put request to the server.
    * @memberof FlatService
    */
-  putFlat(id, flat) {
+  editFlat(id, flat) {
     const body = JSON.stringify(flat);
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Put, headers: headerOptions });

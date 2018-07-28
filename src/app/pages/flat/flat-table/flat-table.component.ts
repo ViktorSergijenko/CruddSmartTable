@@ -13,11 +13,7 @@ import { forkJoin } from '../../../../../node_modules/rxjs';
 @Component({
   selector: 'app-flat-table',
   templateUrl: './flat-table.component.html',
-  styles: [`
-  nb-card {
-    transform: translate3d(0, 0, 0);
-  }
-`],
+  styleUrls: ['./flat-table.component.scss'],
 })
 export class FlatTableComponent implements OnInit {
   /**
@@ -74,6 +70,12 @@ export class FlatTableComponent implements OnInit {
    * @memberof FlatTableComponent
    */
   flatEditForm: number;
+  /**
+   *
+   * 
+   * @type {Flat[]}
+   * @memberof FlatTableComponent
+   */
   sourtedFlatList: Flat[];
   /**
    * Settings is a ng2 smart table property where we can set all needed setings for our table(columns names,actions.....)
@@ -158,17 +160,17 @@ export class FlatTableComponent implements OnInit {
     private router: Router,
     private toasterService: ToasterService,
   ) {
-    this.flatEditForm = null; // Using this in constructor,to make Edit form Invisible at the beggining.
-    this.flatRegForm = null; // Using this in constructor,to make Registration form Invisible at the beggining.
+    // this.flatEditForm = null; // Using this in constructor,to make Edit form Invisible at the beggining.
+    // this.flatRegForm = null; // Using this in constructor,to make Registration form Invisible at the beggining.
   }
   ngOnInit() {
     this.gettingHouseIdFromRoute(); // First we get a house id,to ensure that we will load exactly those flats that we want to load.
     // Also there's cases when there can be no house id in our Route.
     if (!this.additionalHouseId || this.additionalHouseId === 'all') { // If we dont have house id.
-      this.resetTheFuckingForm(); // We will reset form,to avoid problems with our form values.
+      this.resetForm(); // We will reset form,to avoid problems with our form values.
       this.loadAllFlatsInTableAndCountThem(); // Then we will load all flats in to our table.
     } else { // If we have house id.
-      this.resetTheFuckingForm(); // We will reset form,to avoid problems with our form values.
+      this.resetForm(); // We will reset form,to avoid problems with our form values.
       this.loadAdditionalHouseFlatsAndCountThem(); // Then we will load only those flats,that are located ...
       // In house that id is equal to "additionalHouseId" value.
     }
@@ -293,7 +295,7 @@ export class FlatTableComponent implements OnInit {
    * @param {NgForm} [form] form - Form that we want to reset.
    * @memberof FlatTableComponent
    */
-  resetTheFuckingForm(form?: NgForm) {
+  resetForm(form?: NgForm) {
     this.selectedFlat = new Flat(this.additionalHouseId);
   }
   /**
@@ -306,7 +308,7 @@ export class FlatTableComponent implements OnInit {
     if (!form.value.id) {
       this.postRequestFunctionInForm(form);
     } else {
-      this.putRequestFunctionInForm(form);
+      this.confirmModify(form);
     }
   }
   /**
@@ -317,10 +319,10 @@ export class FlatTableComponent implements OnInit {
    * @memberof FlatTableComponent
    */
   postRequestFunctionInForm(form: NgForm) {
-    this.flatService.postFlat(form.value).subscribe(newFlat => {
+    this.flatService.addFlat(form.value).subscribe(newFlat => {
       this.source.prepend(newFlat); // Function that addes a new object in to the table.
       this.toasterService.popAsync('success', 'Flat was added'); // Will make a Toastr message.
-      this.resetTheFuckingForm(form); // Resets a form values to default.
+      this.resetForm(form); // Resets a form values to default.
       this.flatService.getFlatAmountInOneHouse(this.additionalHouseId).subscribe(flatAmountInOneHouse => {
         this.totalFlatsInAdditionalHouse = flatAmountInOneHouse;
       });
@@ -338,11 +340,11 @@ export class FlatTableComponent implements OnInit {
    * @param {NgForm} form
    * @memberof FlatTableComponent
    */
-  putRequestFunctionInForm(form: NgForm) {
-    this.flatService.putFlat(form.value.id, form.value)
+  confirmModify(form: NgForm) {
+    this.flatService.editFlat(form.value.id, form.value)
       .subscribe(editedFlat => { // Returning a edited flat.
         this.source.update(this.flatThatWeWantToChange.data, editedFlat); // Updating our edited object in our table.
-        this.resetTheFuckingForm(form); // Reseting our form.
+        this.resetForm(form); // Reseting our form.
         this.toasterService.popAsync('Record updated', 'Flat info was changed'); // Toastr ensure user with a message taht object was edited.
       },
         (err) => { // If put request was unsuccesssfull, then we will have an error message from server
@@ -360,7 +362,7 @@ export class FlatTableComponent implements OnInit {
   onClose(form: NgForm): void {
     this.flatEditForm = null; // If flatEditForm has no value,then Edit form is invisible.
     this.flatRegForm = null; // If flatRegForm has no value,then Registration form is invisible.
-    this.resetTheFuckingForm(form); // When we close our form,we need to make sure that we will open it next time
+    this.resetForm(form); // When we close our form,we need to make sure that we will open it next time
     // It will be clear,and wont have previous values.
   }
 }

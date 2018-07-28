@@ -24,7 +24,7 @@ export class ResidentService {
   ) { }
 
   /**
-   * function sends a post request to the server to create a new object
+   * function sends a add request to the server to create a new object
    * @param {Resident} res res-resident object
    * @returns post request to the server
    * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
@@ -43,7 +43,7 @@ export class ResidentService {
 * FIXME💩: Wrong JSDocs + Description with capital letter
 */
   /**
-   * function sends a put request to the server to edit a object
+   * function sends a edit request to the server to edit a object
    * @param {*} id id-id of an object that we want to edit
    * @param {*} res res-Resident object with new values
    * @returns put request to the server
@@ -60,7 +60,7 @@ export class ResidentService {
   }
 
   /**
-   * Function sends a get request to our server to get all Residens.
+   * Function sends a gets  all Residents.
    * @memberof ResidentService
    */
   getResidentList() {
@@ -73,35 +73,24 @@ export class ResidentService {
    * @memberof ResidentService
    */
   /*
-  * FIXME💩: Types
   */
   deleteResident(event) {
     return this.http.delete(environment.residentUlr + event.data.id);
   }
-  /**
-   * function that will send a request to backend so he could returns us all...
-   * flat objects
-   * @returns Flat list(all flat objects)
-   * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
-   */
-  getFlatIds() {
-    return this.http.get(environment.flatsUrl);
-  }
 
   /**
-   * Function that sends a get request to our backend  and returns
-   * a value as a number
-   * @returns number value(Resident amount in all database)
-   * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
+   * Function that gets all resident amount.
+   * @returns numeric value(Resident amount in all database)
+   * @memberof ResidentService
    */
   getAllResidentAmount() {
     return this.http.get(environment.residentAmountUrl).map(residentAmount => residentAmount.json());
   }
   /**
-   * Function that sends a request to get resident amount in specific flat
-   * @param {number} id Flat id number
-   * @returns Returns resident amount in specific flat
-   * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
+   * Function gets amount of residents in one specifick flat.
+   * @param {number} id id of a flat that amount of residents we want to get
+   * @returns Returns a numeric value that is our resident amount in specific flat
+   * @memberof ResidentService
    */
   getResidentAmountInOneFlat(id: number) {
     return this.http.get(environment.flatUrl + id + '/ResidentAmount').map(residentAmount => residentAmount.json());

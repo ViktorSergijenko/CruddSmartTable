@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ResidentService } from '../resident.service';
-import { Http } from '@angular/http';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FlatService } from '../../flat/flat.service';
 import { Resident } from '../resident.model';
 import { NgForm } from '@angular/forms';
 import 'rxjs/add/operator/take';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 /**
  * FIXME💩: Try to remove ../node_modules/  
@@ -255,12 +255,8 @@ export class ResidentTableComponent implements OnInit {
   }
 
   /**
-   * Function is used on button submit in registration or edit form,if in form our object id is null
-   * then when user will click in submit button it will send a post request to server, to create a new object in database,if server
-   * will return an error then user will see the message error that will ensure him what did he do wrong.
-   * If our object in form has id,then when user will click submit button it will send a put request to our server, to
-   * change our object values in database to a new one,if server
-   * will return an error then user will see the message error that will ensure him what did he do wrong.
+   * In Registration form,when we will click submit button,function will send a post request to the server,
+   * same in Edit form,but instead of post request it will send put request.
    * @param {NgForm} form form-this property will say on what form will be used this function
    * @memberof ResidentTableComponent
    */
@@ -271,6 +267,13 @@ export class ResidentTableComponent implements OnInit {
       this.putRequestFunctionInForm(form);
     }
   }
+  /**
+   * This function will send a post request to the server, if request was successfull,  it will
+   * add a new object to the table and then resets edit form values to default,if request was unsuccessfull,then
+   * user will receive an error message. 
+   * @param {NgForm} form
+   * @memberof ResidentTableComponent
+   */
   postRequestFunctionInForm(form: NgForm) {
     forkJoin(
       this.residentService.postResident(form.value),
@@ -285,6 +288,13 @@ export class ResidentTableComponent implements OnInit {
       this.toasterService.popAsync('error', 'Custom error in component', this.errorFromServer);
     });
   }
+  /**
+   * This function will send a put request to the server, if request was successfull,  it will
+   * update object values in table and then resets edit form values to default,if request was unsuccessfull,then
+   * user will receive an error message. 
+   * @param {NgForm} form
+   * @memberof ResidentTableComponent
+   */
   putRequestFunctionInForm(form: NgForm) {
     this.residentService.putResident(form.value.id, form.value)
       .subscribe(editedResident => {

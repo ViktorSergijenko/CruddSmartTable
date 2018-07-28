@@ -2,7 +2,12 @@
 <!-- this is cards with additional info -->
 <nb-card>
   <nb-card-header>
-    <h1>House Table</h1> Total amount of houses in Table: {{totalAmountOfHosesInTable}} houses
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <h1>House Table</h1> Total amount of houses in Table: {{totalAmountOfHosesInTable}} houses
+      </div>
+    </div>
+
   </nb-card-header>
 
   <!-- this is our ng2 smart table -->
@@ -17,7 +22,13 @@
 <!-- this is our edit form -->
 <form class="emp-form" #houseForm="ngForm" (ngSubmit)="onSubmit(houseForm) " *ngIf="editHouseForm">
   <nb-card>
-    <nb-card-header>House Edit Form </nb-card-header>
+    <nb-card-header>
+      <div class="row">
+        <div class="col-sm-12 text-center">
+          House Edit Form
+        </div>
+      </div>
+    </nb-card-header>
     <nb-card-body>
       <div class="row">
         <input type="hidden" *ngIf="selectedHouse && selectedHouse.id" name="id" #id="ngModel" [(ngModel)]="selectedHouse.id">
@@ -71,9 +82,13 @@
           </div>
         </div>
       </div>
-      <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;  ">
-        <button type="submit" [disabled]="!houseForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
-        <button type="button" class="btn btn-hero-danger btn-demo" (click)="onClose(houseForm)">Close</button>
+      <div class="row">
+        <div class="col-sm-6 text-center">
+          <button type="submit" [disabled]="!houseForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
+        </div>
+        <div class="col-sm-6 text-center">
+          <button type="button" class="btn btn-hero-danger btn-demo" (click)="onClose(houseForm)">Close</button>
+        </div>
       </div>
     </nb-card-body>
   </nb-card>
@@ -81,7 +96,13 @@
 <!-- this is our registration form -->
 <form class="emp-form" #houseForm="ngForm" (ngSubmit)="onSubmit(houseForm) " *ngIf="registrationHouseForm">
   <nb-card>
-    <nb-card-header>House Registration Form</nb-card-header>
+    <nb-card-header>
+      <div class="row">
+        <div class="col-sm-12 text-center">
+          House Registration Form
+        </div>
+      </div>
+    </nb-card-header>
     <nb-card-body>
       <div class="row">
         <input type="hidden" *ngIf="selectedHouse && selectedHouse.id" name="id" #id="ngModel" [(ngModel)]="selectedHouse.id">
@@ -135,10 +156,16 @@
           </div>
         </div>
       </div>
-      <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;  ">
-        <button type="submit" [disabled]="!houseForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
-        <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(houseForm)">Reset</button>
-        <button type="button" class="btn btn-hero-danger btn-demo" (click)="onClose(houseForm)">Close</button>
+      <div class="row">
+        <div class="col-sm-4 text-center">
+          <button type="submit" [disabled]="!houseForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
+        </div>
+        <div class="col-sm-4 text-center">
+          <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(houseForm)">Reset</button>
+        </div>
+        <div class="col-sm-4  text-center">
+          <button type="button" class="btn btn-hero-danger btn-demo" (click)="onClose(houseForm)">Close</button>
+        </div>
       </div>
     </nb-card-body>
   </nb-card>

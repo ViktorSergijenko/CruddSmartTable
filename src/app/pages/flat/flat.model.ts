@@ -2,7 +2,7 @@ import { Resident } from '../resident/resident.model';
 
 /**
  * Class(model) that stores all needed properties of flat information,
- * used in crud fucntions.
+ * used in crud functions.
  * @export
  * @class Flat
  */
@@ -18,6 +18,7 @@ export class Flat {
         }
     }
     /**
+     *
      * @property {id} - Primary key field with unique value for house object.
      * @type {number} 
      * @memberof Flat
