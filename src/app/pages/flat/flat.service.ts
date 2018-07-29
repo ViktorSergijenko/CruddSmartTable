@@ -3,8 +3,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import { Flat } from './flat.model';
 import { Http, Headers, RequestOptions, RequestMethod } from '@angular/http';
-import { Resident } from '../resident/resident.model';
-import { House } from '../house/house.model';
 import { environment } from '../../../environments/environment';
 
 
@@ -15,63 +13,9 @@ import { environment } from '../../../environments/environment';
  */
 @Injectable()
 export class FlatService {
-  /**
-   * @property {selectedFlat} -  Property(variable) that can contain one flat object.
-   * @type {Flat}
-   * @memberof FlatService
-   */
-  selectedFlat: Flat;
-  /**
-   * @property {flatList} - Property(array) that can contain array of flat objects.
-   * @type {Flat[]}
-   * @memberof FlatService
-   */
-  flatList: Flat[];
-  /**
-   * @property {houseList} - Array that will contain House Objects.
-   * @type {House[]}
-   * @memberof FlatService
-   */
-  houseList: House[] = [];
-  /**
-   * @property {selectedHouse} - Property(variable) that can contain one house object.
-   * @type {House}
-   * @memberof FlatService
-   */
-  selectedHouse: House;
-  /**
-   * @property {TotalFlatsInTable} - Property(variable) that contains information about amount of flats in table.
-   * @type {number}
-   * @memberof FlatService
-   */
-  totalFlatsInTable: number;
-  /**
-   * @property {TotalFlatsInAdditionalHouse} - Property(variable) that contains information about amount of flats in additional house.
-   * @type {number}
-   * @memberof FlatService
-   */
-  totalFlatsInAdditionalHouse: number;
-  /**
-   * @property {SourtedResidents} - Array that will contain  residents objects from additional flat.
-   * @type {Resident[]}
-   * @memberof FlatService
-   */
-  sourtedResidents: Resident[] = [];
-  /**
-   * @property {FlatRegForm} - Property(variable) that responds for Registration form visability.
-   * @type {number}
-   * @memberof FlatService
-   */
-  flatRegForm: number;
-  /**
-   * @property {FlatEditForm} - Property(variable) that responds for Edit form visability.
-   * @type {number}
-   * @memberof FlatService
-   */
-  flatEditForm: number;
   constructor(private http: Http) { }
   /**
-   * Function sends a post request to the server to create a new object.
+   * Function sends a request to add a Flat object.
    * @param {Flat} flat Flat-this property is a flat object.
    * @returns Post request to the server.
    * @memberof FlatService 
@@ -83,27 +27,27 @@ export class FlatService {
     return this.http.post(environment.flatsUrl, body, requestOptions).map(newFlat => newFlat.json());
   }
   /**
-   * Function sends a put request to the server to edit a object.
+   * Function sends a edit request to  edit a Flat object.
    * @param {*} id id-Id of an object that we want to edit.
    * @param {*} flat flat-Flat object with new values.
    * @returns Put request to the server.
    * @memberof FlatService
    */
-  editFlat(id, flat) {
+  editFlat(id: number, flat: Flat) {
     const body = JSON.stringify(flat);
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Put, headers: headerOptions });
     return this.http.put(environment.flatUrl + id, body, requestOptions).map(editedFlat => editedFlat.json());
   }
   /**
-   * Function sends a get request to our server,and returns all data.(in our case it is Flat array).
+   * Function sends a request to get all flats.
    * @memberof FlatService
    */
   getFlatList() {
     return this.http.get(environment.flatsUrl).map(flats => flats.json());
   }
   /**
-   *Function sends a delete request on our server to delete a object that user wants to.
+   * Function sends a request to delete a object.
    * @param {*} event event-Flat Object.
    * @memberof FlatService
    */
@@ -112,17 +56,16 @@ export class FlatService {
   }
 
   /**
-   * Function sends a get request to our server to get all residents that live in
-   * additional flat.
+   * Function sends a request to get residents from specific flat.
    * @param {number} id id - Id of a flat that we want to get residents from.
-   * @returns Returns an array of residents objects that live in additional flat.
+   * @returns Returns an array of residents objects that live in specific flat.
    * @memberof FlatService
    */
   getFlatResidents(id: number) {
     return this.http.get(environment.flatUrl + id + '/residents').map(flatResidents => flatResidents.json());
   }
   /**
-   * Function will send get request to our server to get one additional flat that we want to.
+   * Function will send request to get one additional flat that we want to.
    * @param {number} id id- Id of a flat that we want to get.
    * @returns Returns one flat object.
    * @memberof FlatService
@@ -131,7 +74,7 @@ export class FlatService {
     return this.http.get(environment.flatUrl + id).map(oneFlat => oneFlat.json());
   }
   /**
-   * Function that sends a get request to our server.
+   * Function that sends a request to get amount of all flats.
    * @returns Returns a number value(Flat amount in all database).
    * @memberof FlatService
    */

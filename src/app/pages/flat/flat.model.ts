@@ -8,7 +8,7 @@ import { Resident } from '../resident/resident.model';
  */
 export class Flat {
     /**
-     *Creates an instance of Flat, where our additionalHouseId param will give our houseId property his value.
+     * Creates an instance of Flat, where our additionalHouseId param will give our houseId property his value.
      * @param {number} additionalHouseId 
      * @memberof Flat
      */
@@ -19,44 +19,49 @@ export class Flat {
     }
     /**
      *
-     * @property {id} - Primary key field with unique value for house object.
+     * Primary key field with unique value for house object.
      * @type {number} 
      * @memberof Flat
      */
     id: number;
     /**
-     * @property {floor} - Property that will will store information about floor that flat is located.
+     * Property that will will store information about floor that flat is located.
      * @type {number}
      * @memberof Flat
      */
     floor: number;
     /**
-     * @property {number} - Property that will will store information about flat number.
+     * Property that will will store information about flat number.
      * @type {number}
      * @memberof Flat
      */
     number: number;
     /**
-     * @property {totalarea} - Property that will will store information about Total area of flat.
+     * Property that will will store information about Total area of flat.
      * @type {number}
      * @memberof Flat
      */
     totalarea: number;
     /**
-     * @property {livingspace} - Property that will will store information about Living space area.
+     * Property that will will store information about Living space area.
      * @type {number}
      * @memberof Flat
      */
     livingspace: number;
     /**
-     * @property {residentamount} - Property that will will store information about amount of residents that lives in this flat.
+     * Property that will will store information about amount of residents that lives in this flat.
      * @type {number}
      * @memberof Flat
      */
     residentamount: number;
+    /**
+     * This array will contain all residents that live in this flat.
+     * @type {Resident[]}
+     * @memberof Flat
+     */
     residents: Resident[];
     /**
-     * @property {houseid} - Property that will will store information about house id that this flat is located.
+     * Property that will will store information about house id that this flat is located.
      * @type {number}
      * @memberof Flat
      */

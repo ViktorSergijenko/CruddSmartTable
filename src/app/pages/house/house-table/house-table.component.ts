@@ -15,25 +15,47 @@ import { ToasterService } from '../../../../../node_modules/angular2-toaster';
 @Component({
   selector: 'app-house-table',
   templateUrl: './house-table.component.html',
-  styles: [`
-  nb-card {
-    transform: translate3d(0, 0, 0);
-  }
-`],
+  styleUrls: ['../house.component.scss'],
 })
 export class HouseTableComponent implements OnInit {
 
   /**
-   * @property {errorFromServer} - variable that contains an error text.
+   * @property {errorFromServer} - variable that will contain an error text.
    * @type {string}
    * @memberof HouseTableComponent
    */
   errorFromServer: string;
+
+  /**
+   * Variable contains a flat object that we want to edit.
+   * @type {Flat}
+   * @memberof HouseTableComponent
+   */
   houseThatWeWantToChange;
+  /**
+   * Variable that will contain a numeric value that will be our amoint of houses.
+   * @type {number}
+   * @memberof HouseTableComponent
+   */
   totalAmountOfHosesInTable: number;
+  /**
+   * Variable will contain a House object that user will select
+   * @type {House}
+   * @memberof HouseTableComponent
+   */
   selectedHouse: House;
-  registrationHouseForm: number;
-  editHouseForm: number;
+  /**
+   * Variable that responds for visability of our registration form.
+   * @type {boolean}
+   * @memberof HouseTableComponent
+   */
+  registrationHouseFormVisible: boolean;
+  /**
+   * Variable that responds for visability of our edit form.
+   * @type {boolean}
+   * @memberof HouseTableComponent
+   */
+  editHouseFormVisible: boolean;
 
   /**
    * Settings is a ng2 smart table property where we can set all needed setings for our table(columns names,actions.....)
@@ -106,7 +128,7 @@ export class HouseTableComponent implements OnInit {
   };
   source: LocalDataSource = new LocalDataSource();
   /**
-   * Creates an instance of HouseTableComponent,sets Registration form and Edit form invisible and creates a new House Object,
+   * Creates an instance of HouseTableComponent new House Object,
    * Then constructor sends a get request to the server,loads all objects that we get in to our table and counts it amount.
    * @param {HouseService} houseService - Includes all variables and functions to make crud requests on server.
    * @param {Http} http HTTP requests.
@@ -124,8 +146,6 @@ export class HouseTableComponent implements OnInit {
     private errorHandler: ProcessHttpMsgService,
     private toasterService: ToasterService,
   ) {
-    this.registrationHouseForm = null;
-    this.editHouseForm = null;
     this.selectedHouse = new House();
   }
 
@@ -137,7 +157,7 @@ export class HouseTableComponent implements OnInit {
     });
   }
   /**
-   * This function will call "deleteResident" function that will make a delete request.
+   * This function will delete a house Object.
    * @param {*} event - event-Object,in our case it is House object
    * @memberof HouseTableComponent
    */
@@ -152,7 +172,7 @@ export class HouseTableComponent implements OnInit {
    * @memberof HouseTableComponent
    */
   onCreateConfirm(): void {
-    this.registrationHouseForm = 1; // if RegistrationHouseForm value is not 0, then it will be shown
+    this.registrationHouseFormVisible = true; // if RegistrationHouseForm value is false, then it will be shown
   }
   /**
   * If user will click on 'pencil' button, it will open edit form
@@ -160,9 +180,9 @@ export class HouseTableComponent implements OnInit {
   * @memberof HouseTableComponent
   */
   onSaveConfirm(event): void {
-    this.houseThatWeWantToChange = event;
+    this.houseThatWeWantToChange = event.data;
     this.selectedHouse = Object.assign({}, event.data); // this will send all values that has our object that we want to edit to our form
-    this.editHouseForm = 1; // if EditHouseForm value is not 0, then it will be shown
+    this.editHouseFormVisible = true; // if EditHouseForm value is not 0, then it will be shown
   }
   /**
    * Give us posability to click on a row
@@ -182,71 +202,78 @@ export class HouseTableComponent implements OnInit {
    */
   onClose(form?: NgForm): void {
     this.resetForm(form);
-    this.registrationHouseForm = null;
-    this.editHouseForm = null;
+    this.registrationHouseFormVisible = false;
+    this.editHouseFormVisible = false;
   }
 
   /**
-   * Function will reset our object values un form
-   * @param {NgForm} [form] form-this property will say on what form will be used this function
+   * Function will reset our object values in form.
+   * @param {NgForm} [form] Form-this property will say on what form will be used this function.
    * @memberof HouseTableComponent
    */
   resetForm(form?: NgForm) {
-    // tslint:disable-next-line:curly
     if (form != null)
       form.reset();
     this.selectedHouse = new House();
   }
   /**
-   * In Registration form,when we will click submit button,function will send a post request to the server,
-   * same in Edit form,but instead of post request it will send put request.
+   * Clicking on submit will prevent action that adds, or edits a House Object,
+   * depends in what form you are using it.
    * @param {NgForm} form form - paramater that will be our form that we use
    * @memberof HouseTableComponent
    */
   onSubmit(form: NgForm) {
-    if (!form.value.id) {
-      this.postRequestFunctionInForm(form);
+    if (form.value.id) {
+      this.addRequestFunctionInForm(form);
     } else {
-      this.putRequestFunctionInForm(form);
+      this.editRequestFunctionInForm(form);
+    }
+
+  }
+  /**
+   * Clicking on submit button in Registration form, this function will edit a house object.
+   * @param {NgForm} form Form values.
+   * @memberof HouseTableComponent
+   */
+  editRequestFunctionInForm(form: NgForm) {
+    if (form.value.id) {
+      this.houseService.editHouse(form.value.id, form.value)
+        .subscribe(editedHouse => { // Sending a put request to edit a house values in server.
+          this.source.update(this.houseThatWeWantToChange.data, editedHouse); // Modifying our  house object values in table.
+          this.resetForm(form); // Reseting form values
+          this.toasterService.popAsync('Record updated', 'House info was changed');
+        }, (err) => { // If we reaceave an error from server
+          this.errorFromServer = err.text(); // We will put a message from error to our local variable 'errorFromServer'
+          // And toastr will notify user with this error message
+          this.toasterService.popAsync('error', 'Custom error in component', this.errorFromServer);
+        },
+      );
+    } else {
+      return null;
     }
   }
   /**
-   * This function will send a put request to the server, if request was successfull,  it will
-   * update object values in table and then resets edit form values to default,if request was unsuccessfull,then
-   * user will receive an error message. 
-   * @param {NgForm} form
+   * Clicking on submit button in Edit form,this function will add a new house.
+   * @param {NgForm} form Form values.
    * @memberof HouseTableComponent
    */
-  putRequestFunctionInForm(form: NgForm) {
-    this.houseService.putHouse(form.value.id, form.value)
-      .subscribe(editedHouse => {
-        this.source.update(this.houseThatWeWantToChange.data, editedHouse);
-        this.resetForm(form);
-        this.toasterService.popAsync('Record updated', 'House info was changed');
-      }, (err) => {
-        this.errorFromServer = err.text();
+  addRequestFunctionInForm(form: NgForm) {
+    if (!form.value.id) {
+      this.houseService.addHouse(form.value).subscribe(newHouse => { // Sending a post request to add a new house in server
+        this.source.prepend(newHouse); // Adding new house in our table
+        this.resetForm(form); // Reseting form values
+        this.totalAmountOfHosesInTable = this.source.count(); // Counting amount of houses in our table.
+        this.toasterService.popAsync('success', 'House was added'); // If house was successfully added,then user will reaceave a toastr message
+      }, (err) => { // If we reaceave an error from server
+        this.errorFromServer = err.text(); // We will put a message from error to our local variable 'errorFromServer'
+        // And toastr will notify user with this error message
         this.toasterService.popAsync('error', 'Custom error in component', this.errorFromServer);
       },
-    );
-  }
-  /**
-   * This function will send a post request to the server, if request was successfull,  it will
-   * add a new object to the table and then resets edit form values to default,if request was unsuccessfull,then
-   * user will receive an error message. 
-   * @param {NgForm} form
-   * @memberof HouseTableComponent
-   */
-  postRequestFunctionInForm(form: NgForm) {
-    this.houseService.postHouse(form.value).subscribe(newHouse => {
-      this.source.prepend(newHouse);
-      this.resetForm(form);
-      this.totalAmountOfHosesInTable = this.source.count();
-      this.toasterService.popAsync('success', 'House was added');
-    }, (err) => {
-      this.errorFromServer = err.text();
-      this.toasterService.popAsync('error', 'Custom error in component', this.errorFromServer);
-    },
-    );
+      );
+    } else {
+      return null;
+    }
+
   }
 }
 

@@ -57,7 +57,7 @@
 
 
 <!-- this is our registration form -->
-<form class="emp-form" #flatForm="ngForm" (ngSubmit)="onSubmit(flatForm)" *ngIf="flatRegForm">
+<form class="emp-form" #flatForm="ngForm" (ngSubmit)="onSubmit(flatForm)" *ngIf="flatRegFormVisible">
   <nb-card>
     <nb-card-header>
       <div class="row">
@@ -119,7 +119,7 @@
   </nb-card>
 </form>
 <!-- this is our edit form -->
-<form class="emp-form" #flatForm="ngForm" (ngSubmit)="onSubmit(flatForm)" *ngIf="flatEditForm">
+<form class="emp-form" #flatForm="ngForm" (ngSubmit)="onSubmit(flatForm)" *ngIf="flatEditFormVisible">
   <nb-card>
     <nb-card-header>
       <div class="row">

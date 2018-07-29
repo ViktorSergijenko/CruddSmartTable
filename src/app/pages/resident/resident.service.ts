@@ -24,15 +24,15 @@ export class ResidentService {
   ) { }
 
   /**
-   * function sends a add request to the server to create a new object
+   * Function sends a  request to create a new object
    * @param {Resident} res res-resident object
    * @returns post request to the server
-   * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
+   * @memberof ResidentService 
    */
   /**
  * FIXME💩: stringify not needed, re-check your logic + header and request options (not needed)
  */
-  postResident(res: Resident) {
+  addResident(res: Resident) {
     const body = JSON.stringify(res); // why i cant use var and let instead of const here?
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Post, headers: headerOptions });
@@ -43,16 +43,16 @@ export class ResidentService {
 * FIXME💩: Wrong JSDocs + Description with capital letter
 */
   /**
-   * function sends a edit request to the server to edit a object
+   * Function sends a request to the server to edit a object
    * @param {*} id id-id of an object that we want to edit
    * @param {*} res res-Resident object with new values
    * @returns put request to the server
-   * @memberof ResidentService ResidentService-Service that contains all RESTfull functions that we need
+   * @memberof ResidentService 
    */
   /**
    * FIXME💩: Types + stringify not needed, re-check your logic + header and request options (not needed)
    */
-  putResident(id, res) {
+  editResident(id, res) {
     const body = JSON.stringify(res);
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Put, headers: headerOptions });
@@ -60,7 +60,7 @@ export class ResidentService {
   }
 
   /**
-   * Function sends a gets  all Residents.
+   * Function sends a request to get  all Residents.
    * @memberof ResidentService
    */
   getResidentList() {
@@ -68,7 +68,7 @@ export class ResidentService {
   }
 
   /**
-   * Function sends a delete request to server to delete a object.
+   * Function sends a request to delete a rESIDENT object.
    * @param {*} event event- Resident Object
    * @memberof ResidentService
    */
@@ -80,14 +80,14 @@ export class ResidentService {
 
   /**
    * Function that gets all resident amount.
-   * @returns numeric value(Resident amount in all database)
+   * @returns Numeric value(Resident amount in all database)
    * @memberof ResidentService
    */
   getAllResidentAmount() {
     return this.http.get(environment.residentAmountUrl).map(residentAmount => residentAmount.json());
   }
   /**
-   * Function gets amount of residents in one specifick flat.
+   * Function gets amount of residents in one specific flat.
    * @param {number} id id of a flat that amount of residents we want to get
    * @returns Returns a numeric value that is our resident amount in specific flat
    * @memberof ResidentService

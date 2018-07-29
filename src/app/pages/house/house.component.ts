@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { HouseService } from './house.service';
+import { Component } from '@angular/core';
+
 @Component({
   selector: 'app-house',
   template: `<router-outlet></router-outlet>`,
-  // providers: [ HouseService ],
 })
 export class HouseComponent {
 
