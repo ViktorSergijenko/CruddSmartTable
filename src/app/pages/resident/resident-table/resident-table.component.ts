@@ -215,7 +215,7 @@ export class ResidentTableComponent implements OnInit {
   // + you dont need "-" after param name. Good example: @param {*} event Event of something
   /**
    * Function will delete a resident.
-   * @param {*} event - event-Resident Object
+   * @param {*} event  event-Resident Object
    * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
    */
   onDeleteConfirm(event): void {
