@@ -18,9 +18,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProcessHttpMsgService } from './process-httpmsg.service';
 import { ToasterModule } from 'angular2-toaster';
 import { InternationalPhoneModule } from 'ng4-intl-phone';
+import { AutoCompleteComponent } from './pages/AutoCompleteComponent/AutoComplete.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, AutoCompleteComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

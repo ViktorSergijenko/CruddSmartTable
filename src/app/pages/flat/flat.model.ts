@@ -1,20 +1,21 @@
 import { Resident } from '../resident/resident.model';
+import { House } from '../house/house.model';
 
 /**
- * Class(model) that stores all needed properties of flat information,
+ * Class(model) that describes Flat object,
  * used in crud functions.
  * @export
  * @class Flat
  */
 export class Flat {
     /**
-     * Creates an instance of Flat, where our additionalHouseId param will give our houseId property his value.
-     * @param {number} additionalHouseId 
+     * Creates an instance of Flat, where our specificHouseId param will give our houseId property his value.
+     * @param {number} specificHouseId 
      * @memberof Flat
      */
-    constructor(additionalHouseId: number) {
-        if (additionalHouseId) {
-            this.houseid = additionalHouseId;
+    constructor(specificHouseId: number) {
+        if (specificHouseId) {
+            this.houseid = specificHouseId;
         }
     }
     /**
@@ -25,45 +26,46 @@ export class Flat {
      */
     id: number;
     /**
-     * Property that will will store information about floor that flat is located.
+     *  Information about floor that flat is located.
      * @type {number}
      * @memberof Flat
      */
     floor: number;
     /**
-     * Property that will will store information about flat number.
+     *  Information about flat number.
      * @type {number}
      * @memberof Flat
      */
     number: number;
     /**
-     * Property that will will store information about Total area of flat.
+     *  Information about Total area of flat.
      * @type {number}
      * @memberof Flat
      */
     totalarea: number;
     /**
-     * Property that will will store information about Living space area.
+     *  Information about Living space area.
      * @type {number}
      * @memberof Flat
      */
     livingspace: number;
     /**
-     * Property that will will store information about amount of residents that lives in this flat.
+     *  Information about amount of residents that lives in this flat.
      * @type {number}
      * @memberof Flat
      */
     residentamount: number;
     /**
-     * This array will contain all residents that live in this flat.
+     * Array with residents objects.
      * @type {Resident[]}
      * @memberof Flat
      */
     residents: Resident[];
     /**
-     * Property that will will store information about house id that this flat is located.
+     *  Information about house id in that this flat is located.
      * @type {number}
      * @memberof Flat
      */
     houseid: number;
+    house: House;
 }

@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment';
 
 
 /**
- * This class has all needed properties(variables) and functions to provide crud requests.
+ * This class has all needed functions to provide crud requests.
  * @export
  * @class FlatService
  */
@@ -48,7 +48,7 @@ export class FlatService {
   }
   /**
    * Function sends a request to delete a object.
-   * @param {*} event event-Flat Object.
+   * @param {*} event event- Ng2 Smart table event object which contains row data
    * @memberof FlatService
    */
   deleteFlat(event) {

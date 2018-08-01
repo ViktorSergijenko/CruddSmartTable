@@ -3,7 +3,7 @@
 <ng-template #card>
   <nb-card class="popover-card">
     <nb-card-header status="warning">
-      House Info
+      Flat Info
     </nb-card-header>
     <nb-card-body>
       Floor: {{ selectedFlat.floor}}
@@ -21,7 +21,7 @@
   <nb-card-header>
     <div class="row">
       <div class="col-sm-4">
-        <button class="btn btn-warning with-margins" [nbPopover]="card">With card</button>
+        <button class="btn btn-warning with-margins" [nbPopover]="card" nbPopoverPlacement="left">With card</button>
       </div>
 
       <div class="col-sm-4 text-center">
@@ -34,14 +34,14 @@
   <!-- this is my ng smart table -->
   <nb-card-body>
 
-    <ng2-smart-table [settings]="settings" [source]="source" (delete)="onDeleteConfirm($event)" (edit)="onSaveConfirm($event)"
-      (create)="onCreateConfirm($event)">
+    <ng2-smart-table [settings]="settings" [source]="source" (delete)="deleteResidentFromTable($event)" (edit)="openResidentEditForm($event)"
+      (create)="openResidentRegistrationForm($event)">
     </ng2-smart-table>
   </nb-card-body>
-  <button class="btn btn-hero-primary btn-demo" (click)="goBack()">Go Back</button>
+  <button class="btn btn-hero-primary btn-demo" (click)="navigateToPreviousPage()">Go Back</button>
 </nb-card>
 <!-- this is my registration form -->
-<form class="emp-form" #residentForm="ngForm" (ngSubmit)="onSubmit(residentForm)" *ngIf="residentRegForm">
+<form class="emp-form" #residentForm="ngForm" (ngSubmit)="onSubmit(residentForm)" *ngIf="residentRegFormVisable">
   <nb-card>
     <nb-card-header>
       <div class="row">
@@ -57,36 +57,63 @@
           <div class="form-group">
             <label for="inputstreet">First Name</label>
             <input class="form-control" id="inputstreet" name="firstname" #firstname="ngModel" [(ngModel)]="selectedResident.firstname"
-              placeholder="First Name" required>
-            <div class="validation-error" *ngIf="firstname.invalid && firstname.touched">This field is Required</div>
+              placeholder="First Name" [class.form-control-danger]="firstname.invalid && firstname.touched" required>
+            <div class="md-errors-spacer" [hidden]="firstname.valid || firstname.untouched">
+              <div *ngIf="firstname.errors && firstname.errors['required']">
+                First Name is required
+              </div>
+
+            </div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputnumber">Last Name</label>
             <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="selectedResident.lastname"
-              placeholder="Last Name" required>
-            <div class="validation-error" *ngIf="lastname.invalid && lastname.touched">This field is Required</div>
+              placeholder="Last Name" [class.form-control-danger]="lastname.invalid && lastname.touched" required>
+            <div class="md-errors-spacer" [hidden]="lastname.valid || lastname.untouched">
+              <div *ngIf="lastname.errors && lastname.errors['required']">
+                Last Name is required
+              </div>
+
+            </div>
+
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputpostcode">Post Code</label>
             <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="selectedResident.postcode"
-              placeholder="Post Code" required>
-            <div class="validation-error" *ngIf="postcode.invalid && postcode.touched">This field is Required</div>
+              placeholder="Post Code" [class.form-control-danger]="postcode.invalid && postcode.touched" required>
+            <div class="md-errors-spacer" [hidden]="postcode.valid || postcode.untouched">
+              <div *ngIf="postcode.errors && postcode.errors['required']">
+                Post Code is required
+              </div>
+
+            </div>
+
           </div>
         </div>
         <div class="col-sm-6">
-          <!-- <div class="form-group">
+          <div class="form-group">
             <label for="inputphone">Phone Number</label>
             <input type="text" class="form-control" id="inputphone" name="phone" #phone="ngModel" [(ngModel)]="selectedResident.phone"
-              placeholder="Phone Number" pattern="[0-9]*" required>
-            <div class="validation-error" *ngIf="phone.invalid && phone.touched">This field is Required</div>
+              placeholder="Phone Number" [class.form-control-danger]="phone.invalid && phone.touched" required>
+            <div class="md-errors-spacer" [hidden]="phone.valid || phone.untouched">
+              <div *ngIf="phone.errors && phone.errors['required']">
+                Phone Number is required
+              </div>
+            </div>
+          </div>
+          <!-- <label for="inputcity">Phone Number</label>
+          <int-phone-prefix name="phone" #phone="ngModel" [(ngModel)]="selectedResident.phone" [class.form-control-danger]="phone.invalid && phone.touched"
+            required></int-phone-prefix>
+          <div class="md-errors-spacer" [hidden]="phone.valid || phone.untouched">
+            <div *ngIf="phone.errors && phone.errors['required']">
+              Phone is required
+            </div>
+
           </div> -->
-          <label for="inputcity">Phone Number</label>
-          <int-phone-prefix name="phone" #phone="ngModel" [(ngModel)]="selectedResident.phone" required></int-phone-prefix>
-          <div class="validation-error" *ngIf="phone.invalid && phone.touched">This field is Required</div>
 
         </div>
         <div class="col-sm-6">
@@ -96,7 +123,7 @@
               placeholder="Email" class="form-control" placeholder="Email address" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
               [class.form-control-danger]="email.invalid && email.touched" required>
             <div class="md-errors-spacer" [hidden]="email.valid || email.untouched">
-              <div *ngIf="email.errors && email.errors.required">
+              <div *ngIf="email.errors && email.errors['required']">
                 Email is required
               </div>
               <div *ngIf="email.errors && email.errors.pattern">
@@ -113,10 +140,10 @@
           <button type="submit" [disabled]="!residentForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
         </div>
         <div class="col-sm-4 text-center">
-          <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(residentForm)">Reset</button>
+          <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetResidentForm(residentForm)">Reset</button>
         </div>
         <div class="col-sm-4 text-center">
-          <button type="button" class="btn btn-hero-danger btn-demo" (click)="onClose(flatForm)">Close</button>
+          <button type="button" class="btn btn-hero-danger btn-demo" (click)="closeResidentRegistrationOrEditForm(residentForm)">Close</button>
         </div>
       </div>
 
@@ -125,7 +152,7 @@
   </nb-card>
 </form>
 <!-- This is my edit form -->
-<form class="emp-form" #residentForm="ngForm" (ngSubmit)="onSubmit(residentForm)" *ngIf="residentEditForm">
+<form class="emp-form" #residentForm="ngForm" (ngSubmit)="onSubmit(residentForm)" *ngIf="residentEditFormVisable">
   <nb-card>
     <nb-card-header>Resident Edit Form</nb-card-header>
     <nb-card-body>
@@ -137,46 +164,86 @@
           <div class="form-group">
             <label for="inputstreet">First Name</label>
             <input class="form-control" id="inputstreet" name="firstname" #firstname="ngModel" [(ngModel)]="selectedResident.firstname"
-              placeholder="First Name" required>
-            <div class="validation-error" *ngIf="firstname.invalid && firstname.touched">This field is Required</div>
+              placeholder="First Name" [class.form-control-danger]="firstname.invalid && firstname.touched" required>
+            <div class="md-errors-spacer" [hidden]="firstname.valid || firstname.untouched">
+              <div *ngIf="firstname.errors && firstname.errors['required']">
+                First Name is required
+              </div>
+
+            </div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputnumber">Last Name</label>
             <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="selectedResident.lastname"
-              placeholder="Last Name" required>
-            <div class="validation-error" *ngIf="lastname.invalid && lastname.touched">This field is Required</div>
+              placeholder="Last Name" [class.form-control-danger]="lastname.invalid && lastname.touched" required>
+            <div class="md-errors-spacer" [hidden]="lastname.valid || lastname.untouched">
+              <div *ngIf="lastname.errors && lastname.errors['required']">
+                Last Name is required
+              </div>
+
+            </div>
+
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputpostcode">Post Code</label>
             <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="selectedResident.postcode"
-              placeholder="Post Code" required>
-            <div class="validation-error" *ngIf="postcode.invalid && postcode.touched">This field is Required</div>
+              placeholder="Post Code" [class.form-control-danger]="postcode.invalid && postcode.touched" required>
+            <div class="md-errors-spacer" [hidden]="postcode.valid || postcode.untouched">
+              <div *ngIf="postcode.errors && postcode.errors['required']">
+                Post Code is required
+              </div>
+
+            </div>
+
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputcity">Phone Number</label>
-            <input type="text" class="form-control" id="inputcity" name="phone" #phone="ngModel" [(ngModel)]="selectedResident.phone"
-              placeholder="Phone Number" [pattern]="phonePattern" required>
-            <div class="validation-error" *ngIf="phone.invalid && phone.touched">This field is Required</div>
+            <label for="inputphone">Phone Number</label>
+            <input type="text" class="form-control" id="inputphone" name="phone" #phone="ngModel" [(ngModel)]="selectedResident.phone"
+              placeholder="Phone Number" [class.form-control-danger]="phone.invalid && phone.touched" required>
+            <div class="md-errors-spacer" [hidden]="phone.valid || phone.untouched">
+              <div *ngIf="phone.errors && phone.errors['required']">
+                Phone Number is required
+              </div>
+            </div>
           </div>
+          <!-- <label for="inputcity">Phone Number</label>
+          <int-phone-prefix name="phone" #phone="ngModel" [(ngModel)]="selectedResident.phone" [class.form-control-danger]="phone.invalid && phone.touched"
+            required></int-phone-prefix>
+          <div class="md-errors-spacer" [hidden]="phone.valid || phone.untouched">
+            <div *ngIf="phone.errors && phone.errors['required']">
+              Phone is required
+            </div>
+
+          </div> -->
+
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputcountry">Email</label>
             <input type="text" class="form-control" id="inputcountry" name="email" #email="ngModel" [(ngModel)]="selectedResident.email"
-              placeholder="Email" required>
-            <div class="validation-error" *ngIf="email.invalid && email.touched">This field is Required</div>
+              placeholder="Email" class="form-control" placeholder="Email address" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+              [class.form-control-danger]="email.invalid && email.touched" required>
+            <div class="md-errors-spacer" [hidden]="email.valid || email.untouched">
+              <div *ngIf="email.errors && email.errors['required']">
+                Email is required
+              </div>
+              <div *ngIf="email.errors && email.errors.pattern">
+                Email is invalid
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
       <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;  ">
         <button type="submit" [disabled]="!residentForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
-        <button type="button" class="btn btn-hero-danger btn-demo" (click)="onClose(flatForm)">Close</button>
+        <button type="button" class="btn btn-hero-danger btn-demo" (click)="closeResidentRegistrationOrEditForm(residentForm)">Close</button>
       </div>
 
     </nb-card-body>

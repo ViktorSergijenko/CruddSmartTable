@@ -7,9 +7,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { Flat } from '../flat.model';
 import { NgForm } from '@angular/forms';
-import { ToasterService } from '../../../../../node_modules/angular2-toaster';
+import { ToasterService } from 'angular2-toaster';
 import { House } from '../../house/house.model';
-import { forkJoin } from '../../../../../node_modules/rxjs';
+import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-flat-table',
   templateUrl: './flat-table.component.html',
@@ -21,7 +21,7 @@ export class FlatTableComponent implements OnInit {
    * @type {number}
    * @memberof FlatTableComponent
    */
-  additionalHouseId: any = null;
+  specificHouseId: any = null;
   /**
    * Variable that contains an error text.
    * @type {string}
@@ -34,13 +34,13 @@ export class FlatTableComponent implements OnInit {
    */
   selectedFlat: Flat;
   /**
-   * Property(array) that can contain array of flat objects.
+   * Array that can contain array of flat objects.
    * @type {Flat[]}
    * @memberof FlatTableComponent
    */
   flatList: Flat[];
   /**
-   * Property(variable) that can contain one house object.
+   * Variable with type 'House' that can contain one house object.
    * @type {House}
    * @memberof FlatTableComponent
    */
@@ -53,19 +53,19 @@ export class FlatTableComponent implements OnInit {
   totalFlatsInTable: number;
   flatThatWeWantToChange;
   /**
-   * Property(variable) that contains information about amount of flats in additional house.
+   * Variable that contains information about amount of flats in additional house.
    * @type {number}
    * @memberof FlatTableComponent
    */
   totalFlatsInAdditionalHouse: number;
   /**
-   * Property(variable) that responds for Registration form visability.
+   * Variable that responds for Registration form visability.
    * @type {number}
    * @memberof FlatTableComponent
    */
   flatRegFormVisible: boolean;
   /**
-   * Property(variable) that responds for Edit form visability.
+   * Variable that responds for Edit form visability.
    * @type {boolean}
    * @memberof FlatTableComponent
    */
@@ -77,7 +77,7 @@ export class FlatTableComponent implements OnInit {
    */
   sourtedFlatList: Flat[];
   /**
-   * Settings is a ng2 smart table property where we can set all needed setings for our table(columns names,actions.....)
+   * Ng2 Smart Table settings.
    * @memberof FlatTableComponent
    */
   settings = {
@@ -142,11 +142,11 @@ export class FlatTableComponent implements OnInit {
 
   source: LocalDataSource = new LocalDataSource();
   /**
-   *Creates an instance of FlatTableComponent.
+   * Creates an instance of FlatTableComponent
    * @param {FlatService} flatService - Includes all variables and functions to make crud requests on server
    * @param {HouseService} houseService - Includes all variables and functions to make crud requests on server
-   * @param {Location} location - Location functions.
-   * @param {ActivatedRoute} route Route params.
+   * @param {Location} location - Location functions
+   * @param {ActivatedRoute} route Route params
    * @param {Router} router - Route
    * @param {ToasterService} toasterService - Toastr
    * @memberof FlatTableComponent
@@ -161,27 +161,25 @@ export class FlatTableComponent implements OnInit {
   ) {
   }
   ngOnInit() {
-    this.gettingHouseIdFromRoute(); // First we get a house id,to ensure that we will load exactly those flats that we want to load.
-    // Also there's cases when there can be no house id in our Route.
-    // If we dont have house id.
+    this.gettingHouseIdFromRoute(); // First we get a house id,to ensure that we will load exactly those flats that we want to load
+    // Also there's cases when there can be no house id in our Route
+    // If we dont have house id
     this.loadAllFlatsInTableAndCountThem(); // Then we will load all flats in to our table.
-    // If we have house id.
+    // If we have house id
     this.loadAdditionalHouseFlatsAndCountThem(); // Then we will load only those flats,that are located ...
-    // In house that id is equal to "additionalHouseId" value.
+    // In house that id is equal to "specificHouseId" value
 
   }
 
   /**
-   * Function gets House id value.
+   * Function gets specific House id value.
    * @memberof FlatTableComponent
    */
   gettingHouseIdFromRoute() {
     // Getting a route param from our routing.
-    // this.route.params.subscribe((params: any) => {
-    // this.additionalHouseId = params.id; // Putting this route param in to our locate variable "additionalHouseId".
-    this.additionalHouseId = this.route.snapshot.paramMap.get('id');
-    this.selectedFlat = new Flat(this.additionalHouseId); // Using additionalHouseId variable in Flat object constructor.
-    this.sourtedFlatList = []; // To avoid problems with table loading, we clear all that could be in our sourtedFlatList array.
+    this.specificHouseId = this.route.snapshot.paramMap.get('id');
+    this.selectedFlat = new Flat(this.specificHouseId); // Using specificHouseId variable in Flat object constructor.
+    this.sourtedFlatList = []; // To avoid problems with table loading, we clear all that could be in our sourtedFlatList array
     // });
   }
   /**
@@ -189,28 +187,28 @@ export class FlatTableComponent implements OnInit {
    * @memberof FlatTableComponent
    */
   loadAllFlatsInTableAndCountThem() {
-    if (!this.additionalHouseId || this.additionalHouseId === 'all') {
+    if (!this.specificHouseId || this.specificHouseId === 'all') {
       // Getting all flats from server.
       this.flatService.getFlatList().subscribe(flats => {
-        this.flatList = flats; // Putting this flats in to flatList array.
-        this.source.load(this.flatList); // Loading this flats in to our table.
-        this.totalFlatsInTable = this.source.count(); // Counting amount of flats that was laoded in to our table.
+        this.flatList = flats; // Putting this flats in to flatList array
+        this.source.load(this.flatList); // Loading this flats in to our table
+        this.totalFlatsInTable = this.source.count(); // Counting amount of flats that was laoded in to our table
       });
     }
   }
   /**
-   * Function will load to our table only those flats, that are located in additional house,and count their amount.
+   * Function will load to our table only those flats, that are located in additional house,and count their amount
    * @memberof FlatTableComponent
    */
   loadAdditionalHouseFlatsAndCountThem() {
     forkJoin(
-      // Getting flats that are located in house, that has id equal to "additionalHouseId" value.
-      this.houseService.getOneHouse(this.additionalHouseId),
-      this.houseService.getHouseFlats(this.additionalHouseId),
+      // Getting flats that are located in house, that has id equal to "specificHouseId" value
+      this.houseService.getOneHouse(this.specificHouseId),
+      this.houseService.getHouseFlats(this.specificHouseId),
       // Getting Info about house, where our falts are located.
 
     ).subscribe(houseAndItsFlats => {
-      if (this.additionalHouseId) {
+      if (this.specificHouseId) {
         // Putting our house in to selectedHouse variable,to get house info later.
         this.selectedHouse = houseAndItsFlats[0];
         // Loading this flats to our table.
@@ -229,20 +227,20 @@ export class FlatTableComponent implements OnInit {
   }
 
   /**
-  * This function will call "deleteResident" function that will make a delete request.
-  * @param {*} event - event-Object,in our case it is Flat object
+  * Function deletes a flat from table
+  * @param {*} event  event- Ng2 Smart table event object which contains row data
   * @memberof FlatTableComponent
   */
-  onDeleteConfirm(event): void {
+  deleteFlatFromTable(event): void {
     this.flatService.deleteFlat(event).subscribe(res => {
       this.source.remove(event.data); // This function removes a deleted object from our table.
-      if (this.additionalHouseId) { // If we have a value in additionalHouseId variable,then it will count amount of flats in additional house...
-        // Because if our additionalHouseId variable is not null,then our table has loaded flats from additional house
-        // That has id equal to additionalHouseId value.
-        this.flatService.getFlatAmountInOneHouse(this.additionalHouseId).subscribe(Amount => {
+      if (this.specificHouseId) { // If we have a value in specificHouseId variable,then it will count amount of flats in additional house...
+        // Because if our specificHouseId variable is not null,then our table has loaded flats from additional house
+        // That has id equal to specificHouseId value.
+        this.flatService.getFlatAmountInOneHouse(this.specificHouseId).subscribe(Amount => {
           this.totalFlatsInAdditionalHouse = Amount;
         });
-        // If our table has loaded all flats that exists,then it will count all flat amount in database.
+        // If our table has loaded all flats that exists,then it will count all flat amount in database
       } else {
         this.flatService.getAllFlatAmount().subscribe(Amount => {
           this.totalFlatsInTable = Amount;
@@ -251,44 +249,36 @@ export class FlatTableComponent implements OnInit {
     });
   }
   /**
-   * If user will click on 'Plus' button it will open registration form.
+   * Function opens a Flat registration form
    * @memberof FlatTableComponent
    */
-  onCreateConfirm(): void {
-    this.flatRegFormVisible = true; // if flatRegFormVisible value is not false, then Registration form will be shown.
+  openFlatRegistrationForm(): void {
+    // If user will click on 'Plus' button it will open registration form.
+    this.flatRegFormVisible = true; // If flatRegFormVisible value is true, then Registration form will be shown
   }
   /**
-  * If user will click on 'pencil' button, it will open edit form.
-  * @param {*} event event-Flat Object,
+  * Function opens a Flat edit form
+  * @param {*} event event- Ng2 Smart table event object which contains row data
   * @memberof FlatTableComponent
   */
-  onSaveConfirm(event): void {
+  openFlatEditForm(event): void {
     this.flatThatWeWantToChange = event;
     this.selectedFlat = Object.assign({}, event.data); // This will send all values that has our object that we want to edit to our form
-    this.flatEditFormVisible = true; // If flatEditForm value is not false, then Edit form will be shown.
+    this.flatEditFormVisible = true; // If flatEditForm value is not false, then Edit form will be shown
   }
   /**
-   * Function will be use on button,when we will click on button,
-   * function will send uss on previous page.
+   * Method navigates on previous page,  
+   * can be used on buttons.
    * @memberof FlatTableComponent
    */
-  goBack(): void {
+  goOnPreviousPage(): void {
     this.location.back();
   }
+
+
   /**
-   * Give us posability to click on a row
-   * as a result it will give us all values of this row as an event
-   * and after that it will route uss to '/pages/resident/resident-table/ id'
-   * @param {*} event event- in our case it is a click event on a row
-   * @memberof FlatTableComponent
-   */
-  onUserRowSelect(event) {
-    console.log('user row select: ', event.data.id);
-    this.router.navigate(['/pages/resident/resident-table/' + event.data.id]);
-  }
-  /**
-   * This function is used on a button,when we will press button,it will
-   * send uss on a House table page, where we will be able to see all houses that exists.
+   * This function is used on a button,when we will press button,it will,  
+   * send uss on a House table page, where we will be able to see all houses that exists
    * @memberof FlatTableComponent
    */
   getFullList(): void {
@@ -298,38 +288,39 @@ export class FlatTableComponent implements OnInit {
   /**
    * Function resets all form values(edit and registration)
    * to a default values.
-   * @param {NgForm} [form] form - Form that we want to reset.
+   * @param {NgForm} [form] form - Form that we want to reset
    * @memberof FlatTableComponent
    */
   resetForm(form?: NgForm) {
-    this.selectedFlat = new Flat(this.additionalHouseId);
+    if (form !== null) {
+      form.reset();
+      this.selectedFlat = new Flat(this.specificHouseId);
+    }
   }
   /**
-   * In Registration form,when we will click submit button,function will send a post request to the server,
-   * same in Edit form,but instead of post request it will send put request.
-   * @param {NgForm} form form-paramater that will be our form that we use.
+   * Clicking on submit will prevent action that adds, or edits a House Object,  
+   * depends in what form you are using it
+   * @param {NgForm} form form-paramater that will be our form that we use
    * @memberof FlatTableComponent
    */
   onSubmit(form: NgForm) {
     if (!form.value.id) {
-      this.postRequestFunctionInForm(form);
+      this.addRequestFunctionInForm(form);
     } else {
-      this.confirmModify(form);
+      this.editRequestFunctionInForm(form);
     }
   }
   /**
-   * This function will send a post request to the server, if request was successfull,  it will
-   * add a new object to the table and then resets edit form values to default,if request was unsuccessfull,then
-   * user will receive an error message. 
+   * Clicking on submit button in Registration form, function adds a new house
    * @param {NgForm} form form values
    * @memberof FlatTableComponent
    */
-  postRequestFunctionInForm(form: NgForm) {
+  addRequestFunctionInForm(form: NgForm) {
     this.flatService.addFlat(form.value).subscribe(newFlat => {
       this.source.prepend(newFlat); // Function that addes a new object in to the table.
       this.toasterService.popAsync('success', 'Flat was added'); // Will make a Toastr message.
       this.resetForm(form); // Resets a form values to default.
-      this.flatService.getFlatAmountInOneHouse(this.additionalHouseId).subscribe(flatAmountInOneHouse => {
+      this.flatService.getFlatAmountInOneHouse(this.specificHouseId).subscribe(flatAmountInOneHouse => {
         this.totalFlatsInAdditionalHouse = flatAmountInOneHouse;
       });
     },
@@ -340,18 +331,16 @@ export class FlatTableComponent implements OnInit {
     );
   }
   /**
-   * This function will send a put request to the server, if request was successfull,  it will
-   * update object values in table and then resets edit form values to default,if request was unsuccessfull,then
-   * user will receive an error message. 
-   * @param {NgForm} form
+   * Clicking on submit button in Edit form, function edits a house object
+   * @param {NgForm} form Form values.
    * @memberof FlatTableComponent
    */
-  confirmModify(form: NgForm) {
+  editRequestFunctionInForm(form: NgForm) {
     this.flatService.editFlat(form.value.id, form.value)
-      .subscribe(editedFlat => { // Returning a edited flat.
-        this.source.update(this.flatThatWeWantToChange.data, editedFlat); // Updating our edited object in our table.
+      .subscribe(editedFlat => { // Returning a edited flat
+        this.source.update(this.flatThatWeWantToChange.data, editedFlat); // Updating our edited object in our table
         this.resetForm(form); // Reseting our form.
-        this.toasterService.popAsync('Record updated', 'Flat info was changed'); // Toastr ensure user with a message taht object was edited.
+        this.toasterService.popAsync('Record updated', 'Flat info was changed'); // Toastr ensure user with a message taht object was edited
       },
         (err) => { // If put request was unsuccesssfull, then we will have an error message from server
           this.errorFromServer = err.text(); // Putting this error message to our local variable "errorFromServer"
@@ -360,15 +349,18 @@ export class FlatTableComponent implements OnInit {
         });
   }
   /**
-   * Function will close registration or edit form in house table,
+   * Function will close registration or edit form in house table,  
    * Used on button in forms
-   * @param {NgForm} [form] form-Form that we are using.
+   * @param {NgForm} [form] form-Form that we are using
    * @memberof FlatTableComponent
    */
-  onClose(form: NgForm): void {
-    this.flatEditFormVisible = false; // If flatEditFormVisible has no value,then Edit form is invisible.
-    this.flatRegFormVisible = false; // If flatRegFormVisible has no value,then Registration form is invisible.
-    this.resetForm(form); // When we close our form,we need to make sure that we will open it next time
+  closeFlatRegistrationOrEditForm(form: NgForm): void {
+    // If flatEditFormVisible has no value,then Edit form is invisible
+    this.flatEditFormVisible = false;
+    // If flatRegFormVisible has no value,then Registration form is invisible
+    this.flatRegFormVisible = false;
+    // When we close our form,we need to make sure that we will open it next time
+    this.resetForm(form);
     // It will be clear,and wont have previous values.
   }
 }

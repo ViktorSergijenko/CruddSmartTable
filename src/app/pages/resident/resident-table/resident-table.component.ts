@@ -5,16 +5,15 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FlatService } from '../../flat/flat.service';
 import { Resident } from '../resident.model';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup } from '@angular/forms';
 import 'rxjs/add/operator/take';
 
 /**
  * FIXME💩: Try to remove ../node_modules/  
  * COrrect: 'angular2-toaster' + unused imports
  */
-import { ToasterService } from '../../../../../node_modules/angular2-toaster';
-import { forkJoin } from '../../../../../node_modules/rxjs';
-import { Flat } from '../../flat/flat.model';
+import { ToasterService } from 'angular2-toaster';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-resident-table',
@@ -23,11 +22,6 @@ import { Flat } from '../../flat/flat.model';
 })
 export class ResidentTableComponent implements OnInit {
 
-  /**
-   * Used as a pattern for phone number.
-   * @memberof ResidentTableComponent
-   */
-  numberPattern = '^2[0-9]{7}'; // pattern for our phone number, but still didnt manage to use it...
   /**
    * Variable that will contain one of Id's of a flat,that will come with params from route.
    * @type {number}
@@ -148,10 +142,8 @@ export class ResidentTableComponent implements OnInit {
     this.gettingFlatIdFromRoute(); // First we get a flat id,to ensure that we will load exactly those residents that we want to load.
     // Also there can be  cases when there can be no flat id in our Route.
     if (!this.additionalFlatId || this.additionalFlatId === 'all') { // If we dont have flat id.
-      this.resetForm(); // We will reset form,to avoid problems with our form values.
       this.loadAllResidentsInTableAndCountThem(); // Then we will load all residents in to our table.
     } else { // If we have flat id.
-      this.resetForm(); // We will reset form,to avoid problems with our form values.
       this.loadAdditionalHouseFlatsAndCountThem(); // Then we will load only those resdients,that are located ...
       // In flat that id is equal to "additionalFlatId" value.
     }
@@ -163,7 +155,7 @@ export class ResidentTableComponent implements OnInit {
    */
   gettingFlatIdFromRoute() {
     // Getting a route param from our routing.
-    this.route.params.take(1).subscribe((params: any) => {
+    this.route.params.subscribe((params: any) => {
       this.additionalFlatId = params.id; // Putting this route param in to our locate variable "additionalFlatId".
       this.selectedResident = new Resident(this.additionalFlatId); // Using additionalFlatId variable in Resident object constructor.
       this.sourtedResidents = []; // To avoid problems with table loading, we clear all that could be in our sourtedResidents array.
@@ -218,7 +210,7 @@ export class ResidentTableComponent implements OnInit {
    * @param {*} event  event-Resident Object
    * @memberof ResidentTableComponent ResidentTableComponent - Have all setting of our resident smart table
    */
-  onDeleteConfirm(event): void {
+  deleteResidentFromTable(event): void {
     this.residentService.deleteResident(event).subscribe(res => {
       console.log(res);
       this.source.remove(event.data);
@@ -232,8 +224,8 @@ export class ResidentTableComponent implements OnInit {
    * If user will click on 'Plus' button it will open registration form.
    * @memberof ResidentTableComponent
    */
-  onCreateConfirm(): void {
-    this.residentRegFormVisable = true; // if residentRegFormVisable value is not 0, then Registration form will be shown.
+  openResidentRegistrationForm(): void {
+    this.residentRegFormVisable = true; // If residentRegFormVisable value is not 0, then Registration form will be shown.
   }
 
   /**
@@ -241,10 +233,10 @@ export class ResidentTableComponent implements OnInit {
    * @param {*} event event-Resident Object,
    * @memberof ResidentTableComponent
    */
-  onSaveConfirm(event): void {
+  openResidentEditForm(event): void {
     this.residentThatWeWantToChange = event;
     this.selectedResident = Object.assign({}, event.data); // This will send all values that has our object that we want to edit to our form.
-    this.residentEditFormVisable = true; // if residentEditFormVisable value is not 0, then it will be shown.
+    this.residentEditFormVisable = true; // If residentEditFormVisable value is not 0, then it will be shown.
   }
 
   /**
@@ -252,7 +244,7 @@ export class ResidentTableComponent implements OnInit {
    * function will send uss on previous page.
    * @memberof ResidentTableComponent
    */
-  goBack(): void {
+  navigateToPreviousPage(): void {
     this.location.back();
   }
 
@@ -272,20 +264,24 @@ export class ResidentTableComponent implements OnInit {
    * @param {NgForm} [form] form - Form that we want to reset.
    * @memberof ResidentTableComponent
    */
-  resetForm(form?: NgForm) {
-    this.selectedResident = new Resident(this.additionalFlatId);
+  resetResidentForm(form?: NgForm) {
+    if (form !== null) {
+      form.reset();
+      this.selectedResident = new Resident(this.additionalFlatId);
+    }
+
   }
 
   /**
    * 
-   * @param {NgForm} form form-this property will say on what form will be used this function
+   * @param {NgForm} form Form -  Property will say on what form will be used this function
    * @memberof ResidentTableComponent
    */
   onSubmit(form: NgForm) {
     if (!form.value.id) {
-      this.addRequestFunctionInForm(form);
+      this.submitToAddNewResident(form);
     } else {
-      this.editRequestFunctionInForm(form);
+      this.submitToEditResident(form);
     }
   }
   /**
@@ -293,14 +289,14 @@ export class ResidentTableComponent implements OnInit {
    * @param {NgForm} form
    * @memberof ResidentTableComponent
    */
-  addRequestFunctionInForm(form: NgForm) {
+  submitToAddNewResident(form: NgForm) {
     forkJoin(
       this.residentService.addResident(form.value),
       this.residentService.getResidentAmountInOneFlat(this.additionalFlatId),
     ).subscribe(newResidentAndResidentAmount => {
       this.source.prepend(newResidentAndResidentAmount[0]);
       this.toasterService.popAsync('success', 'Resident was added');
-      this.resetForm(form);
+      this.resetResidentForm(form);
       this.totalResidentsInAdditionalFlat = newResidentAndResidentAmount[1];
     }, (err) => {
       this.errorFromServer = err.text();
@@ -312,12 +308,12 @@ export class ResidentTableComponent implements OnInit {
    * @param {NgForm} form
    * @memberof ResidentTableComponent
    */
-  editRequestFunctionInForm(form: NgForm) {
+  submitToEditResident(form: NgForm) {
     this.residentService.editResident(form.value.id, form.value)
       .subscribe(editedResident => {
         this.source.update(this.residentThatWeWantToChange.data, editedResident);
         this.toasterService.popAsync('Record updated', 'Resident info was changed');
-        this.resetForm(form);
+        this.resetResidentForm(form);
       },
         (err) => {
           this.errorFromServer = err.text();
@@ -332,11 +328,11 @@ export class ResidentTableComponent implements OnInit {
   * because it will also reset the form.
   * @memberof ResidentTableComponent
   */
-  onClose(form?: NgForm): void {
+  closeResidentRegistrationOrEditForm(form?: NgForm): void {
 
     this.residentRegFormVisable = false;
     this.residentEditFormVisable = false;
-    this.resetForm(form);
+    this.resetResidentForm(form);
   }
 }
 

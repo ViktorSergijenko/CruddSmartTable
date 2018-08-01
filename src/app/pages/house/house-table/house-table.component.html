@@ -1,4 +1,31 @@
-<toaster-container></toaster-container>
+<div class="col-sm-2">
+  <input class="form-control" list="countries1">
+  <div class="anyClass col-sm-4">
+    <datalist id="countries1">
+      <select>
+        <option *ngFor="let d of countries ">{{d}}</option>
+      </select>
+
+    </datalist>
+  </div>
+</div>
+
+<!-- <div class="container">
+  <div class="input-field col s12">
+    <input id="country" type="text" class="form-control" [(ngModel)]=query (keyup)=filter()>
+    <label for="country">Country</label>
+  </div>
+  <div *ngIf="filteredList.length > 0">
+    <ul class="list-group" *ngFor="let item of countries">
+      <li>
+        <a (click)="select(item)">{{item}}</a>
+      </li>
+    </ul>
+  </div>
+</div> -->
+
+<toaster-container>
+</toaster-container>
 <!-- this is cards with additional info -->
 <nb-card>
   <nb-card-header>
@@ -12,8 +39,8 @@
 
   <!-- this is our ng2 smart table -->
   <nb-card-body>
-    <ng2-smart-table #table [settings]="settings" [source]="source" (delete)="onDeleteConfirm($event)" (edit)="onSaveConfirm($event)"
-      (create)="onCreateConfirm()">
+    <ng2-smart-table #table [settings]="settings" [source]="source" (delete)="deleteHouseFromTable($event)" (edit)="openHouseEditForm($event)"
+      (create)="openHouseRegistrationForm()">
       <!-- (userRowSelect)="onUserRowSelect($event)" -->
     </ng2-smart-table>
   </nb-card-body>
@@ -25,7 +52,7 @@
     <nb-card-header>
       <div class="row">
         <div class="col-sm-12 text-center">
-          House Edit Form 1
+          House Edit Form
         </div>
       </div>
     </nb-card-header>
@@ -37,48 +64,72 @@
           <div class="form-group">
             <label for="inputstreet">Street</label>
             <input class="form-control" id="inputstreet" name="street" #street="ngModel" [(ngModel)]="selectedHouse.street" placeholder="Street"
-              required>
-            <div class="validation-error" *ngIf="street.invalid && street.touched">This field is Required</div>
+              [class.form-control-danger]="street.invalid && street.touched" required>
+            <div class="md-errors-spacer" [hidden]="street.valid || street.untouched">
+              <div *ngIf="street.errors && street.errors['required']">
+                Street is required
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputnumber">House Number</label>
             <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="selectedHouse.number"
-              placeholder="House Number" required>
-            <div class="validation-error" *ngIf="number.invalid && number.touched">This field is Required</div>
+              placeholder="House Number" [class.form-control-danger]="number.invalid && number.touched" required>
+            <div class="md-errors-spacer" [hidden]="number.valid || number.untouched">
+              <div *ngIf="number.errors && number.errors['required']">
+                House Number is required
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputfloors">Floors</label>
             <input type="text" class="form-control" id="inputfloors" name="floors" #floors="ngModel" [(ngModel)]="selectedHouse.floors"
-              placeholder="Floors" required>
-            <div class="validation-error" *ngIf="floors.invalid && floors.touched">This field is Required</div>
+              placeholder="Floors" [class.form-control-danger]="floors.invalid && floors.touched" required>
+            <div class="md-errors-spacer" [hidden]="floors.valid || floors.untouched">
+              <div *ngIf="floors.errors && floors.errors['required']">
+                Floor amount is required
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputcity">City</label>
             <input type="text" class="form-control" id="inputcity" name="city" #city="ngModel" [(ngModel)]="selectedHouse.city" placeholder="City"
-              required>
-            <div class="validation-error" *ngIf="city.invalid && city.touched">This field is Required</div>
+              [class.form-control-danger]="city.invalid && city.touched" required>
+            <div class="md-errors-spacer" [hidden]="city.valid || city.untouched">
+              <div *ngIf="city.errors && city.errors['required']">
+                City is required
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputcountry">Country</label>
+            <label for="country">Country</label>
             <input type="text" class="form-control" id="inputcountry" name="country" #country="ngModel" [(ngModel)]="selectedHouse.country"
-              placeholder="Country" required>
-            <div class="validation-error" *ngIf="country.invalid && country.touched">This field is Required</div>
+              placeholder="Country" [class.form-control-danger]="country.invalid && country.touched" required>
+            <div class="md-errors-spacer" [hidden]="country.valid || country.untouched">
+              <div *ngIf="country.errors && country.errors['required']">
+                Phone Number is required
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputpostindex">Post Index</label>
             <input type="email" class="form-control" id="inputpostindex" name="postIndex" #postIndex="ngModel" [(ngModel)]="selectedHouse.postIndex"
-              placeholder="Post Index" required>
-            <div class="validation-error" *ngIf="postIndex.invalid && postIndex.touched">This field is Required</div>
+              placeholder="Post Index" [class.form-control-danger]="postIndex.invalid && postIndex.touched" required>
+            <div class="md-errors-spacer" [hidden]="postIndex.valid || postIndex.untouched">
+              <div *ngIf="postIndex.errors && postIndex.errors['required']">
+                Post Index is required
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -87,19 +138,19 @@
           <button type="submit" [disabled]="!houseForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
         </div>
         <div class="col-sm-6 text-center">
-          <button type="button" class="btn btn-hero-danger btn-demo" (click)="onClose(houseForm)">Close</button>
+          <button type="button" class="btn btn-hero-danger btn-demo" (click)="closeHouseRegistrationOrEditForm(houseForm)">Close</button>
         </div>
       </div>
     </nb-card-body>
   </nb-card>
 </form>
 <!-- this is our registration form -->
-<form class="emp-form" #houseForm="ngForm" (ngSubmit)="onSubmit(houseForm) " *ngIf="registrationHouseForm">
+<form class="emp-form" #houseForm="ngForm" (ngSubmit)="onSubmit(houseForm) " *ngIf="registrationHouseFormVisible">
   <nb-card>
     <nb-card-header>
       <div class="row">
         <div class="col-sm-12 text-center">
-          House Registration Form 2
+          House Registration Form
         </div>
       </div>
     </nb-card-header>
@@ -111,48 +162,94 @@
           <div class="form-group">
             <label for="inputstreet">Street</label>
             <input class="form-control" id="inputstreet" name="street" #street="ngModel" [(ngModel)]="selectedHouse.street" placeholder="Street"
-              required>
-            <div class="validation-error" *ngIf="street.invalid && street.touched">This field is Required</div>
+              [class.form-control-danger]="street.invalid && street.touched" required>
+            <div class="md-errors-spacer" [hidden]="street.valid || street.untouched">
+              <div *ngIf="street.errors && street.errors['required']">
+                Street is required
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputnumber">House Number</label>
             <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="selectedHouse.number"
-              placeholder="House Number" required>
-            <div class="validation-error" *ngIf="number.invalid && number.touched">This field is Required</div>
+              placeholder="House Number" [class.form-control-danger]="number.invalid && number.touched" required>
+            <div class="md-errors-spacer" [hidden]="number.valid || number.untouched">
+              <div *ngIf="number.errors && number.errors['required']">
+                House Number is required
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputfloors">Floors</label>
             <input type="text" class="form-control" id="inputfloors" name="floors" #floors="ngModel" [(ngModel)]="selectedHouse.floors"
-              placeholder="Floors" required>
-            <div class="validation-error" *ngIf="floors.invalid && floors.touched">This field is Required</div>
+              placeholder="Floors" [class.form-control-danger]="floors.invalid && floors.touched" required>
+            <div class="md-errors-spacer" [hidden]="floors.valid || floors.untouched">
+              <div *ngIf="floors.errors && floors.errors['required']">
+                Floor amount is required
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputcity">City</label>
             <input type="text" class="form-control" id="inputcity" name="city" #city="ngModel" [(ngModel)]="selectedHouse.city" placeholder="City"
-              required>
-            <div class="validation-error" *ngIf="city.invalid && city.touched">This field is Required</div>
+              [class.form-control-danger]="city.invalid && city.touched" required>
+            <div class="md-errors-spacer" [hidden]="city.valid || city.untouched">
+              <div *ngIf="city.errors && city.errors['required']">
+                City is required
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputcountry">Country</label>
+            <!-- <label for="inputcountry">Country</label>
             <input type="text" class="form-control" id="inputcountry" name="country" #country="ngModel" [(ngModel)]="selectedHouse.country"
-              placeholder="Country" required>
-            <div class="validation-error" *ngIf="country.invalid && country.touched">This field is Required</div>
+              placeholder="Country" [class.form-control-danger]="country.invalid && country.touched" required>
+            <div class="md-errors-spacer" [hidden]="country.valid || country.untouched">
+              <div *ngIf="country.errors && country.errors['required']">
+                Phone Number is required
+              </div>
+            </div> -->
+            <!-- <div class="col-sm-2">
+              <input class="form-control" list="countries1">
+              <div class="anyClass col-sm-4">
+                <datalist id="countries1">
+                  <select>
+                    <option *ngFor="let d of countries">{{d}}</option>
+                  </select>
+
+                </datalist>
+              </div>
+            </div> -->
+
+            <input type="text" autocomplete="off" id="inputcountry" name="country" #country="ngModel" [class.form-control-danger]="country.invalid && country.touched"
+              required class="form-control" [(ngModel)]=query (keyup)=filter()>
+
+            <div class="col-sm-4" *ngIf="filteredList.length > 0">
+              <ul class="list-group" *ngFor="let item of filteredList | slice:0:6">
+                <li class="list-group-item">
+                  <a (click)="select(item)">{{item}}</a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputpostindex">Post Index</label>
-            <input type="email" class="form-control" id="inputpostindex" name="postindex" #postindex="ngModel" [(ngModel)]="selectedHouse.postindex"
-              placeholder="Post Index" required>
-            <div class="validation-error" *ngIf="postindex.invalid && postindex.touched">This field is Required</div>
+            <input type="email" class="form-control" id="inputpostindex" name="postIndex" #postIndex="ngModel" [(ngModel)]="selectedHouse.postIndex"
+              placeholder="Post Index" [class.form-control-danger]="postIndex.invalid && postIndex.touched" required>
+            <div class="md-errors-spacer" [hidden]="postIndex.valid || postIndex.untouched">
+              <div *ngIf="postIndex.errors && postIndex.errors['required']">
+                Post Index is required
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -164,7 +261,7 @@
           <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(houseForm)">Reset</button>
         </div>
         <div class="col-sm-4  text-center">
-          <button type="button" class="btn btn-hero-danger btn-demo" (click)="onClose(houseForm)">Close</button>
+          <button type="button" class="btn btn-hero-danger btn-demo" (click)="closeHouseRegistrationOrEditForm(houseForm)">Close</button>
         </div>
       </div>
     </nb-card-body>

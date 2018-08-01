@@ -15,12 +15,17 @@
     "class-name": true,
     "comment-format": [
       true,
-      "check-space"
+      "check-space",
+      "check-uppercase"
     ],
     "eofline": true,
     "forin": true,
     "import-blacklist": [
       true
+    ],
+    "curly": [
+      true,
+      "all"
     ],
     "import-spacing": true,
     "indent": [
@@ -78,7 +83,8 @@
     ],
     "radix": true,
     "semicolon": [
-      true
+      true,
+      "always"
     ],
     "triple-equals": [
       true,
