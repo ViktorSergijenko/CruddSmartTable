@@ -68,7 +68,7 @@ export class HouseTableComponent implements OnInit {
 
     'Portugal', 'Romania', 'Russia', 'San Marino', 'Serbia', 'Slovakia', 'Slovenia',
 
-    'Spain', 'Sweden', 'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican City'];
+    'Spain', 'Sweden', 'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican city'];
 
 
 
@@ -112,7 +112,7 @@ export class HouseTableComponent implements OnInit {
         type: 'number',
       },
       city: {
-        title: 'City',
+        title: 'city',
         type: 'string',
       },
       country: {
@@ -123,7 +123,7 @@ export class HouseTableComponent implements OnInit {
         title: 'P.Index',
         type: 'string',
       },
-      flatamount: {
+      flatAmount: {
         editable: false,
         addable: false,
         title: 'Flat Amount',
@@ -173,6 +173,7 @@ export class HouseTableComponent implements OnInit {
       // Counting amount of houses in table.
       this.totalAmountOfHosesInTable = this.source.count();
     });
+
   }
   /**
    * Function deletes a house Object.
@@ -311,6 +312,7 @@ export class HouseTableComponent implements OnInit {
     if (!inside) {
       this.filteredList = [];
     }
+
   }
 }
 

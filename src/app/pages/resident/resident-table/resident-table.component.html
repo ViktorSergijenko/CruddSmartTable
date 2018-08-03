@@ -8,8 +8,8 @@
     <nb-card-body>
       Floor: {{ selectedFlat.floor}}
       <br>Number: {{ selectedFlat.number}}
-      <br>Total Area: {{ selectedFlat.totalarea}}
-      <br>Living Space: {{selectedFlat.livingspace}}
+      <br>Total Area: {{ selectedFlat.totalArea}}
+      <br>Living Space: {{selectedFlat.livingSpace}}
       <br>Resident Amount: {{ totalResidentsInAdditionalFlat}}
     </nb-card-body>
   </nb-card>
@@ -17,7 +17,7 @@
 <!-- this is cards with additional info,it will be shown only if we are looking on residents that are living in additional flat -->
 
 <!-- this is cards with additional info,it will be shown only if we are looking on all residents that exist -->
-<nb-card *ngIf="!residentEditForm && !residentRegForm">
+<nb-card *ngIf="!residentEditFormVisable && !residentRegFormVisable">
   <nb-card-header>
     <div class="row">
       <div class="col-sm-4">
@@ -51,15 +51,15 @@
     <nb-card-body>
       <div class="row">
         <input type="hidden" *ngIf="selectedResident && selectedResident.id" name="id" #id="ngModel" [(ngModel)]="selectedResident.id">
-        <input type="hidden" *ngIf="selectedResident && selectedResident.flatamount" name="flatamount" #id="ngModel" [(ngModel)]="selectedResident.flatamount">
-        <input type="hidden" *ngIf="selectedResident && selectedResident.flatid" name="flatid" #id="ngModel" [(ngModel)]="selectedResident.flatid">
+        <input type="hidden" *ngIf="selectedResident && selectedResident.flatAmount" name="flatAmount" #id="ngModel" [(ngModel)]="selectedResident.flatAmount">
+        <input type="hidden" *ngIf="selectedResident && selectedResident.flatId" name="flatId" #id="ngModel" [(ngModel)]="selectedResident.flatId">
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputstreet">First Name</label>
-            <input class="form-control" id="inputstreet" name="firstname" #firstname="ngModel" [(ngModel)]="selectedResident.firstname"
-              placeholder="First Name" [class.form-control-danger]="firstname.invalid && firstname.touched" required>
-            <div class="md-errors-spacer" [hidden]="firstname.valid || firstname.untouched">
-              <div *ngIf="firstname.errors && firstname.errors['required']">
+            <input class="form-control" id="inputstreet" name="firstName" #firstName="ngModel" [(ngModel)]="selectedResident.firstName"
+              placeholder="First Name" [class.form-control-danger]="firstName.invalid && firstName.touched" required>
+            <div class="md-errors-spacer" [hidden]="firstName.valid || firstName.untouched">
+              <div *ngIf="firstName.errors && firstName.errors['required']">
                 First Name is required
               </div>
 
@@ -69,10 +69,10 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputnumber">Last Name</label>
-            <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="selectedResident.lastname"
-              placeholder="Last Name" [class.form-control-danger]="lastname.invalid && lastname.touched" required>
-            <div class="md-errors-spacer" [hidden]="lastname.valid || lastname.untouched">
-              <div *ngIf="lastname.errors && lastname.errors['required']">
+            <input type="text" class="form-control" id="inputnumber" name="lastName" #lastName="ngModel" [(ngModel)]="selectedResident.lastName"
+              placeholder="Last Name" [class.form-control-danger]="lastName.invalid && lastName.touched" required>
+            <div class="md-errors-spacer" [hidden]="lastName.valid || lastName.untouched">
+              <div *ngIf="lastName.errors && lastName.errors['required']">
                 Last Name is required
               </div>
 
@@ -83,10 +83,10 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputpostcode">Post Code</label>
-            <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="selectedResident.postcode"
-              placeholder="Post Code" [class.form-control-danger]="postcode.invalid && postcode.touched" required>
-            <div class="md-errors-spacer" [hidden]="postcode.valid || postcode.untouched">
-              <div *ngIf="postcode.errors && postcode.errors['required']">
+            <input type="text" class="form-control" id="inputpostcode" name="postCode" #postCode="ngModel" [(ngModel)]="selectedResident.postCode"
+              placeholder="Post Code" [class.form-control-danger]="postCode.invalid && postCode.touched" required>
+            <div class="md-errors-spacer" [hidden]="postCode.valid || postCode.untouched">
+              <div *ngIf="postCode.errors && postCode.errors['required']">
                 Post Code is required
               </div>
 
@@ -158,15 +158,15 @@
     <nb-card-body>
       <div class="row">
         <input type="hidden" *ngIf="selectedResident && selectedResident.id" name="id" #id="ngModel" [(ngModel)]="selectedResident.id">
-        <input type="hidden" *ngIf="selectedResident && selectedResident.flatamount" name="flatamount" #id="ngModel" [(ngModel)]="selectedResident.flatamount">
-        <input type="hidden" *ngIf="selectedResident && selectedResident.flatid" name="flatid" #id="ngModel" [(ngModel)]="selectedResident.flatid">
+        <input type="hidden" *ngIf="selectedResident && selectedResident.flatAmount" name="flatAmount" #id="ngModel" [(ngModel)]="selectedResident.flatAmount">
+        <input type="hidden" *ngIf="selectedResident && selectedResident.flatId" name="flatId" #id="ngModel" [(ngModel)]="selectedResident.flatId">
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputstreet">First Name</label>
-            <input class="form-control" id="inputstreet" name="firstname" #firstname="ngModel" [(ngModel)]="selectedResident.firstname"
-              placeholder="First Name" [class.form-control-danger]="firstname.invalid && firstname.touched" required>
-            <div class="md-errors-spacer" [hidden]="firstname.valid || firstname.untouched">
-              <div *ngIf="firstname.errors && firstname.errors['required']">
+            <input class="form-control" id="inputstreet" name="firstName" #firstName="ngModel" [(ngModel)]="selectedResident.firstName"
+              placeholder="First Name" [class.form-control-danger]="firstName.invalid && firstName.touched" required>
+            <div class="md-errors-spacer" [hidden]="firstName.valid || firstName.untouched">
+              <div *ngIf="firstName.errors && firstName.errors['required']">
                 First Name is required
               </div>
 
@@ -176,10 +176,10 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputnumber">Last Name</label>
-            <input type="text" class="form-control" id="inputnumber" name="lastname" #lastname="ngModel" [(ngModel)]="selectedResident.lastname"
-              placeholder="Last Name" [class.form-control-danger]="lastname.invalid && lastname.touched" required>
-            <div class="md-errors-spacer" [hidden]="lastname.valid || lastname.untouched">
-              <div *ngIf="lastname.errors && lastname.errors['required']">
+            <input type="text" class="form-control" id="inputnumber" name="lastName" #lastName="ngModel" [(ngModel)]="selectedResident.lastName"
+              placeholder="Last Name" [class.form-control-danger]="lastName.invalid && lastName.touched" required>
+            <div class="md-errors-spacer" [hidden]="lastName.valid || lastName.untouched">
+              <div *ngIf="lastName.errors && lastName.errors['required']">
                 Last Name is required
               </div>
 
@@ -190,10 +190,10 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputpostcode">Post Code</label>
-            <input type="text" class="form-control" id="inputpostcode" name="postcode" #postcode="ngModel" [(ngModel)]="selectedResident.postcode"
-              placeholder="Post Code" [class.form-control-danger]="postcode.invalid && postcode.touched" required>
-            <div class="md-errors-spacer" [hidden]="postcode.valid || postcode.untouched">
-              <div *ngIf="postcode.errors && postcode.errors['required']">
+            <input type="text" class="form-control" id="inputpostcode" name="postCode" #postCode="ngModel" [(ngModel)]="selectedResident.postCode"
+              placeholder="Post Code" [class.form-control-danger]="postCode.invalid && postCode.touched" required>
+            <div class="md-errors-spacer" [hidden]="postCode.valid || postCode.untouched">
+              <div *ngIf="postCode.errors && postCode.errors['required']">
                 Post Code is required
               </div>
 

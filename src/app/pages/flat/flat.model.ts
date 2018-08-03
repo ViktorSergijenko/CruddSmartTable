@@ -9,13 +9,13 @@ import { House } from '../house/house.model';
  */
 export class Flat {
     /**
-     * Creates an instance of Flat, where our specificHouseId param will give our houseId property his value.
-     * @param {number} specificHouseId 
+     * Creates an instance of Flat, where our specifichouseId param will give our houseId property his value.
+     * @param {number} specifichouseId 
      * @memberof Flat
      */
-    constructor(specificHouseId: number) {
-        if (specificHouseId) {
-            this.houseid = specificHouseId;
+    constructor(specifichouseId: number) {
+        if (specifichouseId) {
+            this.houseId = specifichouseId;
         }
     }
     /**
@@ -42,19 +42,19 @@ export class Flat {
      * @type {number}
      * @memberof Flat
      */
-    totalarea: number;
+    totalArea: number;
     /**
      *  Information about Living space area.
      * @type {number}
      * @memberof Flat
      */
-    livingspace: number;
+    livingSpace: number;
     /**
      *  Information about amount of residents that lives in this flat.
      * @type {number}
      * @memberof Flat
      */
-    residentamount: number;
+    residentAmount: number;
     /**
      * Array with residents objects.
      * @type {Resident[]}
@@ -66,6 +66,6 @@ export class Flat {
      * @type {number}
      * @memberof Flat
      */
-    houseid: number;
+    houseId: number;
     house: House;
 }

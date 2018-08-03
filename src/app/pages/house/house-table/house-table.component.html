@@ -1,15 +1,17 @@
 <div class="col-sm-2">
-  <input class="form-control" list="countries1">
-  <div class="anyClass col-sm-4">
-    <datalist id="countries1">
-      <select>
-        <option *ngFor="let d of countries ">{{d}}</option>
-      </select>
+  <input class="form-control" list="countries1" id="a">
+  <datalist id="countries1" style="-webkit-appearance: none; background-color: red;">
+    <select id="testbox" style="-webkit-appearance: none; background-color: red;">
+      <option *ngFor="let d of countries ">{{d}}</option>
+    </select>
 
-    </datalist>
-  </div>
+  </datalist>
 </div>
-
+<style>
+  select option {
+    background-color: red;
+  }
+</style>
 <!-- <div class="container">
   <div class="input-field col s12">
     <input id="country" type="text" class="form-control" [(ngModel)]=query (keyup)=filter()>
@@ -27,7 +29,7 @@
 <toaster-container>
 </toaster-container>
 <!-- this is cards with additional info -->
-<nb-card>
+<nb-card *ngIf="!editHouseFormVisible && !registrationHouseFormVisible">
   <nb-card-header>
     <div class="row">
       <div class="col-sm-12 text-center">
@@ -59,14 +61,14 @@
     <nb-card-body>
       <div class="row">
         <input type="hidden" *ngIf="selectedHouse && selectedHouse.id" name="id" #id="ngModel" [(ngModel)]="selectedHouse.id">
-        <input type="hidden" *ngIf="selectedHouse && selectedHouse.flatamount" name="flatamount" #id="ngModel" [(ngModel)]="selectedHouse.flatamount">
+        <input type="hidden" *ngIf="selectedHouse && selectedHouse.flatAmount" name="flatAmount" #id="ngModel" [(ngModel)]="selectedHouse.flatAmount">
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputstreet">Street</label>
             <input class="form-control" id="inputstreet" name="street" #street="ngModel" [(ngModel)]="selectedHouse.street" placeholder="Street"
               [class.form-control-danger]="street.invalid && street.touched" required>
             <div class="md-errors-spacer" [hidden]="street.valid || street.untouched">
-              <div *ngIf="street.errors && street.errors['required']">
+              <div class="Wrapper" *ngIf="street.errors && street.errors['required']">
                 Street is required
               </div>
             </div>
@@ -98,12 +100,12 @@
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputcity">City</label>
-            <input type="text" class="form-control" id="inputcity" name="city" #city="ngModel" [(ngModel)]="selectedHouse.city" placeholder="City"
+            <label for="inputcity">city</label>
+            <input type="text" class="form-control" id="inputcity" name="city" #city="ngModel" [(ngModel)]="selectedHouse.city" placeholder="city"
               [class.form-control-danger]="city.invalid && city.touched" required>
             <div class="md-errors-spacer" [hidden]="city.valid || city.untouched">
               <div *ngIf="city.errors && city.errors['required']">
-                City is required
+                city is required
               </div>
             </div>
           </div>
@@ -157,14 +159,14 @@
     <nb-card-body>
       <div class="row">
         <input type="hidden" *ngIf="selectedHouse && selectedHouse.id" name="id" #id="ngModel" [(ngModel)]="selectedHouse.id">
-        <input type="hidden" *ngIf="selectedHouse && selectedHouse.flatamount" name="flatamount" #id="ngModel" [(ngModel)]="selectedHouse.flatamount">
+        <input type="hidden" *ngIf="selectedHouse && selectedHouse.flatAmount" name="flatAmount" #id="ngModel" [(ngModel)]="selectedHouse.flatAmount">
         <div class="col-sm-6">
           <div class="form-group">
             <label for="inputstreet">Street</label>
             <input class="form-control" id="inputstreet" name="street" #street="ngModel" [(ngModel)]="selectedHouse.street" placeholder="Street"
               [class.form-control-danger]="street.invalid && street.touched" required>
             <div class="md-errors-spacer" [hidden]="street.valid || street.untouched">
-              <div *ngIf="street.errors && street.errors['required']">
+              <div class="Wrapper" *ngIf="street.errors && street.errors['required']">
                 Street is required
               </div>
             </div>
@@ -196,12 +198,12 @@
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="inputcity">City</label>
-            <input type="text" class="form-control" id="inputcity" name="city" #city="ngModel" [(ngModel)]="selectedHouse.city" placeholder="City"
+            <label for="inputcity">city</label>
+            <input type="text" class="form-control" id="inputcity" name="city" #city="ngModel" [(ngModel)]="selectedHouse.city" placeholder="city"
               [class.form-control-danger]="city.invalid && city.touched" required>
             <div class="md-errors-spacer" [hidden]="city.valid || city.untouched">
               <div *ngIf="city.errors && city.errors['required']">
-                City is required
+                city is required
               </div>
             </div>
           </div>
@@ -229,11 +231,11 @@
             </div> -->
 
             <input type="text" autocomplete="off" id="inputcountry" name="country" #country="ngModel" [class.form-control-danger]="country.invalid && country.touched"
-              required class="form-control" [(ngModel)]=query (keyup)=filter()>
+              required class="form-control" [(ngModel)]="query" (keyup)=filter()>
 
             <div class="col-sm-4" *ngIf="filteredList.length > 0">
-              <ul class="list-group" *ngFor="let item of filteredList | slice:0:6">
-                <li class="list-group-item">
+              <ul class="list-group countries-autocomplete">
+                <li class="list-group-item" *ngFor="let item of filteredList | slice:0:6">
                   <a (click)="select(item)">{{item}}</a>
                 </li>
               </ul>

@@ -33,7 +33,7 @@ export class House {
      */
     floors: number;
     /**
-     * City that this house is located.
+     * city that this house is located.
      * @type {string}
      * @memberof House
      */
@@ -49,13 +49,13 @@ export class House {
      * @type {string}
      * @memberof House
      */
-    postindex: string;
+    postIndex: string;
     /**
      * Flat amount in house.
      * @type {number}
      * @memberof House
      */
-    flatamount: number = 0;
+    flatAmount: number = 0;
     /**
      * Array with flats.
      * @type {Flat[]}

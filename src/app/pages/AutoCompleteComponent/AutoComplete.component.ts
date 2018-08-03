@@ -1,7 +1,7 @@
 import { Component, ElementRef } from '@angular/core';
 
 @Component({
-  selector: 'app-AutoCompleteComponent',
+  selector: 'app-autocompletecomponent',
   templateUrl: './AutoCompleteComponent.component.html',
   styleUrls: ['./AutoCompleteComponent.component.scss'],
 })
@@ -22,7 +22,7 @@ export class AutoCompleteComponent {
 
     'Portugal', 'Romania', 'Russia', 'San Marino', 'Serbia', 'Slovakia', 'Slovenia',
 
-    'Spain', 'Sweden', 'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican City'];
+    'Spain', 'Sweden', 'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican city'];
   public filteredList = [];
   public elementRef;
   constructor(myElement: ElementRef) {

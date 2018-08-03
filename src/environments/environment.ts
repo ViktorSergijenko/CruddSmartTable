@@ -18,4 +18,5 @@ export const environment = {
   residentUlr: 'http://localhost:52414/api/Resident/',
   flatAmountUrl: 'http://localhost:52414/api/flat/FlatsAmount',
   residentAmountUrl: 'http://localhost:52414/api/resident/ResidentsAmount',
+  houseAndFlatsUrl: 'http://localhost:52414/api/houseAndFLats/',
 };

@@ -101,15 +101,15 @@ export class ResidentTableComponent implements OnInit {
       confirmDelete: true,
     },
     columns: {
-      firstname: {
+      firstName: {
         title: 'First Name',
         type: 'string',
       },
-      lastname: {
+      lastName: {
         title: 'Last Name',
         type: 'string',
       },
-      postcode: {
+      postCode: {
         title: 'Post-code',
         type: 'string',
       },
@@ -196,7 +196,7 @@ export class ResidentTableComponent implements OnInit {
         // Counting amount of loaded residents.
         this.totalResidentsInAdditionalFlat = this.source.count();
         // Putting our flat in to selectedFlat variable,to get flat info later.
-        this.selectedFlat = flatAndItsResidents[1];
+        this.selectedFlat = flatAndItsResidents[1][0];
       });
     } else {
       return null;
@@ -292,12 +292,12 @@ export class ResidentTableComponent implements OnInit {
   submitToAddNewResident(form: NgForm) {
     forkJoin(
       this.residentService.addResident(form.value),
-      this.residentService.getResidentAmountInOneFlat(this.additionalFlatId),
-    ).subscribe(newResidentAndResidentAmount => {
-      this.source.prepend(newResidentAndResidentAmount[0]);
+      this.residentService.getresidentAmountInOneFlat(this.additionalFlatId),
+    ).subscribe(newResidentAndresidentAmount => {
+      this.source.prepend(newResidentAndresidentAmount[0]);
       this.toasterService.popAsync('success', 'Resident was added');
       this.resetResidentForm(form);
-      this.totalResidentsInAdditionalFlat = newResidentAndResidentAmount[1];
+      this.totalResidentsInAdditionalFlat = newResidentAndresidentAmount[1];
     }, (err) => {
       this.errorFromServer = err.text();
       this.toasterService.popAsync('error', 'Custom error in component', this.errorFromServer);

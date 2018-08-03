@@ -83,7 +83,7 @@ export class ResidentService {
    * @returns Numeric value(Resident amount in all database)
    * @memberof ResidentService
    */
-  getAllResidentAmount() {
+  getAllresidentAmount() {
     return this.http.get(environment.residentAmountUrl).map(residentAmount => residentAmount.json());
   }
   /**
@@ -92,8 +92,8 @@ export class ResidentService {
    * @returns Returns a numeric value that is our resident amount in specific flat
    * @memberof ResidentService
    */
-  getResidentAmountInOneFlat(id: number) {
-    return this.http.get(environment.flatUrl + id + '/ResidentAmount').map(residentAmount => residentAmount.json());
+  getresidentAmountInOneFlat(id: number) {
+    return this.http.get(environment.flatUrl + id + '/residentAmount').map(residentAmount => residentAmount.json());
   }
 }
 

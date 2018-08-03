@@ -8,13 +8,13 @@
  */
 export class Resident {
     /**
-     * Creates an instance of Resident, where our additionalFlatId param will give our flatid property his value,if it has any.
+     * Creates an instance of Resident, where our additionalFlatId param will give our flatId property his value,if it has any.
      * @param {number} additionalFlatId
      * @memberof Resident
      */
     constructor(additionalFlatId: number) {
         if (additionalFlatId) {
-            this.flatid = additionalFlatId;
+            this.flatId = additionalFlatId;
         }
     }
     /**
@@ -28,19 +28,19 @@ export class Resident {
      * @type {string}
      * @memberof Resident
      */
-    firstname: string;
+    firstName: string;
     /**
      * Property that will store Resident Firstname.
      * @type {string}
      * @memberof Resident
      */
-    lastname: string;
+    lastName: string;
     /**
      * Property that will store Resident Postcode.
      * @type {string}
      * @memberof Resident
      */
-    postcode: string;
+    postCode: string;
     /**
      * Property that will store Resident phone number.
      * @type {string}
@@ -58,5 +58,5 @@ export class Resident {
      * @type {number}
      * @memberof Resident
      */
-    flatid: number;
+    flatId: number;
 }

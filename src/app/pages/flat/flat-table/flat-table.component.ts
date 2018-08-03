@@ -21,7 +21,7 @@ export class FlatTableComponent implements OnInit {
    * @type {number}
    * @memberof FlatTableComponent
    */
-  specificHouseId: any = null;
+  specifichouseId: any = null;
   /**
    * Variable that contains an error text.
    * @type {string}
@@ -109,15 +109,15 @@ export class FlatTableComponent implements OnInit {
         title: 'Flat Number',
         type: 'number',
       },
-      totalarea: {
+      totalArea: {
         title: 'Total Area',
         type: 'number',
       },
-      livingspace: {
+      livingSpace: {
         title: 'Living Space',
         type: 'number',
       },
-      residentamount: {
+      residentAmount: {
         editable: false,
         addable: false,
         title: 'Resident Amount',
@@ -161,13 +161,14 @@ export class FlatTableComponent implements OnInit {
   ) {
   }
   ngOnInit() {
-    this.gettingHouseIdFromRoute(); // First we get a house id,to ensure that we will load exactly those flats that we want to load
+
+    this.gettinghouseIdFromRoute(); // First we get a house id,to ensure that we will load exactly those flats that we want to load
     // Also there's cases when there can be no house id in our Route
     // If we dont have house id
     this.loadAllFlatsInTableAndCountThem(); // Then we will load all flats in to our table.
     // If we have house id
     this.loadAdditionalHouseFlatsAndCountThem(); // Then we will load only those flats,that are located ...
-    // In house that id is equal to "specificHouseId" value
+    // In house that id is equal to "specifichouseId" value
 
   }
 
@@ -175,10 +176,12 @@ export class FlatTableComponent implements OnInit {
    * Function gets specific House id value.
    * @memberof FlatTableComponent
    */
-  gettingHouseIdFromRoute() {
+  gettinghouseIdFromRoute() {
     // Getting a route param from our routing.
-    this.specificHouseId = this.route.snapshot.paramMap.get('id');
-    this.selectedFlat = new Flat(this.specificHouseId); // Using specificHouseId variable in Flat object constructor.
+    this.specifichouseId = this.route.snapshot.paramMap.get('id');
+    console.log('Checking my specifichouseId' + this.specifichouseId);
+    this.selectedFlat = new Flat(this.specifichouseId); // Using specifichouseId variable in Flat object constructor.
+    console.log('Checking my selectedFlat' + <Flat>this.selectedFlat);
     this.sourtedFlatList = []; // To avoid problems with table loading, we clear all that could be in our sourtedFlatList array
     // });
   }
@@ -187,7 +190,7 @@ export class FlatTableComponent implements OnInit {
    * @memberof FlatTableComponent
    */
   loadAllFlatsInTableAndCountThem() {
-    if (!this.specificHouseId || this.specificHouseId === 'all') {
+    if (!this.specifichouseId || this.specifichouseId === 'all') {
       // Getting all flats from server.
       this.flatService.getFlatList().subscribe(flats => {
         this.flatList = flats; // Putting this flats in to flatList array
@@ -201,25 +204,11 @@ export class FlatTableComponent implements OnInit {
    * @memberof FlatTableComponent
    */
   loadAdditionalHouseFlatsAndCountThem() {
-    forkJoin(
-      // Getting flats that are located in house, that has id equal to "specificHouseId" value
-      this.houseService.getOneHouse(this.specificHouseId),
-      this.houseService.getHouseFlats(this.specificHouseId),
-      // Getting Info about house, where our falts are located.
-
-    ).subscribe(houseAndItsFlats => {
-      if (this.specificHouseId) {
-        // Putting our house in to selectedHouse variable,to get house info later.
-        this.selectedHouse = houseAndItsFlats[0];
-        // Loading this flats to our table.
-        this.source.load(houseAndItsFlats[1]);
-        // Counting amount of loaded flats.
-        this.totalFlatsInAdditionalHouse = this.source.count();
-
-
-      } else {
-        return null;
-      }
+    this.flatService.getFlatsWihtHouse(this.specifichouseId).subscribe(houseAndFlats => {
+      this.selectedHouse = houseAndFlats[0];
+      this.source.load(this.selectedHouse.flats);
+      this.totalFlatsInAdditionalHouse = this.source.count();
+      console.log(this.selectedHouse);
     }, (err) => {
       this.errorFromServer = err.text(); // Putting an error message to our local variable.
       this.toasterService.popAsync('error', 'Custom error in component', this.errorFromServer); // Will make a Toastr message with text error.
@@ -234,10 +223,10 @@ export class FlatTableComponent implements OnInit {
   deleteFlatFromTable(event): void {
     this.flatService.deleteFlat(event).subscribe(res => {
       this.source.remove(event.data); // This function removes a deleted object from our table.
-      if (this.specificHouseId) { // If we have a value in specificHouseId variable,then it will count amount of flats in additional house...
-        // Because if our specificHouseId variable is not null,then our table has loaded flats from additional house
-        // That has id equal to specificHouseId value.
-        this.flatService.getFlatAmountInOneHouse(this.specificHouseId).subscribe(Amount => {
+      if (this.specifichouseId) { // If we have a value in specifichouseId variable,then it will count amount of flats in additional house...
+        // Because if our specifichouseId variable is not null,then our table has loaded flats from additional house
+        // That has id equal to specifichouseId value.
+        this.flatService.getFlatAmountInOneHouse(this.specifichouseId).subscribe(Amount => {
           this.totalFlatsInAdditionalHouse = Amount;
         });
         // If our table has loaded all flats that exists,then it will count all flat amount in database
@@ -294,7 +283,7 @@ export class FlatTableComponent implements OnInit {
   resetForm(form?: NgForm) {
     if (form !== null) {
       form.reset();
-      this.selectedFlat = new Flat(this.specificHouseId);
+      this.selectedFlat = new Flat(this.specifichouseId);
     }
   }
   /**
@@ -320,7 +309,7 @@ export class FlatTableComponent implements OnInit {
       this.source.prepend(newFlat); // Function that addes a new object in to the table.
       this.toasterService.popAsync('success', 'Flat was added'); // Will make a Toastr message.
       this.resetForm(form); // Resets a form values to default.
-      this.flatService.getFlatAmountInOneHouse(this.specificHouseId).subscribe(flatAmountInOneHouse => {
+      this.flatService.getFlatAmountInOneHouse(this.specifichouseId).subscribe(flatAmountInOneHouse => {
         this.totalFlatsInAdditionalHouse = flatAmountInOneHouse;
       });
     },

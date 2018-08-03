@@ -90,6 +90,16 @@ export class FlatService {
   getFlatAmountInOneHouse(id: number) {
     return this.http.get(environment.houseUrl + id + '/flatAmount').map(flatAmount => flatAmount.json());
   }
+  /**
+   * Function that sends a request to get a house and flats that are located in this house.
+   *
+   * @param {number} houseId
+   * @returns
+   * @memberof FlatService
+   */
+  getFlatsWihtHouse(houseId: number) {
+    return this.http.get(environment.houseAndFlatsUrl + houseId).map(houseAndFlats => houseAndFlats.json());
+  }
 }
 
 
