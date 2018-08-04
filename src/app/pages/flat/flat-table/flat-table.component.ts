@@ -125,9 +125,10 @@ export class FlatTableComponent implements OnInit {
       },
       actions:
       {
+        filter: false,
         addable: false,
         editable: false,
-        title: 'Details',
+        title: 'Flat Details',
         type: 'html',
         valuePrepareFunction: (cell, row) => {
           return `<a title ="See Detail House" href="#/pages/resident/resident-table/${row.id}"><i class=""material-icons">Details</i></a>`;

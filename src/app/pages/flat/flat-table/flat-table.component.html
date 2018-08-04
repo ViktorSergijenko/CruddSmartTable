@@ -20,7 +20,7 @@
 
     <div class="row">
       <div class="col-md-4">
-        <button class="btn btn-warning with-margins" [nbPopover]="card" nbPopoverPlacement="left">With card</button>
+        <button class="btn btn-warning with-margins" [nbPopover]="card" nbPopoverPlacement="left">House Info</button>
       </div>
 
       <div class="col-md-4 text-center">
@@ -36,161 +36,98 @@
   </nb-card-body>
   <button class="btn btn-hero-primary btn-demo" (click)="goOnPreviousPage()">GoBack</button>
 </nb-card>
+<!-- THIS IS MY EDIT AND REG FORM -->
 
+<form class="emp-form" #flatForm="ngForm" (ngSubmit)="onSubmit(flatForm)">
+  <div class="row outerdiv">
+    <div class="col-md-6 inerdiv">
+      <nb-card *ngIf="(flatRegFormVisible || flatEditFormVisible)">
+        <nb-card-header>
+          <div class="row">
+            <div class="col-sm-6 text-center">
+              <h3 *ngIf="flatRegFormVisible">Flat Registration Form:</h3>
+              <h3 *ngIf="flatEditFormVisible">Flat Edit Form:</h3>
+            </div>
+            <div class="col-sm-6 text-center">
+              <button type="button" class="btn btn-hero-danger btn-demo" (click)="closeFlatRegistrationOrEditForm(flatForm)">Close</button>
+            </div>
+          </div>
 
-<!-- this is our registration form -->
-<form class="emp-form" #flatForm="ngForm" (ngSubmit)="onSubmit(flatForm)" *ngIf="flatRegFormVisible">
-  <nb-card>
-    <nb-card-header>
-      <div class="row">
-        <div class="col-sm-12 text-center">
-          Flat Registration Form
-        </div>
-      </div>
-    </nb-card-header>
-    <nb-card-body>
-      <div class="row">
-        <input type="hidden" *ngIf="selectedFlat && selectedFlat.id" name="id" #id="ngModel" [(ngModel)]="selectedFlat.id">
-        <input type="hidden" *ngIf="selectedFlat && selectedFlat.residentAmount" name="residentAmount" #id="ngModel" [(ngModel)]="selectedFlat.residentAmount">
-        <input type="hidden" *ngIf="selectedFlat && selectedFlat.houseId" name="houseId" #id="ngModel" [(ngModel)]="selectedFlat.houseId">
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputstreet">Floor</label>
-            <input class="form-control" id="inputfloor" name="floor" #floor="ngModel" [(ngModel)]="selectedFlat.floor" placeholder="Floor"
-              [class.form-control-danger]="floor.invalid && floor.touched" required>
-            <div class="md-errors-spacer" [hidden]="floor.valid || floor.untouched">
-              <div *ngIf="floor.errors && floor.errors['required']">
-                Floor is required
+        </nb-card-header>
+        <nb-card-body>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <input type="hidden" *ngIf="selectedFlat && selectedFlat.id" name="id" #id="ngModel" [(ngModel)]="selectedFlat.id">
+                <input type="hidden" *ngIf="selectedFlat && selectedFlat.residentAmount" name="residentAmount" #id="ngModel" [(ngModel)]="selectedFlat.residentAmount">
+                <input type="hidden" *ngIf="selectedFlat && selectedFlat.houseId" name="houseId" #id="ngModel" [(ngModel)]="selectedFlat.houseId">
+                <label for="inputstreet">Floor</label>
+                <input class="form-control" id="inputfloor" name="floor" #floor="ngModel" [(ngModel)]="selectedFlat.floor" placeholder="Floor"
+                  [class.form-control-danger]="floor.invalid && floor.touched" required>
+                <div class="md-errors-spacer" [hidden]="floor.valid || floor.untouched">
+                  <div *ngIf="floor.errors && floor.errors['required']">
+                    Floor is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputnumber">Flat Number</label>
+                <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="selectedFlat.number"
+                  placeholder="Flat Number" [class.form-control-danger]="number.invalid && number.touched" required>
+                <div class="md-errors-spacer" [hidden]="number.valid || number.untouched">
+                  <div *ngIf="number.errors && number.errors['required']">
+                    Number is required
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputnumber">Flat Number</label>
-            <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="selectedFlat.number"
-              placeholder="Flat Number" [class.form-control-danger]="number.invalid && number.touched" required>
-            <div class="md-errors-spacer" [hidden]="number.valid || number.untouched">
-              <div *ngIf="number.errors && number.errors['required']">
-                Number is required
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputtotalArea">Total Area</label>
+                <input type="text" class="form-control" id="inputtotalArea" name="totalArea" #totalArea="ngModel" [(ngModel)]="selectedFlat.totalArea"
+                  placeholder="Total Area" [class.form-control-danger]="totalArea.invalid && totalArea.touched" required>
+                <div class="md-errors-spacer" [hidden]="totalArea.valid || totalArea.untouched">
+                  <div *ngIf="totalArea.errors && totalArea.errors['required']">
+                    Total Area is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputlivingspace">Living Space</label>
+                <input type="text" class="form-control" id="inputlivingspace" name="livingSpace" #livingSpace="ngModel" [(ngModel)]="selectedFlat.livingSpace"
+                  placeholder="Living Space" [class.form-control-danger]="livingSpace.invalid && livingSpace.touched" required>
+                <div class="md-errors-spacer" [hidden]="livingSpace.valid || livingSpace.untouched">
+                  <div *ngIf="livingSpace.errors && livingSpace.errors['required']">
+                    Living Space is required
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputtotalArea">Total Area</label>
-            <input type="text" class="form-control" id="inputtotalArea" name="totalArea" #totalArea="ngModel" [(ngModel)]="selectedFlat.totalArea"
-              placeholder="Total Area" [class.form-control-danger]="totalArea.invalid && totalArea.touched" required>
-            <div class="md-errors-spacer" [hidden]="totalArea.valid || totalArea.untouched">
-              <div *ngIf="totalArea.errors && totalArea.errors['required']">
-                Total Area is required
-              </div>
+
+        </nb-card-body>
+        <nb-card-footer>
+          <div class="row" *ngIf="flatRegFormVisible">
+            <div class="col-sm-6 text-center">
+              <button type="submit" [disabled]="!flatForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
+            </div>
+            <div class="col-sm-6 text-center">
+              <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(flatForm)">Reset</button>
             </div>
           </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputlivingspace">Living Space</label>
-            <input type="text" class="form-control" id="inputlivingspace" name="livingSpace" #livingSpace="ngModel" [(ngModel)]="selectedFlat.livingSpace"
-              placeholder="Living Space" [class.form-control-danger]="livingSpace.invalid && livingSpace.touched" required>
-            <div class="md-errors-spacer" [hidden]="livingSpace.valid || livingSpace.untouched">
-              <div *ngIf="livingSpace.errors && livingSpace.errors['required']">
-                Living Space is required
-              </div>
+          <div class="row" *ngIf="flatEditFormVisible">
+            <div class="col-sm-12 text-center">
+              <button type="submit" [disabled]="!flatForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-4 formBtn text-center">
-          <button type="submit" [disabled]="!flatForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
-        </div>
-        <div class="col-sm-4 formBtn text-center">
-          <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetForm(flatForm)">Reset</button>
-        </div>
-        <div class="col-sm-4 formBtn text-center">
-          <button type="button" class="btn btn-hero-danger btn-demo" (click)="closeFlatRegistrationOrEditForm(flatForm)">Close</button>
-        </div>
-      </div>
-    </nb-card-body>
-  </nb-card>
+        </nb-card-footer>
+      </nb-card>
+    </div>
+  </div>
 </form>
-<!-- this is our edit form -->
-<form class="emp-form" #flatForm="ngForm" (ngSubmit)="onSubmit(flatForm)" *ngIf="flatEditFormVisible">
-  <nb-card>
-    <nb-card-header>
-      <div class="row">
-        <div class="col-sm-12 text-center">Flat Edit Table</div>
-      </div>
-    </nb-card-header>
-    <nb-card-body>
-      <div class="row">
-        <input type="hidden" *ngIf="selectedFlat && selectedFlat.id" name="id" #id="ngModel" [(ngModel)]="selectedFlat.id">
-        <input type="hidden" *ngIf="selectedFlat && selectedFlat.residentAmount" name="residentAmount" #id="ngModel" [(ngModel)]="selectedFlat.residentAmount">
-        <input type="hidden" *ngIf="selectedFlat && selectedFlat.houseId" name="houseId" #id="ngModel" [(ngModel)]="selectedFlat.houseId">
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputstreet">Floor</label>
-            <input class="form-control" id="inputfloor" name="floor" #floor="ngModel" [(ngModel)]="selectedFlat.floor" placeholder="Floor"
-              [class.form-control-danger]="floor.invalid && floor.touched" required>
-            <div class="md-errors-spacer" [hidden]="floor.valid || floor.untouched">
-              <div *ngIf="floor.errors && floor.errors['required']">
-                Floor is required
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputnumber">Flat Number</label>
-            <input type="text" class="form-control" id="inputnumber" name="number" #number="ngModel" [(ngModel)]="selectedFlat.number"
-              placeholder="Flat Number" [class.form-control-danger]="number.invalid && number.touched" required>
-            <div class="md-errors-spacer" [hidden]="number.valid || number.untouched">
-              <div *ngIf="number.errors && number.errors['required']">
-                Number is required
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputtotalArea">Total Area</label>
-            <input type="text" class="form-control" id="inputtotalArea" name="totalArea" #totalArea="ngModel" [(ngModel)]="selectedFlat.totalArea"
-              placeholder="Total Area" [class.form-control-danger]="totalArea.invalid && totalArea.touched" required>
-            <div class="md-errors-spacer" [hidden]="totalArea.valid || totalArea.untouched">
-              <div *ngIf="totalArea.errors && totalArea.errors['required']">
-                Total Area is required
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputlivingspace">Living Space</label>
-            <input type="text" class="form-control" id="inputlivingspace" name="livingSpace" #livingSpace="ngModel" [(ngModel)]="selectedFlat.livingSpace"
-              placeholder="Living Space" [class.form-control-danger]="livingSpace.invalid && livingSpace.touched" required>
-            <div class="md-errors-spacer" [hidden]="livingSpace.valid || livingSpace.untouched">
-              <div *ngIf="livingSpace.errors && livingSpace.errors['required']">
-                Living Space is required
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="row">
-          <div class="col-sm-6 text-center">
-            <button type="submit" [disabled]="!flatForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
-          </div>
-          <div class="col-sm-6 text-center">
-            <button type="button" class="btn btn-hero-danger btn-demo" (click)="closeFlatRegistrationOrEditForm(flatForm)">Close</button>
-          </div>
-        </div>
-      </div>
-    </nb-card-body>
-  </nb-card>
-</form>
-<!-- <pre class="code" *ngIf="selectedFlat">
-  {{selectedFlat | json}}
-</pre> -->

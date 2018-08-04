@@ -21,7 +21,7 @@
   <nb-card-header>
     <div class="row">
       <div class="col-sm-4">
-        <button class="btn btn-warning with-margins" [nbPopover]="card" nbPopoverPlacement="left">With card</button>
+        <button class="btn btn-warning with-margins" [nbPopover]="card" nbPopoverPlacement="left">Flat Info</button>
       </div>
 
       <div class="col-sm-4 text-center">
@@ -41,214 +41,126 @@
   <button class="btn btn-hero-primary btn-demo" (click)="navigateToPreviousPage()">Go Back</button>
 </nb-card>
 <!-- this is my registration form -->
-<form class="emp-form" #residentForm="ngForm" (ngSubmit)="onSubmit(residentForm)" *ngIf="residentRegFormVisable">
-  <nb-card>
-    <nb-card-header>
-      <div class="row">
-        <div class="col-sm-12 text-center">Resident Registration Form</div>
-      </div>
-    </nb-card-header>
-    <nb-card-body>
-      <div class="row">
-        <input type="hidden" *ngIf="selectedResident && selectedResident.id" name="id" #id="ngModel" [(ngModel)]="selectedResident.id">
-        <input type="hidden" *ngIf="selectedResident && selectedResident.flatAmount" name="flatAmount" #id="ngModel" [(ngModel)]="selectedResident.flatAmount">
-        <input type="hidden" *ngIf="selectedResident && selectedResident.flatId" name="flatId" #id="ngModel" [(ngModel)]="selectedResident.flatId">
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputstreet">First Name</label>
-            <input class="form-control" id="inputstreet" name="firstName" #firstName="ngModel" [(ngModel)]="selectedResident.firstName"
-              placeholder="First Name" [class.form-control-danger]="firstName.invalid && firstName.touched" required>
-            <div class="md-errors-spacer" [hidden]="firstName.valid || firstName.untouched">
-              <div *ngIf="firstName.errors && firstName.errors['required']">
-                First Name is required
-              </div>
 
+
+<form class="emp-form" #residentForm="ngForm" (ngSubmit)="onSubmit(residentForm)">
+  <div class="row outerdiv">
+    <div class="col-md-6 inerdiv">
+      <nb-card *ngIf="(residentRegFormVisable || residentEditFormVisable)">
+        <nb-card-header>
+          <div class="row">
+            <div class="col-sm-6 text-center">
+              <h3 *ngIf="residentRegFormVisable">Resident Registration Form:</h3>
+              <h3 *ngIf="residentEditFormVisable">Resident Edit Form:</h3>
+            </div>
+            <div class="col-sm-6 text-center">
+              <button type="button" class="btn btn-hero-danger btn-demo" (click)="closeResidentRegistrationOrEditForm(residentForm)">Close</button>
             </div>
           </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputnumber">Last Name</label>
-            <input type="text" class="form-control" id="inputnumber" name="lastName" #lastName="ngModel" [(ngModel)]="selectedResident.lastName"
-              placeholder="Last Name" [class.form-control-danger]="lastName.invalid && lastName.touched" required>
-            <div class="md-errors-spacer" [hidden]="lastName.valid || lastName.untouched">
-              <div *ngIf="lastName.errors && lastName.errors['required']">
-                Last Name is required
+
+        </nb-card-header>
+        <nb-card-body>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <input type="hidden" *ngIf="selectedResident && selectedResident.id" name="id" #id="ngModel" [(ngModel)]="selectedResident.id">
+                <input type="hidden" *ngIf="selectedResident && selectedResident.flatAmount" name="flatAmount" #id="ngModel" [(ngModel)]="selectedResident.flatAmount">
+                <input type="hidden" *ngIf="selectedResident && selectedResident.flatId" name="flatId" #id="ngModel" [(ngModel)]="selectedResident.flatId">
+                <label for="inputstreet">First Name</label>
+                <input class="form-control" id="inputstreet" name="firstName" #firstName="ngModel" [(ngModel)]="selectedResident.firstName"
+                  placeholder="First Name" [class.form-control-danger]="firstName.invalid && firstName.touched" required>
+                <div class="md-errors-spacer" [hidden]="firstName.valid || firstName.untouched">
+                  <div *ngIf="firstName.errors && firstName.errors['required']">
+                    First Name is required
+                  </div>
+                </div>
               </div>
-
             </div>
-
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputpostcode">Post Code</label>
-            <input type="text" class="form-control" id="inputpostcode" name="postCode" #postCode="ngModel" [(ngModel)]="selectedResident.postCode"
-              placeholder="Post Code" [class.form-control-danger]="postCode.invalid && postCode.touched" required>
-            <div class="md-errors-spacer" [hidden]="postCode.valid || postCode.untouched">
-              <div *ngIf="postCode.errors && postCode.errors['required']">
-                Post Code is required
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputphone">Phone Number</label>
-            <input type="text" class="form-control" id="inputphone" name="phone" #phone="ngModel" [(ngModel)]="selectedResident.phone"
-              placeholder="Phone Number" [class.form-control-danger]="phone.invalid && phone.touched" required>
-            <div class="md-errors-spacer" [hidden]="phone.valid || phone.untouched">
-              <div *ngIf="phone.errors && phone.errors['required']">
-                Phone Number is required
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputnumber">Last Name</label>
+                <input type="text" class="form-control" id="inputnumber" name="lastName" #lastName="ngModel" [(ngModel)]="selectedResident.lastName"
+                  placeholder="Last Name" [class.form-control-danger]="lastName.invalid && lastName.touched" required>
+                <div class="md-errors-spacer" [hidden]="lastName.valid || lastName.untouched">
+                  <div *ngIf="lastName.errors && lastName.errors['required']">
+                    Last Name is required
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <!-- <label for="inputcity">Phone Number</label>
-          <int-phone-prefix name="phone" #phone="ngModel" [(ngModel)]="selectedResident.phone" [class.form-control-danger]="phone.invalid && phone.touched"
-            required></int-phone-prefix>
-          <div class="md-errors-spacer" [hidden]="phone.valid || phone.untouched">
-            <div *ngIf="phone.errors && phone.errors['required']">
-              Phone is required
-            </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputpostcode">Post Code</label>
+                <input type="text" class="form-control" id="inputpostcode" name="postCode" #postCode="ngModel" [(ngModel)]="selectedResident.postCode"
+                  placeholder="Post Code" [class.form-control-danger]="postCode.invalid && postCode.touched" required>
+                <div class="md-errors-spacer" [hidden]="postCode.valid || postCode.untouched">
+                  <div *ngIf="postCode.errors && postCode.errors['required']">
+                    Post Code is required
+                  </div>
 
-          </div> -->
-
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputcountry">Email</label>
-            <input type="text" class="form-control" id="inputcountry" name="email" #email="ngModel" [(ngModel)]="selectedResident.email"
-              placeholder="Email" class="form-control" placeholder="Email address" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
-              [class.form-control-danger]="email.invalid && email.touched" required>
-            <div class="md-errors-spacer" [hidden]="email.valid || email.untouched">
-              <div *ngIf="email.errors && email.errors['required']">
-                Email is required
+                </div>
               </div>
-              <div *ngIf="email.errors && email.errors.pattern">
-                Email is invalid
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputphone">Phone Number</label>
+                <input type="text" autocomplete="off" id="inputphone" name="phone" placeholder="Phone" #phone="ngModel" [class.form-control-danger]="phone.invalid && phone.touched"
+                  required class="form-control" [(ngModel)]="query" (keyup)=filter()>
+                <div class="col-sm-4" *ngIf="filteredList.length > 0">
+                  <div class="md-errors-spacer" [hidden]="phone.valid || phone.untouched">
+                    <div *ngIf="phone.errors && phone.errors['required']">
+                      Phone is required
+                    </div>
+                  </div>
+                  <ul class="list-group countries-autocomplete">
+                    <li class="list-group-item" *ngFor="let item of filteredList | slice:0:6">
+                      <a (click)="select(item)">{{item.name}}{{item.dial_code}}</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group full-width">
+                <div class="input-group-addon">@</div>
+                <input type="text" class="form-control" id="inputcemail" name="email" #email="ngModel" [(ngModel)]="selectedResident.email"
+                  class="form-control" placeholder="Email address" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                  [class.form-control-danger]="email.invalid && email.touched" required>
 
-      </div>
+              </div>
+              <div class="md-errors-spacer" [hidden]="email.valid || email.untouched">
+                <div *ngIf="email.errors && email.errors['required']">
+                  Email is required
+                </div>
+                <div *ngIf="email.errors && email.errors.pattern">
+                  Email is invalid
+                </div>
+              </div>
+            </div>
 
-      <div class="row">
-        <div class="col-sm-4 text-center">
-          <button type="submit" [disabled]="!residentForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
-        </div>
-        <div class="col-sm-4 text-center">
-          <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetResidentForm(residentForm)">Reset</button>
-        </div>
-        <div class="col-sm-4 text-center">
-          <button type="button" class="btn btn-hero-danger btn-demo" (click)="closeResidentRegistrationOrEditForm(residentForm)">Close</button>
-        </div>
-      </div>
+          </div>
 
-
-    </nb-card-body>
-  </nb-card>
+        </nb-card-body>
+        <nb-card-footer>
+          <div class="row" *ngIf="residentRegFormVisable">
+            <div class="col-sm-6 text-center">
+              <button type="submit" [disabled]="!residentForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
+            </div>
+            <div class="col-sm-6 text-center">
+              <button type="button" class="btn btn-hero-warning btn-demo" (click)="resetResidentForm(residentForm)">Reset</button>
+            </div>
+          </div>
+          <div class="row" *ngIf="residentEditFormVisable">
+            <div class="col-sm-12 text-center">
+              <button type="submit" [disabled]="!residentForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
+            </div>
+          </div>
+        </nb-card-footer>
+      </nb-card>
+    </div>
+  </div>
 </form>
-<!-- This is my edit form -->
-<form class="emp-form" #residentForm="ngForm" (ngSubmit)="onSubmit(residentForm)" *ngIf="residentEditFormVisable">
-  <nb-card>
-    <nb-card-header>Resident Edit Form</nb-card-header>
-    <nb-card-body>
-      <div class="row">
-        <input type="hidden" *ngIf="selectedResident && selectedResident.id" name="id" #id="ngModel" [(ngModel)]="selectedResident.id">
-        <input type="hidden" *ngIf="selectedResident && selectedResident.flatAmount" name="flatAmount" #id="ngModel" [(ngModel)]="selectedResident.flatAmount">
-        <input type="hidden" *ngIf="selectedResident && selectedResident.flatId" name="flatId" #id="ngModel" [(ngModel)]="selectedResident.flatId">
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputstreet">First Name</label>
-            <input class="form-control" id="inputstreet" name="firstName" #firstName="ngModel" [(ngModel)]="selectedResident.firstName"
-              placeholder="First Name" [class.form-control-danger]="firstName.invalid && firstName.touched" required>
-            <div class="md-errors-spacer" [hidden]="firstName.valid || firstName.untouched">
-              <div *ngIf="firstName.errors && firstName.errors['required']">
-                First Name is required
-              </div>
-
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputnumber">Last Name</label>
-            <input type="text" class="form-control" id="inputnumber" name="lastName" #lastName="ngModel" [(ngModel)]="selectedResident.lastName"
-              placeholder="Last Name" [class.form-control-danger]="lastName.invalid && lastName.touched" required>
-            <div class="md-errors-spacer" [hidden]="lastName.valid || lastName.untouched">
-              <div *ngIf="lastName.errors && lastName.errors['required']">
-                Last Name is required
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputpostcode">Post Code</label>
-            <input type="text" class="form-control" id="inputpostcode" name="postCode" #postCode="ngModel" [(ngModel)]="selectedResident.postCode"
-              placeholder="Post Code" [class.form-control-danger]="postCode.invalid && postCode.touched" required>
-            <div class="md-errors-spacer" [hidden]="postCode.valid || postCode.untouched">
-              <div *ngIf="postCode.errors && postCode.errors['required']">
-                Post Code is required
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputphone">Phone Number</label>
-            <input type="text" class="form-control" id="inputphone" name="phone" #phone="ngModel" [(ngModel)]="selectedResident.phone"
-              placeholder="Phone Number" [class.form-control-danger]="phone.invalid && phone.touched" required>
-            <div class="md-errors-spacer" [hidden]="phone.valid || phone.untouched">
-              <div *ngIf="phone.errors && phone.errors['required']">
-                Phone Number is required
-              </div>
-            </div>
-          </div>
-          <!-- <label for="inputcity">Phone Number</label>
-          <int-phone-prefix name="phone" #phone="ngModel" [(ngModel)]="selectedResident.phone" [class.form-control-danger]="phone.invalid && phone.touched"
-            required></int-phone-prefix>
-          <div class="md-errors-spacer" [hidden]="phone.valid || phone.untouched">
-            <div *ngIf="phone.errors && phone.errors['required']">
-              Phone is required
-            </div>
-
-          </div> -->
-
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="inputcountry">Email</label>
-            <input type="text" class="form-control" id="inputcountry" name="email" #email="ngModel" [(ngModel)]="selectedResident.email"
-              placeholder="Email" class="form-control" placeholder="Email address" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
-              [class.form-control-danger]="email.invalid && email.touched" required>
-            <div class="md-errors-spacer" [hidden]="email.valid || email.untouched">
-              <div *ngIf="email.errors && email.errors['required']">
-                Email is required
-              </div>
-              <div *ngIf="email.errors && email.errors.pattern">
-                Email is invalid
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;  ">
-        <button type="submit" [disabled]="!residentForm.valid" class="btn btn-hero-success btn-demo">Submit</button>
-        <button type="button" class="btn btn-hero-danger btn-demo" (click)="closeResidentRegistrationOrEditForm(residentForm)">Close</button>
-      </div>
-
-    </nb-card-body>
-  </nb-card>
-</form>
-<!-- <pre class="code">
-  {{selectedResident | json}}
-</pre> -->

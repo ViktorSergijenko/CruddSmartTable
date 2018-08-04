@@ -23,6 +23,13 @@ div.Wrapper *
   z-index: 1;
   min-width: 280px;
 }
+.outerdiv {
+  margin: 0 auto;
+}
+.inerdiv{
+  display: table;
+  margin: 0 auto;
+}
 // .anyClass {
 //   height:150px;
 //   overflow-y: scroll;
