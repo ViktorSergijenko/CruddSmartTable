@@ -154,7 +154,7 @@ export class FlatTableComponent implements OnInit {
    */
   constructor(
     private flatService: FlatService,
-    private houseService: HouseService,
+
     private location: Location,
     private route: ActivatedRoute,
     private router: Router,
@@ -180,9 +180,7 @@ export class FlatTableComponent implements OnInit {
   gettinghouseIdFromRoute() {
     // Getting a route param from our routing.
     this.specifichouseId = this.route.snapshot.paramMap.get('id');
-    console.log('Checking my specifichouseId' + this.specifichouseId);
     this.selectedFlat = new Flat(this.specifichouseId); // Using specifichouseId variable in Flat object constructor.
-    console.log('Checking my selectedFlat' + <Flat>this.selectedFlat);
     this.sourtedFlatList = []; // To avoid problems with table loading, we clear all that could be in our sourtedFlatList array
     // });
   }
@@ -295,9 +293,9 @@ export class FlatTableComponent implements OnInit {
    */
   onSubmit(form: NgForm) {
     if (!form.value.id) {
-      this.addRequestFunctionInForm(form);
+      this.submitToAddFlatInForm(form);
     } else {
-      this.editRequestFunctionInForm(form);
+      this.submitToEditFlatInForm(form);
     }
   }
   /**
@@ -305,7 +303,7 @@ export class FlatTableComponent implements OnInit {
    * @param {NgForm} form form values
    * @memberof FlatTableComponent
    */
-  addRequestFunctionInForm(form: NgForm) {
+  submitToAddFlatInForm(form: NgForm) {
     this.flatService.addFlat(form.value).subscribe(newFlat => {
       this.source.prepend(newFlat); // Function that addes a new object in to the table.
       this.toasterService.popAsync('success', 'Flat was added'); // Will make a Toastr message.
@@ -325,7 +323,7 @@ export class FlatTableComponent implements OnInit {
    * @param {NgForm} form Form values.
    * @memberof FlatTableComponent
    */
-  editRequestFunctionInForm(form: NgForm) {
+  submitToEditFlatInForm(form: NgForm) {
     this.flatService.editFlat(form.value.id, form.value)
       .subscribe(editedFlat => { // Returning a edited flat
         this.source.update(this.flatThatWeWantToChange.data, editedFlat); // Updating our edited object in our table

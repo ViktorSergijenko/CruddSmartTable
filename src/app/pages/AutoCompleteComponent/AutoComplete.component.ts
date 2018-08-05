@@ -3,7 +3,10 @@ import { Component, ElementRef } from '@angular/core';
 @Component({
   selector: 'app-autocompletecomponent',
   templateUrl: './AutoCompleteComponent.component.html',
-  styleUrls: ['./AutoCompleteComponent.component.scss'],
+  host: {
+    '(document:click)': 'handleClick($event)',
+  },
+
 })
 export class AutoCompleteComponent {
   public query = '';

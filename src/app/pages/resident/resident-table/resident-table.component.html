@@ -21,11 +21,18 @@
   <nb-card-header>
     <div class="row">
       <div class="col-sm-4">
-        <button class="btn btn-warning with-margins" [nbPopover]="card" nbPopoverPlacement="left">Flat Info</button>
+        <button class="btn btn-warning with-margins" [nbPopover]="card" nbPopoverPlacement="left">Flat Info
+          <h3>
+            <i class="nb-roller-shades
+          "></i>
+          </h3>
+        </button>
       </div>
 
       <div class="col-sm-4 text-center">
-        <h1>Resident Table</h1>
+        <h1>Resident Table
+          <i class="fa fa fa-bed"></i>
+        </h1>
       </div>
 
 
@@ -103,7 +110,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div id="interPhones" class="col-sm-6">
               <div class="form-group">
                 <label for="inputphone">Phone Number</label>
                 <input type="text" autocomplete="off" id="inputphone" name="phone" placeholder="Phone" #phone="ngModel" [class.form-control-danger]="phone.invalid && phone.touched"
@@ -114,9 +121,9 @@
                       Phone is required
                     </div>
                   </div>
-                  <ul class="list-group countries-autocomplete">
+                  <ul class="list-group internationalNumber-autocomplete">
                     <li class="list-group-item" *ngFor="let item of filteredList | slice:0:6">
-                      <a (click)="select(item)">{{item.name}}{{item.dial_code}}</a>
+                      <a (click)="select(item)">{{item.name}} {{item.dial_code}}</a>
                     </li>
                   </ul>
                 </div>

@@ -1,11 +1,14 @@
 <toaster-container>
 </toaster-container>
+
 <!-- this is cards with additional info -->
 <nb-card *ngIf="!editHouseFormVisible && !registrationHouseFormVisible">
   <nb-card-header>
     <div class="row">
       <div class="col-sm-12 text-center">
-        <h1>House Table</h1> Total amount of houses in Table: {{totalAmountOfHosesInTable}} houses
+        <h1>House Table
+          <i class="fa fa fa-building"></i>
+        </h1> Total amount of houses in Table: {{totalAmountOfHosesInTable}} houses
       </div>
     </div>
 
@@ -90,7 +93,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-sm-6">
+                <div id="countries1" class="col-sm-6">
                   <div class="form-group">
                     <label for="inputcountry">Country</label>
                     <input type="text" autocomplete="off" id="inputcountry" name="country" placeholder="Country" #country="ngModel" [class.form-control-danger]="country.invalid && country.touched"
@@ -103,12 +106,13 @@
                       </div>
                       <ul class="list-group countries-autocomplete">
                         <li class="list-group-item" *ngFor="let item of filteredList | slice:0:6">
-                          <a (click)="select(item)">{{item.name}}{{spaceForFilter}}{{item.dial_code}}</a>
+                          <a (click)="select(item)">{{item}}</a>
                         </li>
                       </ul>
                     </div>
                   </div>
                 </div>
+
               </div>
               <div class="row ">
                 <div class="col-sm-12 inerdiv">

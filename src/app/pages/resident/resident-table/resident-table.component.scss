@@ -10,3 +10,8 @@ nb-card {
     display: table;
     margin: 0 auto;
   }
+  .internationalNumber-autocomplete {
+    position: fixed;
+    z-index: 1;
+    min-width: 280px;
+  }

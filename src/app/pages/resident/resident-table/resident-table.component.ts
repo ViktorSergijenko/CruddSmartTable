@@ -1,5 +1,5 @@
 import { isNumeric } from 'rxjs/util/isNumeric';
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ResidentService } from '../resident.service';
 import { Location } from '@angular/common';
@@ -1231,7 +1231,7 @@ export class ResidentTableComponent implements OnInit {
       'code': 'AX',
     },
   ];
-  public elementRef;
+
   /**
    * Variable that will contain one of Id's of a flat,that will come with params from route.
    * @type {number}
@@ -1343,8 +1343,25 @@ export class ResidentTableComponent implements OnInit {
     private location: Location,
     private route: ActivatedRoute,
     private router: Router,
+
     private toasterService: ToasterService,
   ) {
+    document.addEventListener('click', (evt) => {
+      const flyoutElement = document.getElementById('interPhones');
+      let targetElement = evt.srcElement;
+
+      do {
+        if (targetElement === flyoutElement) {
+          this.filter();
+          return;
+        }
+        // Go up the DOMs
+        targetElement = targetElement.parentElement;
+      } while (targetElement);
+
+      // This is a click outside.
+      this.filteredList = [];
+    });
     this.residentEditFormVisable = null; // Using this in constructor,to make Edit form Invisible at the beggining.
     this.residentRegFormVisable = null;  // Using this in constructor,to make Registration form Invisible at the beggining.
   }
@@ -1446,6 +1463,7 @@ export class ResidentTableComponent implements OnInit {
   openResidentEditForm(event): void {
     this.residentThatWeWantToChange = event;
     this.selectedResident = Object.assign({}, event.data); // This will send all values that has our object that we want to edit to our form.
+    this.query = this.selectedResident.phone;
     this.residentEditFormVisable = true; // If residentEditFormVisable value is not 0, then it will be shown.
   }
 
@@ -1477,6 +1495,7 @@ export class ResidentTableComponent implements OnInit {
   resetResidentForm(form?: NgForm) {
     if (form !== null) {
       form.reset();
+      this.query = '';
       this.selectedResident = new Resident(this.additionalFlatId);
     }
 
@@ -1566,20 +1585,6 @@ export class ResidentTableComponent implements OnInit {
   select(item) {
     this.query = item.dial_code;
     this.filteredList = [];
-  }
-  handleClick(event) {
-    let clickedComponent = event.target;
-    let inside = false;
-    do {
-      if (clickedComponent === this.elementRef.nativeElement) {
-        inside = true;
-      }
-      clickedComponent = clickedComponent.parentNode;
-    } while (clickedComponent);
-    if (!inside) {
-      this.filteredList = [];
-    }
-
   }
 
 }
