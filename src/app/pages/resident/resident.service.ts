@@ -23,34 +23,26 @@ export class ResidentService {
     private http: Http,
   ) { }
 
+
   /**
    * Function sends a  request to create a new object
    * @param {Resident} res res-resident object
    * @returns post request to the server
    * @memberof ResidentService 
    */
-  /**
- * FIXME💩: stringify not needed, re-check your logic + header and request options (not needed)
- */
   addResident(res: Resident) {
-    const body = JSON.stringify(res); // why i cant use var and let instead of const here?
+    const body = JSON.stringify(res);
     const headerOptions = new Headers({ 'Content-Type': 'application/json' });
     const requestOptions = new RequestOptions({ method: RequestMethod.Post, headers: headerOptions });
     return this.http.post(environment.residentUlr, body, requestOptions).map(resident => resident.json());
   }
 
-  /*
-* FIXME💩: Wrong JSDocs + Description with capital letter
-*/
+
   /**
    * Function sends a request to the server to edit a object
    * @param {*} id id-id of an object that we want to edit
    * @param {*} res res-Resident object with new values
    * @returns put request to the server
-   * @memberof ResidentService 
-   */
-  /**
-   * FIXME💩: Types + stringify not needed, re-check your logic + header and request options (not needed)
    */
   editResident(id, res) {
     const body = JSON.stringify(res);

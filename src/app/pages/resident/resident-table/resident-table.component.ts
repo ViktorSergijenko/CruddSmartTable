@@ -6,7 +6,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FlatService } from '../../flat/flat.service';
 import { Resident } from '../resident.model';
-import { NgForm, FormGroup } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import 'rxjs/add/operator/take';
 
 

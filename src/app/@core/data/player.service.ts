@@ -7,6 +7,7 @@ export class Track {
   cover: string;
 }
 
+// tslint:disable-next-line:max-classes-per-file
 @Injectable()
 export class PlayerService {
   current: number;

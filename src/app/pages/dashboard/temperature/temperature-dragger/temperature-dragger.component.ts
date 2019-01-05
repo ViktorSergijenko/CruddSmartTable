@@ -13,7 +13,7 @@ export class TemperatureDraggerComponent implements AfterViewInit, OnChanges {
 
   @ViewChild('svgRoot') svgRoot: ElementRef;
 
-  @Input() fillColors: string|string[] = '#2ec6ff';
+  @Input() fillColors: string | string[] = '#2ec6ff';
   @Input() disableArcColor = '#999999';
   @Input() bottomAngle = 90;
   @Input() arcThickness = 18; // CSS pixels
@@ -27,8 +27,8 @@ export class TemperatureDraggerComponent implements AfterViewInit, OnChanges {
     this.value = value;
   }
 
-  @Input() min = 0; // min output value
-  @Input() max = 100; // max output value
+  @Input() min = 0; // Min output value
+  @Input() max = 100; // Max output value
   @Input() step = 0.1;
 
   @Output() power = new EventEmitter<boolean>();
@@ -142,8 +142,8 @@ export class TemperatureDraggerComponent implements AfterViewInit, OnChanges {
 
 
     const circleFactor = this.bottomAngleRad <= Math.PI
-      ? ( 2 / (1 + Math.cos(halfAngle)) )
-      : ( 2 * Math.sin(halfAngle) / (1 + Math.cos(halfAngle)) );
+      ? (2 / (1 + Math.cos(halfAngle)))
+      : (2 * Math.sin(halfAngle) / (1 + Math.cos(halfAngle)));
     if (circleFactor > svgAreaFactor) {
       if (this.bottomAngleRad > Math.PI) {
         this.radius = (VIEW_BOX_SIZE - 2 * thumbMargin) / (2 * Math.sin(halfAngle));
@@ -245,7 +245,7 @@ export class TemperatureDraggerComponent implements AfterViewInit, OnChanges {
 
     const gradArray = [];
 
-    for (let i = 0, currentAngle = this.bottomAngleRad / 2; i < this.colors.length; i++, currentAngle += angleStep) {
+    for (let i = 0, currentAngle = this.bottomAngleRad / 2; i < this.colors.length; i++ , currentAngle += angleStep) {
       gradArray.push({
         start: { x: calcX(currentAngle), y: calcY(currentAngle) },
         end: { x: calcX(currentAngle + angleStep), y: calcY(currentAngle + angleStep) },

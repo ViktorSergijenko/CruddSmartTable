@@ -1,5 +1,5 @@
 
-import { of as observableOf,  Observable } from 'rxjs';
+import { of as observableOf, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 
 
@@ -20,7 +20,7 @@ export class UserService {
   private userArray: any[];
 
   constructor() {
-    // this.userArray = Object.values(this.users);
+
   }
 
   getUsers(): Observable<any> {

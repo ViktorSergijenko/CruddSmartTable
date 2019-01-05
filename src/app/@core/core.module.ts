@@ -28,7 +28,6 @@ const socialLinks = [
 
 export class NbSimpleRoleProvider extends NbRoleProvider {
   getRole() {
-    // here you could provide any role based on any auth flow
     return observableOf('guest');
   }
 }
@@ -47,7 +46,7 @@ export const NB_CORE_PROVIDERS = [
         },
         register: {
           // ...
-          endpoint: 'http://localhost:55420/api/User/Register', // what is a endpoint?
+          endpoint: 'http://localhost:55420/api/User/Register',
         },
       }),
     ],
@@ -79,6 +78,7 @@ export const NB_CORE_PROVIDERS = [
   AnalyticsService,
 ];
 
+// tslint:disable-next-line:max-classes-per-file
 @NgModule({
   imports: [
     CommonModule,

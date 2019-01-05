@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { FlatService } from '../flat.service';
-import { HouseService } from '../../house/house.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
@@ -9,7 +8,6 @@ import { Flat } from '../flat.model';
 import { NgForm } from '@angular/forms';
 import { ToasterService } from 'angular2-toaster';
 import { House } from '../../house/house.model';
-import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-flat-table',
   templateUrl: './flat-table.component.html',

@@ -6,7 +6,6 @@ import { HouseService } from '../house.service';
 import { NgForm } from '@angular/forms';
 import { House } from '../house.model';
 import { ToasterService } from 'angular2-toaster';
-import { NbSpinnerService } from '@nebular/theme/services/spinner.service';
 
 
 
