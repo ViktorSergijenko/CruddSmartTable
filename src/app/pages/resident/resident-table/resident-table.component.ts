@@ -9,10 +9,7 @@ import { Resident } from '../resident.model';
 import { NgForm, FormGroup } from '@angular/forms';
 import 'rxjs/add/operator/take';
 
-/**
- * FIXME💩: Try to remove ../node_modules/  
- * COrrect: 'angular2-toaster' + unused imports
- */
+
 import { ToasterService } from 'angular2-toaster';
 import { forkJoin } from 'rxjs';
 
@@ -1430,8 +1427,6 @@ export class ResidentTableComponent implements OnInit {
     }
   }
 
-  // FIXME💩: Types + JSDoc param description should be moved to specific model and it should be described
-  // + you dont need "-" after param name. Good example: @param {*} event Event of something
   /**
    * Function will delete a resident.
    * @param {*} event  event-Resident Object
@@ -1520,16 +1515,24 @@ export class ResidentTableComponent implements OnInit {
    */
   submitToAddNewResident(form: NgForm) {
     forkJoin(
+      // Adding new resident
       this.residentService.addResident(form.value),
+      // Updating our resident amount value in flat, by requesting a new value
       this.residentService.getresidentAmountInOneFlat(this.additionalFlatId),
     ).subscribe(newResidentAndresidentAmount => {
+      // Addint new resident in our smart table list
       this.source.prepend(newResidentAndresidentAmount[0]);
+      // If it was successfull the this message will appear
       this.toasterService.popAsync('success', 'Resident was added');
+      // Reseting our registration form
       this.resetResidentForm(form);
+      // Updating our resident amount value
       this.totalResidentsInAdditionalFlat = newResidentAndresidentAmount[1];
+      // If there was an error
     }, (err) => {
       this.errorFromServer = err.text();
-      this.toasterService.popAsync('error', 'Custom error in component', this.errorFromServer);
+      // This message will appaer
+      this.toasterService.popAsync('error', this.errorFromServer);
     });
   }
   /**
@@ -1546,7 +1549,7 @@ export class ResidentTableComponent implements OnInit {
       },
         (err) => {
           this.errorFromServer = err.text();
-          this.toasterService.popAsync('error', 'Custom error in component', this.errorFromServer);
+          this.toasterService.popAsync('error', this.errorFromServer);
         });
   }
 
@@ -1564,21 +1567,23 @@ export class ResidentTableComponent implements OnInit {
     this.resetResidentForm(form);
   }
   filter() {
-    if (this.query !== '') {
-      if (isNumeric(this.query) === true) {
+    // If our query is epmty, then it will drop list with all international numbers
+    if (this.query === '') {
+      this.filteredList = this.internationalNumbers;
+    } else {
+      // If our query has only digits, then drop down will be filtered by digits
+      if (isNumeric(this.query)) {
         this.filteredList = this.internationalNumbers.filter(function (el) {
           return el.dial_code.toLowerCase().indexOf(this.query.toLowerCase()) > -1;
         }.bind(this));
         console.log('Number' + this.filteredList);
+        // If our query has chars, then filter will work with chars
       } else {
         this.filteredList = this.internationalNumbers.filter(function (el) {
           return el.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1;
         }.bind(this));
         console.log('nonumber' + this.filteredList);
       }
-
-    } else {
-      this.filteredList = [];
     }
   }
 

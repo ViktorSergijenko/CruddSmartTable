@@ -70,12 +70,16 @@
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
-                <input type="hidden" *ngIf="selectedResident && selectedResident.id" name="id" #id="ngModel" [(ngModel)]="selectedResident.id">
-                <input type="hidden" *ngIf="selectedResident && selectedResident.flatAmount" name="flatAmount" #id="ngModel" [(ngModel)]="selectedResident.flatAmount">
-                <input type="hidden" *ngIf="selectedResident && selectedResident.flatId" name="flatId" #id="ngModel" [(ngModel)]="selectedResident.flatId">
+                <input type="hidden" *ngIf="selectedResident && selectedResident.id" name="id" #id="ngModel"
+                  [(ngModel)]="selectedResident.id">
+                <input type="hidden" *ngIf="selectedResident && selectedResident.flatAmount" name="flatAmount" #id="ngModel"
+                  [(ngModel)]="selectedResident.flatAmount">
+                <input type="hidden" *ngIf="selectedResident && selectedResident.flatId" name="flatId" #id="ngModel"
+                  [(ngModel)]="selectedResident.flatId">
                 <label for="inputstreet">First Name</label>
                 <input class="form-control" id="inputstreet" name="firstName" #firstName="ngModel" [(ngModel)]="selectedResident.firstName"
-                  placeholder="First Name" [class.form-control-danger]="firstName.invalid && firstName.touched" required>
+                  placeholder="First Name" [class.form-control-danger]="firstName.invalid && firstName.touched"
+                  required>
                 <div class="md-errors-spacer" [hidden]="firstName.valid || firstName.untouched">
                   <div *ngIf="firstName.errors && firstName.errors['required']">
                     First Name is required
@@ -86,8 +90,9 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="inputnumber">Last Name</label>
-                <input type="text" class="form-control" id="inputnumber" name="lastName" #lastName="ngModel" [(ngModel)]="selectedResident.lastName"
-                  placeholder="Last Name" [class.form-control-danger]="lastName.invalid && lastName.touched" required>
+                <input type="text" class="form-control" id="inputnumber" name="lastName" #lastName="ngModel"
+                  [(ngModel)]="selectedResident.lastName" placeholder="Last Name" [class.form-control-danger]="lastName.invalid && lastName.touched"
+                  required>
                 <div class="md-errors-spacer" [hidden]="lastName.valid || lastName.untouched">
                   <div *ngIf="lastName.errors && lastName.errors['required']">
                     Last Name is required
@@ -100,8 +105,9 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="inputpostcode">Post Code</label>
-                <input type="text" class="form-control" id="inputpostcode" name="postCode" #postCode="ngModel" [(ngModel)]="selectedResident.postCode"
-                  placeholder="Post Code" [class.form-control-danger]="postCode.invalid && postCode.touched" required>
+                <input type="text" class="form-control" id="inputpostcode" name="postCode" #postCode="ngModel"
+                  [(ngModel)]="selectedResident.postCode" placeholder="Post Code" [class.form-control-danger]="postCode.invalid && postCode.touched"
+                  required>
                 <div class="md-errors-spacer" [hidden]="postCode.valid || postCode.untouched">
                   <div *ngIf="postCode.errors && postCode.errors['required']">
                     Post Code is required
@@ -113,8 +119,9 @@
             <div id="interPhones" class="col-sm-6">
               <div class="form-group">
                 <label for="inputphone">Phone Number</label>
-                <input type="text" autocomplete="off" id="inputphone" name="phone" placeholder="Phone" #phone="ngModel" [class.form-control-danger]="phone.invalid && phone.touched"
-                  required class="form-control" [(ngModel)]="query" (keyup)=filter()>
+                <input type="text" autocomplete="off" id="inputphone" name="phone" placeholder="Phone" #phone="ngModel"
+                  [class.form-control-danger]="phone.invalid && phone.touched" required class="form-control"
+                  [(ngModel)]="query" (keyup)=filter() minlength="5" maxlength="14">
                 <div class="col-sm-4" *ngIf="filteredList.length > 0">
                   <div class="md-errors-spacer" [hidden]="phone.valid || phone.untouched">
                     <div *ngIf="phone.errors && phone.errors['required']">
@@ -122,7 +129,7 @@
                     </div>
                   </div>
                   <ul class="list-group internationalNumber-autocomplete">
-                    <li class="list-group-item" *ngFor="let item of filteredList | slice:0:6">
+                    <li class="list-group-item" *ngFor="let item of filteredList">
                       <a (click)="select(item)">{{item.name}} {{item.dial_code}}</a>
                     </li>
                   </ul>

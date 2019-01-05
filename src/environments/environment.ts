@@ -10,6 +10,7 @@
 
 export const environment = {
   production: false,
+  apiUrl: 'http://localhost:52414/api/',
   housesUrl: 'http://localhost:52414/api/House',
   houseUrl: 'http://localhost:52414/api/House/',
   flatsUrl: 'http://localhost:52414/api/flat',

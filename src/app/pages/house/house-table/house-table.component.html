@@ -15,7 +15,7 @@
   </nb-card-header>
 
   <!-- this is our ng2 smart table -->
-  <nb-card-body>
+  <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="danger" nbSpinnerSize="xlarge">
     <ng2-smart-table #table [settings]="settings" [source]="source" (delete)="deleteHouseFromTable($event)" (edit)="openHouseEditForm($event)"
       (create)="openHouseRegistrationForm()">
       <!-- (userRowSelect)="onUserRowSelect($event)" -->
@@ -152,6 +152,6 @@
 </div>
 
 
-<pre class="code">
+<!-- <pre class="code">
     {{selectedHouse | json}}
-  </pre>
+  </pre> -->

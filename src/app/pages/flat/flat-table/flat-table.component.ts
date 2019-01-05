@@ -276,10 +276,10 @@ export class FlatTableComponent implements OnInit {
   /**
    * Function resets all form values(edit and registration)
    * to a default values.
-   * @param {NgForm} [form] form - Form that we want to reset
+   * @param {NgForm} form form - Form that we want to reset
    * @memberof FlatTableComponent
    */
-  resetForm(form?: NgForm) {
+  resetForm(form: NgForm) {
     if (form !== null) {
       form.reset();
       this.selectedFlat = new Flat(this.specifichouseId);

@@ -43,7 +43,7 @@
     "@fortawesome/fontawesome-free": "^5.2.0",
     "@nebular/auth": "^2.0.0-rc.9",
     "@nebular/security": "^2.0.0-rc.8",
-    "@nebular/theme": "^2.0.0-rc.8",
+    "@nebular/theme": "^2.0.0-rc.10",
     "@ng-bootstrap/ng-bootstrap": "1.0.0",
     "@swimlane/ngx-charts": "7.0.1",
     "angular2-chartjs": "0.4.1",

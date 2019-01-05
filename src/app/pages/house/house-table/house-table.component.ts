@@ -6,6 +6,8 @@ import { HouseService } from '../house.service';
 import { NgForm } from '@angular/forms';
 import { House } from '../house.model';
 import { ToasterService } from 'angular2-toaster';
+import { NbSpinnerService } from '@nebular/theme/services/spinner.service';
+
 
 
 
@@ -15,10 +17,6 @@ import { ToasterService } from 'angular2-toaster';
   selector: 'app-house-table',
   templateUrl: './house-table.component.html',
   styleUrls: ['../house.component.scss'],
-  host: {
-    '(document:click)': 'handleClick($event)',
-  },
-
 })
 export class HouseTableComponent implements OnInit {
   /**
@@ -28,7 +26,7 @@ export class HouseTableComponent implements OnInit {
    * @memberof HouseTableComponent
    */
   errorFromServer: string;
-  spaceForFilter = '   ';
+
   /**
    * Variable contains a flat object that we want to edit
    * @memberof HouseTableComponent
@@ -63,8 +61,8 @@ export class HouseTableComponent implements OnInit {
    *
    * @memberof HouseTableComponent
    */
-  public query = '';
-  public countries = [
+  query = '';
+  countries = [
     'Albania', 'Andorra', 'Armenia', 'Austria', 'Azerbaijan', 'Belarus',
 
     'Belgium', 'Bosnia & Herzegovina', 'Bulgaria', 'Croatia', 'Cyprus',
@@ -85,8 +83,8 @@ export class HouseTableComponent implements OnInit {
    *
    * @memberof HouseTableComponent
    */
-  public filteredList = [];
-
+  filteredList = [];
+  loading = true;
 
   /**
    * Ng2 smart table settings.
@@ -201,28 +199,13 @@ export class HouseTableComponent implements OnInit {
       this.source.load(Houses);
       // Counting amount of houses in table.
       this.totalAmountOfHosesInTable = this.source.count();
+      this.loading = false;
     });
 
   }
 
-  // ngAfterViewInit() {
-  //   document.addEventListener('click', (evt) => {
-  //     const flyoutElement = document.getElementById('countries1');
-  //     let targetElement = evt.srcElement;
 
-  //     do {
-  //       if (targetElement === flyoutElement) {
-  //         this.filter();
-  //         return;
-  //       }
-  //       // Go up the DOM
-  //       targetElement = targetElement.parentElement;
-  //     } while (targetElement);
 
-  //     // This is a click outside.
-  //     this.filteredList = [];
-  //   });
-  // }
   /**
    * Function deletes a house Object.
    * @param {*} event  event- Ng2 Smart table event object which contains row data
@@ -315,10 +298,10 @@ export class HouseTableComponent implements OnInit {
         // And toastr will notify user with this error message
         this.toasterService.popAsync('error', 'Custom error in component', this.errorFromServer);
       },
-    );
+      );
   }
   /**
-   * Clicking on submit button in Edit form, function adds a new house
+   * Clicking on submit button in Registration form, function adds a new house
    * @param {NgForm} form Form values.
    * @memberof HouseTableComponent
    */
@@ -344,9 +327,9 @@ export class HouseTableComponent implements OnInit {
    */
   filter() {
     if (this.query !== '') {
-      this.filteredList = this.countries.filter(function (el) {
+      this.filteredList = this.countries.filter((el) => {
         return el.toLowerCase().indexOf(this.query.toLowerCase()) > -1;
-      }.bind(this));
+      });
     } else {
       this.filteredList = [];
     }
