@@ -17,24 +17,5 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
     ],
   },
-  {
-    title: 'Flat',
-    icon: 'nb-roller-shades',
-    children: [
-      {
-        title: 'Flat',
-        link: '/pages/flat/flat-table',
-      },
-    ],
-  },
-  {
-    title: 'Resident',
-    icon: 'nb-person',
-    children: [
-      {
-        title: 'Resident',
-        link: '/pages/resident/resident-table',
-      },
-    ],
-  },
+
 ];

@@ -6,9 +6,6 @@ import { ResidentTableComponent } from './resident-table/resident-table.componen
 const routes: Routes = [{
   path: '',
   component: ResidentComponent,
-  /**
- * FIXME💩: -table is not the best decission
- */
   children: [
     { path: 'resident-table/:id', component: ResidentTableComponent },
     { path: 'resident-table', component: ResidentTableComponent },

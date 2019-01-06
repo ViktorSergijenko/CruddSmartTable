@@ -1,0 +1,97 @@
+@import "~bootstrap/scss/_functions.scss";
+@import "~bootstrap/scss/_variables.scss";
+@import "~bootstrap/scss/mixins/_breakpoints.scss";
+
+.padding-for-top-card {
+    padding-bottom: 1rem;
+}
+.padding-for-top-card-body {
+    padding-top: 10rem !important;
+}
+.home-page-card {
+    background-color: #3d3780;
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-clip: border-box;
+    border-radius: 1rem;
+}
+
+.home-page-card-body {
+    background-color: #3d3780;
+    width: 100%;
+    border-radius: 1rem;
+    flex: 1 1 auto;
+    padding: 1.25rem;
+}
+
+.centered {
+    text-align: center !important;
+}
+
+.icon-border {
+    border-right: 1px solid #342e73;
+}
+
+.new-row {
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+.icon-glow:hover {
+box-shadow: 20px 0px 100px 20px #342e73;
+cursor: pointer;
+}
+
+.fadein {
+    height: 300px;
+    width: 100%;
+
+}
+.fadein img {
+    border-radius: 1rem 1rem 0rem 0rem;
+    height: 300px;
+    width: 100%;
+    position:absolute;
+    top:0;
+    -webkit-animation-name: fade;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-duration: 10s;
+    animation-name: fade;
+    animation-iteration-count: infinite;
+    animation-duration: 10s;
+}
+
+@-webkit-keyframes fade {
+    0% {opacity: 0;}
+    20% {opacity: 1;}
+    33% {opacity: 1;}
+    53% {opacity: 0;}
+    100% {opacity: 0;}
+}
+@keyframes fade {
+    0% {opacity: 0;}
+    20% {opacity: 1;}
+    33% {opacity: 1;}
+    53% {opacity: 0;}
+    100% {opacity: 0;}
+}
+
+#f1 {
+
+}
+#f2 {
+    -webkit-animation-delay: -7s;
+
+}
+#f3 {
+    -webkit-animation-delay: -4s;
+
+}
+

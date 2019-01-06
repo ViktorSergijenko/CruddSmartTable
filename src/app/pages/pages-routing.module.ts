@@ -1,15 +1,15 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { HomePageComponent } from './home-page/home-page.component';
 
 
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
   children: [{
-    path: 'dashboard',
-    component: DashboardComponent,
+    path: 'home',
+    component: HomePageComponent,
   },
   {
     path: 'house',
@@ -23,7 +23,7 @@ const routes: Routes = [{
   },
   {
     path: '',
-    redirectTo: 'house/house-table',
+    redirectTo: 'home',
     pathMatch: 'full',
   }],
 }];
